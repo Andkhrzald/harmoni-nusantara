@@ -1,21 +1,17 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
+<html lang="id">
 
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>{{ config('app.name', 'Harmoni Nusantara') }}</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Atkinson+Hyperlegible+Next:wght@400;500;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Atkinson+Hyperlegible+Next:wght@400;500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
         rel="stylesheet" />
-
-    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @endif
-
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
     <style>
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -30,16 +26,106 @@
             scrollbar-width: none;
         }
     </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "on-secondary-container": "#76300d",
+                        "on-tertiary-container": "#f4f0e6",
+                        "on-secondary-fixed-variant": "#77320e",
+                        "on-secondary-fixed": "#360f00",
+                        "surface-container-low": "#f6f3f2",
+                        "secondary-container": "#fd9a6f",
+                        "on-primary-container": "#dbf7e3",
+                        "on-background": "#1b1c1c",
+                        "surface-variant": "#e4e2e1",
+                        "on-primary-fixed-variant": "#344c3e",
+                        "outline-variant": "#c2c8c2",
+                        "on-tertiary-fixed": "#1c1c16",
+                        "inverse-on-surface": "#f3f0f0",
+                        "background": "#fbf9f8",
+                        "tertiary-container": "#6f6d65",
+                        "error": "#ba1a1a",
+                        "primary": "#425a4b",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#e4e2e1",
+                        "secondary-fixed": "#ffdbcd",
+                        "surface-container": "#f0eded",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#cac6bd",
+                        "surface-bright": "#fbf9f8",
+                        "secondary-fixed-dim": "#ffb597",
+                        "surface-dim": "#dcd9d9",
+                        "surface-container-high": "#eae8e7",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#4b6454",
+                        "on-surface-variant": "#424843",
+                        "on-tertiary-fixed-variant": "#484740",
+                        "inverse-primary": "#b2cdba",
+                        "inverse-surface": "#303030",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#56554d",
+                        "tertiary-fixed": "#e6e2d8",
+                        "surface": "#fbf9f8",
+                        "primary-fixed": "#cee9d6",
+                        "primary-fixed-dim": "#b2cdba",
+                        "on-surface": "#1b1c1c",
+                        "primary-container": "#5a7363",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#082014",
+                        "secondary": "#964824",
+                        "outline": "#727973"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "40px",
+                        "unit": "8px",
+                        "container-max-width": "1200px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Inter"],
+                        "label-sm": ["Atkinson Hyperlegible Next"],
+                        "headline-md": ["Inter"],
+                        "label-md": ["Atkinson Hyperlegible Next"],
+                        "display-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                },
+            },
+        }
+    </script>
 </head>
 
 <body class="bg-background text-on-background selection:bg-primary-fixed selection:text-on-primary-fixed">
     <!-- TopNavBar -->
     <nav
-        class="bg-red-500 dark:bg-background docked full-width top-0 z-50 border-b border-outline-variant dark:border-outline flat no shadows sticky">
+        class="bg-surface dark:bg-background docked full-width top-0 z-50 border-b border-outline-variant dark:border-outline flat no shadows sticky top-0">
         <div
             class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 max-w-container-max-width mx-auto">
-            <div class="text-headline-md font-headline-md font-bold text-primary dark:text-primary-fixed">
-                Harmoni
+            <div class="text-headline-md font-headline-md font-bold text-primary dark:text-primary-fixed">Harmoni
                 Nusantara</div>
             <div class="hidden md:flex items-center gap-6">
                 <a class="text-on-surface-variant dark:text-surface-variant font-medium hover:text-primary dark:hover:text-primary-fixed transition-colors duration-200 font-label-md text-label-md"
@@ -56,19 +142,6 @@
                     href="#">Khonghucu</a>
             </div>
             <div class="flex items-center gap-4">
-                @if (Route::has('login'))
-                    @auth
-                        <a href="{{ url('/dashboard') }}"
-                            class="hidden md:inline-flex bg-primary text-on-primary px-5 py-2 rounded-lg font-label-md text-label-md hover:opacity-90 transition-all">Dashboard</a>
-                    @else
-                        <a href="{{ route('login') }}"
-                            class="hidden md:inline-flex text-on-surface-variant dark:text-surface-variant font-label-md text-label-md hover:text-primary dark:hover:text-primary-fixed transition-colors duration-200">Masuk</a>
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}"
-                                class="hidden md:inline-flex bg-primary text-on-primary px-5 py-2 rounded-lg font-label-md text-label-md hover:opacity-90 transition-all">Daftar</a>
-                        @endif
-                    @endauth
-                @endif
                 <button
                     class="material-symbols-outlined text-primary dark:text-primary-fixed active:opacity-80 active:scale-95 transition-all"
                     data-icon="volume_up">volume_up</button>
@@ -86,7 +159,8 @@
         <section
             class="relative h-[600px] flex items-center overflow-hidden mb-16 px-margin-mobile md:px-margin-desktop">
             <div class="absolute inset-0 z-0">
-                <img class="w-full h-full object-cover" alt=""
+                <img class="w-full h-full object-cover"
+                    data-alt="A panoramic wide-angle photograph capturing a diverse group of Indonesians from various religious backgrounds standing together in a lush tropical garden. The soft morning sunlight filters through palm leaves, creating a warm and peaceful atmosphere. The subjects are dressed in traditional, modest attire that reflects cultural richness without being overly formal. The color palette is dominated by soft sage greens, creamy whites, and warm terracotta tones, evoking a sense of serenity, unity, and institutional trust."
                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuBozEbFlKLm1IMD0DNT5iLLZGfMgjJHp73szrA_fpmJ4d8EodFsYAw-kEP-EeMKYSbZi_8-3Dlo2rVHX03gRbMiIRgmxKhBIDE7qYmE9n_ZI6n6YvIEVPPMWCdpRedkbvH6dTRnSCHuLydCsTbGZVbHkV74taxlG1j3FrOkGX97Heh65E2d1Z-neX359hoPkvuG85akRsr6YG9uZfl3HdzfRoZXb9tPJQzkVifmcQXR2IRv-D1SuUtjojyN3rb3zyF_B-tWWNA1Ebo" />
                 <div class="absolute inset-0 bg-gradient-to-r from-background via-background/60 to-transparent"></div>
             </div>
@@ -155,7 +229,7 @@
                         <span class="font-label-md text-label-md text-secondary font-bold mb-2 block">Terdekat</span>
                         <h3 class="font-headline-lg text-headline-lg text-on-secondary-container mb-2">Hari Raya Idul
                             Fitri</h3>
-                        <p class="font-body-md text-body-md text-on-secondary-container/80 mb-4">1 Syawal 1445 H &bull; 10
+                        <p class="font-body-md text-body-md text-on-secondary-container/80 mb-4">1 Syawal 1445 H • 10
                             April 2024</p>
                         <div class="flex -space-x-2">
                             <div class="w-8 h-8 rounded-full border-2 border-surface bg-slate-300"></div>
@@ -204,8 +278,9 @@
             </div>
             <div class="flex overflow-x-auto gap-4 pb-4 hide-scrollbar">
                 <!-- Video Card 1 -->
-                <div class="relative min-w-[260px] h-[450px] rounded-2xl overflow-hidden group flex-shrink-0">
-                    <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt=""
+                <div class="relative min-w-[260px] h-[450px] rounded-2xl overflow-hidden group">
+                    <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        data-alt="A portrait-oriented cinematic shot of a young Buddhist monk sharing a meal with a group of diverse teenagers in a modern urban cafe. The lighting is soft and natural, emphasizing a mood of casual friendship and genuine dialogue. The background is slightly blurred to keep focus on the interaction. The aesthetic is clean and contemporary, utilizing a palette of sage green and soft neutrals to create a serene, trustworthy feeling."
                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuAuW9n5AioJ6mQ-3LHFRRBZOIPGIJTTv4xF70Rm32UhoJnlUAubaFBumPVAqhW_hjQn0Sr7qI-os8oWrw759DfM4Ep1bOcx7P76ZUrshjoXKncdvKGKuTprrv_3KDuL7-GxVv-bLpRh61Mh79EMKAnj29__AWD875eV8WUs2490RfoBzQrgXgUbmwIwL71OOVyim2fZmSCUdSw6UaHZLUh7GcKWcqTTSxq97-3c5sPxQ-3Jt0EZuQiumd3v2mZv8TG3agvudPpe5no" />
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
                     <div class="absolute bottom-4 left-4 right-4">
@@ -223,8 +298,9 @@
                     </div>
                 </div>
                 <!-- Video Card 2 -->
-                <div class="relative min-w-[260px] h-[450px] rounded-2xl overflow-hidden group flex-shrink-0">
-                    <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt=""
+                <div class="relative min-w-[260px] h-[450px] rounded-2xl overflow-hidden group">
+                    <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        data-alt="A vertical video still showing a Catholic priest and an Imam laughing together while painting a community mural on a sunlit street in Yogyakarta. The vibrant colors of the mural contrast with the soft, earthy tones of their surroundings. The atmosphere is joyful and collaborative, lit by the warm glow of late afternoon sun. The visual style is high-end and modern, reinforcing the brand's message of harmony and mutual respect."
                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYJOAfZypx9OKD9cu7ppbqxCtZnWmFCMkK_kr719OCU-3N5eoLmdgnw9ir3cEiIHW8B_8rgeGztw0XfDvixTK4zSWG-_sZB2_mEUUkhjmSDLFSgedPx0voqf2ddu_RN16V-Voga8t7WI9sp6xCBD4qd4xHty9awyr6hPrl3kR_yTawJ5iI_kl1nLxysBy_kBoAvMbWWA-d3V6zEUswQELji4DOSfcWgFw7lAYSwmmVn5v4PVltbgKcrVNIKQ24kO0keex_kOajRBc" />
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
                     <div class="absolute bottom-4 left-4 right-4">
@@ -242,8 +318,9 @@
                     </div>
                 </div>
                 <!-- Video Card 3 -->
-                <div class="relative min-w-[260px] h-[450px] rounded-2xl overflow-hidden group flex-shrink-0">
-                    <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt=""
+                <div class="relative min-w-[260px] h-[450px] rounded-2xl overflow-hidden group">
+                    <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        data-alt="A vertical cinematic shot of a young Hindu woman explaining the philosophy of Tri Hita Karana to a group of university students in a minimalist classroom. The space is filled with soft, diffused daylight. The color scheme is a sophisticated blend of cream, sage, and terracotta. The overall feeling is one of intellectual curiosity and institutional trust, captured in a high-fidelity digital art style."
                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTT7gkHNJyX91HUEz4t7Gfbn2dlLZmAgE0KwFNY7GlHmk52Rei0evXw_F9XwfYvNIu_3UFlOBMYfldINT2FbpkYk3XTEVeeICypgHPRs1SgrfjFxs8OJuCVi8SiRublJJgjzvK9Jy11o2JwAhQJbwO6Eqz57-KJ7BC7ZFRp5Wpg9fiiZmlbLp-DQ8z5STc23R7Xg6XPVLEYgSnEZEfrAiVIXpFj_pkbMEfodqb_GnYCajfOcDteeLS5EG5u4vlkg8r6jDX5Gs25_U" />
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
                     <div class="absolute bottom-4 left-4 right-4">
@@ -261,8 +338,9 @@
                     </div>
                 </div>
                 <!-- Video Card 4 -->
-                <div class="relative min-w-[260px] h-[450px] rounded-2xl overflow-hidden group flex-shrink-0">
-                    <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt=""
+                <div class="relative min-w-[260px] h-[450px] rounded-2xl overflow-hidden group">
+                    <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        data-alt="A candid vertical video still of a diverse group of Indonesian scouts assisting elderly citizens of different faiths at a communal event. The setting is a brightly lit community hall with a warm, inviting atmosphere. The lighting is bright and cheerful, highlighting the selfless actions of the youth. The image uses a soft-focus background and a color palette of sage green and cream, evoking a sense of serenity and communal goodness."
                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuDx0tzGzr3Jt9TuEyY8ZARHw9L-a027SzCvsqxTwaGbt1N0FpM2DbBeGSLa34hPC2jux_IfnQvg2uIF-c_-_9Xp_UAX6jlbIz_V0IMzC4GOEoJUWuzcJcBeIj4FVP4HCxzJsovmzlX9Tr6T--Lz2Ow-fqXC9B2sem3zva2pm7jiA-xSauZ5wOVxkCnFKuLq16K-rM3Yw5IvLPw94NoExWNQhnjoECfS7L-INOiZOEv-3sPJ-_EQI3l4HAqe1EYrvhjfWnFAI13TnMQ" />
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
                     <div class="absolute bottom-4 left-4 right-4">
@@ -327,15 +405,18 @@
                         </div>
                         <div class="bg-white/60 p-6 rounded-2xl col-span-2 flex items-center gap-4">
                             <div class="flex -space-x-3 overflow-hidden">
-                                <img class="inline-block h-10 w-10 rounded-full ring-2 ring-white" alt=""
+                                <img class="inline-block h-10 w-10 rounded-full ring-2 ring-white"
+                                    data-alt="Profile photo of a diverse man"
                                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwzVYvLGCTszJ6t55-bOPmuFBvGgQfEuMAyG78ulkypOtkEAYYH3qnpRfG8NDeHzZxax7dZ45RvhJQYasONhODKGofb4g37gBicTzs0a4m2AkGEkz56lo_S_tXqBWCwVmo258NJLgAqQWpl2lsBuVERd_wXkxVTw83HJDTadxLFBZqswAkl5XeeJoeg-A9A8Ipk6ioDlTpJsJsoutlNNBkqO4PbyIhYu2-oVyFw9qKWMLfbE_3be_DI4SIR94kRNrGO0pvxZiUzhA" />
-                                <img class="inline-block h-10 w-10 rounded-full ring-2 ring-white" alt=""
+                                <img class="inline-block h-10 w-10 rounded-full ring-2 ring-white"
+                                    data-alt="Profile photo of a diverse woman"
                                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgNIKF1pQ6N6d4aObHEutwb52PgupC9PjskAGrlkA0rynsA5RHnuNS0G0CD0bbbbKEhbYdnDrsa_DHJnRk7WA_CXNvKqBpg96LKwq6uDNBrfNCppnmDqd18cbLqu9HuSeilAFCKYwTPkYR69BXlKSTbpiJ5ZaWIWEaxg2Bh9bKZHSbVSvT0gwZvlmRonupWGNxD5PJaExQgt-WbVtMIvTlhyGXChrqTk0DyoSfj2FGW-jmbgRalGAsEVeUw6gRE6HO8LaHGjzkgvE" />
-                                <img class="inline-block h-10 w-10 rounded-full ring-2 ring-white" alt=""
+                                <img class="inline-block h-10 w-10 rounded-full ring-2 ring-white"
+                                    data-alt="Profile photo of a diverse man"
                                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMrtlcvMLLjeUaglD41SV4wTc_JRKYc57McTetOFzZ8RFz9sgXnY66gBwXFgo2rbevs1CYMOOq5A3PJG9_HNpdqcMKFjhs7DIubC09TgFMxIU-YhWEb7qGDfC4zSfZCzwoQKkbeya1XcWg3hmjYBMLsFhs7HlHph36IbJi70lgXMz02o9WFg57ES6eVAaCT_lkwAbXtoLwztxdWzZHpQFaWl5hacbyy1bWrFgfw1xKsJTiVMnhonH0tucUCWD8gvzGznqe2fpAE8I" />
                             </div>
-                            <p class="font-label-sm text-label-sm text-on-surface-variant italic">&quot;Telah bergabung
-                                sebagai pahlawan toleransi.&quot;</p>
+                            <p class="font-label-sm text-label-sm text-on-surface-variant italic">"Telah bergabung
+                                sebagai pahlawan toleransi."</p>
                         </div>
                     </div>
                 </div>
@@ -358,7 +439,7 @@
                 <a class="text-on-surface-variant dark:text-surface-variant font-body-md text-body-md hover:text-secondary dark:hover:text-secondary-fixed transition-all"
                     href="#">Kontak</a>
             </div>
-            <p class="text-on-surface-variant dark:text-surface-variant font-label-sm text-label-sm text-center">&copy; 2024
+            <p class="text-on-surface-variant dark:text-surface-variant font-label-sm text-label-sm text-center">© 2024
                 Harmoni Nusantara. Menjaga Toleransi, Merawat Keberagaman Indonesia.</p>
             <div class="flex gap-4">
                 <button
@@ -390,7 +471,7 @@
         <button
             class="w-16 h-16 rounded-full bg-secondary text-on-secondary shadow-lg shadow-secondary/30 flex items-center justify-center hover:scale-110 active:scale-95 transition-all">
             <span class="material-symbols-outlined text-3xl" data-icon="volume_up"
-                style="font-variation-settings: 'FILL' 1">volume_up</span>
+                style="font-variation-settings: 'FILL' 1;">volume_up</span>
         </button>
     </div>
 </body>
