@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\EducationContent;
 use App\Models\ReligionCategory;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class EducationController extends Controller
@@ -66,15 +67,27 @@ class EducationController extends Controller
         return view('education.virtual-tour', compact('virtualTours'));
     }
 
-    public function byReligion(string $slug): View
+    public function byReligion(string $slug, Request $request): View
     {
         $religion = ReligionCategory::where('slug', $slug)->firstOrFail();
 
-        $contents = EducationContent::where('religion_id', $religion->id)
+        $query = EducationContent::where('religion_id', $religion->id)
             ->where('status', 'approved')
-            ->with('author')
-            ->latest()
-            ->paginate(12);
+            ->with('author');
+
+        if ($request->filled('filter') && in_array($request->filter, ['article', 'video'])) {
+            $query->where('content_type', $request->filter);
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+
+        $contents = $query->latest()->paginate(12);
 
         return view('education.religion', compact('religion', 'contents'));
     }

@@ -1,36 +1,47 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Asisten Ibadah') }}
-        </h2>
+        <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-2xl text-primary">self_improvement</span>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Asisten Ibadah</h2>
+        </div>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <a href="{{ route('ibadah.schedule') }}" class="bg-white p-6 rounded-lg shadow-sm hover:shadow-md text-center">
-                    <span class="text-4xl">🕌</span>
-                    <h3 class="font-semibold mt-3">Jadwal Ibadah</h3>
-                    <p class="text-sm text-gray-500">Jadwal salat dan hari besar keagamaan</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+                {{-- Jadwal Ibadah --}}
+                <a href="{{ route('ibadah.schedule') }}" class="group relative bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <span class="material-symbols-outlined text-4xl text-emerald-600 relative">schedule</span>
+                    <h3 class="font-semibold text-gray-800 mt-3 relative">Jadwal Sholat</h3>
+                    <p class="text-sm text-gray-500 mt-1 relative">Waktu salat 5 waktu dan hari besar Islam</p>
                 </a>
 
-                <a href="{{ route('ibadah.map') }}" class="bg-white p-6 rounded-lg shadow-sm hover:shadow-md text-center">
-                    <span class="text-4xl">🗺️</span>
-                    <h3 class="font-semibold mt-3">Peta Rumah Ibadah</h3>
-                    <p class="text-sm text-gray-500">Temukan rumah ibadah terdekat</p>
+                {{-- Peta --}}
+                <a href="{{ route('ibadah.map') }}" class="group relative bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <span class="material-symbols-outlined text-4xl text-blue-600 relative">map</span>
+                    <h3 class="font-semibold text-gray-800 mt-3 relative">Peta Rumah Ibadah</h3>
+                    <p class="text-sm text-gray-500 mt-1 relative">Temukan masjid, gereja, pura, vihara terdekat</p>
                 </a>
 
-                <a href="{{ route('ibadah.guide', 'islam') }}" class="bg-white p-6 rounded-lg shadow-sm hover:shadow-md text-center">
-                    <span class="text-4xl">📖</span>
-                    <h3 class="font-semibold mt-3">Panduan Ritual</h3>
-                    <p class="text-sm text-gray-500">Tata cara ibadah per agama</p>
+                {{-- Panduan Ritual --}}
+                <a href="{{ route('ibadah.guide', 'islam') }}" class="group relative bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-secondary-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <span class="material-symbols-outlined text-4xl text-secondary relative">live_help</span>
+                    <h3 class="font-semibold text-gray-800 mt-3 relative">Panduan Ibadah</h3>
+                    <p class="text-sm text-gray-500 mt-1 relative">Tata cara ibadah 6 agama di Indonesia</p>
                 </a>
 
-                <a href="{{ route('ibadah.etiquette', 'islam') }}" class="bg-white p-6 rounded-lg shadow-sm hover:shadow-md text-center">
-                    <span class="text-4xl">🤝</span>
-                    <h3 class="font-semibold mt-3">Etiket Bertamu</h3>
-                    <p class="text-sm text-gray-500">Cara посещения rumah ibadah agama lain</p>
+                {{-- Etiket --}}
+                <a href="{{ route('ibadah.etiquette', 'islam') }}" class="group relative bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-amber-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <span class="material-symbols-outlined text-4xl text-amber-600 relative">account_balance</span>
+                    <h3 class="font-semibold text-gray-800 mt-3 relative">Etiket Bertamu</h3>
+                    <p class="text-sm text-gray-500 mt-1 relative">Tata krama mengunjungi rumah ibadah</p>
                 </a>
+
             </div>
         </div>
     </div>

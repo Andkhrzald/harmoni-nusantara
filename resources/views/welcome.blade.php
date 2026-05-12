@@ -160,6 +160,21 @@
             </div>
         </section>
 
+        {{-- Explore Edukasi CTA --}}
+        <section class="py-16 px-4 sm:px-6 lg:px-10 bg-white">
+            <div class="max-w-7xl mx-auto text-center">
+                <span class="material-symbols-outlined text-5xl text-primary mb-4">school</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-primary mb-3">Jelajahi Edukasi Keagamaan</h2>
+                <p class="text-on-surface-variant max-w-xl mx-auto mb-8">Pelajari lebih dalam tentang setiap agama melalui artikel, video, dan wisata virtual yang tersedia.</p>
+                <a href="{{ route('edukasi.index') }}"
+                   class="inline-flex items-center gap-2 bg-primary text-white px-8 py-3.5 rounded-xl font-semibold text-base
+                          hover:bg-primary-700 transition-all shadow-md hover:shadow-lg">
+                    <span class="material-symbols-outlined">explore</span>
+                    Jelajahi Semua Edukasi
+                </a>
+            </div>
+        </section>
+
         <!-- Widget Section -->
         <section class="py-20 px-4 sm:px-6 lg:px-10 max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
