@@ -138,12 +138,12 @@
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
                     @php
                     $faiths = [
-                        ['name' => 'Islam', 'slug' => 'islam', 'image' => 'https://images.unsplash.com/photo-1584559582124-bafe7ab03a12?w=400&q=80', 'followers' => '87%'],
-                        ['name' => 'Kristen', 'slug' => 'kristen', 'image' => 'https://images.unsplash.com/photo-1548625361-e80e71c60b68?w=400&q=80', 'followers' => '7%'],
-                        ['name' => 'Katolik', 'slug' => 'katolik', 'image' => 'https://images.unsplash.com/photo-1548625361-e80e71c60b68?w=400&q=80', 'followers' => '3%'],
-                        ['name' => 'Hindu', 'slug' => 'hindu', 'image' => 'https://images.unsplash.com/photo-1545454675-3531b543be5d?w=400&q=80', 'followers' => '2%'],
-                        ['name' => 'Buddha', 'slug' => 'buddha', 'image' => 'https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=400&q=80', 'followers' => '0.7%'],
-                        ['name' => 'Konghucu', 'slug' => 'konghucu', 'image' => 'https://images.unsplash.com/photo-1518659526054-190340b32700?w=400&q=80', 'followers' => '0.3%'],
+                        ['name' => 'Islam', 'slug' => 'islam', 'image' => 'https://images.unsplash.com/photo-1584559582124-bafe7ab03a12?w=400&q=80', 'followers' => ''],
+                        ['name' => 'Kristen', 'slug' => 'kristen', 'image' => 'https://images.unsplash.com/photo-1548625361-e80e71c60b68?w=400&q=80', 'followers' => ''],
+                        ['name' => 'Katolik', 'slug' => 'katolik', 'image' => 'https://images.unsplash.com/photo-1548625361-e80e71c60b68?w=400&q=80', 'followers' => ''],
+                        ['name' => 'Hindu', 'slug' => 'hindu', 'image' => 'https://images.unsplash.com/photo-1545454675-3531b543be5d?w=400&q=80', 'followers' => ''],
+                        ['name' => 'Buddha', 'slug' => 'buddha', 'image' => 'https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=400&q=80', 'followers' => ''],
+                        ['name' => 'Konghucu', 'slug' => 'konghucu', 'image' => 'https://images.unsplash.com/photo-1518659526054-190340b32700?w=400&q=80', 'followers' => ''],
                     ];
                     @endphp
                     @foreach($faiths as $faith)
