@@ -152,6 +152,14 @@ Semua views render OK ✅ (20+ file tested, 0 error)
 
 ---
 
+### 📚 Dokumentasi
+
+- **File baru:** `DATABASE-MIGRATION-RECOVERY.md`
+- Mencatat penyebab `SQLSTATE[25P02]` di Supabase dan langkah recovery yang berhasil.
+- Termasuk perintah `drop schema public cascade` + `create schema public` dan validasi migrasi ulang.
+
+---
+
 ### 📁 Semua File yang Diubah/Dibuat Hari Ini
 
 | Status | File |
