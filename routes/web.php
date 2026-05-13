@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\FactCheckController;
+use App\Http\Controllers\ForumController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VolunteerController;
 use App\Http\Controllers\WorshipController;
@@ -76,6 +77,14 @@ Route::prefix('aksi')->name('aksi.')->group(function () {
         Route::get('/{id}', [ConsultationController::class, 'show'])->name('show')->middleware('auth');
         Route::post('/{id}/message', [ConsultationController::class, 'sendMessage'])->name('message')->middleware('auth');
     });
+});
+
+Route::get('/forum', [ForumController::class, 'index'])->name('forum');
+
+Route::middleware('auth')->group(function () {
+    Route::post('/forum/message', [ForumController::class, 'storeMessage'])->name('forum.message');
+    Route::post('/forum/request-join', [ForumController::class, 'requestJoin'])->name('forum.request-join');
+    Route::post('/forum/approve/{user}', [ForumController::class, 'approveMember'])->name('forum.approve');
 });
 
 require __DIR__.'/auth.php';

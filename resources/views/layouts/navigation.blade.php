@@ -11,13 +11,16 @@
                 </div>
 
                 <!-- Navigation Links -->
-                @auth
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                            {{ __('Dashboard') }}
-                        </x-nav-link>
-                    </div>
-                @endauth
+                        @auth
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <x-nav-link :href="route('forum')" :active="request()->routeIs('forum')">
+                                    {{ __('Ruang Bersama') }}
+                                </x-nav-link>
+                                <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                                    {{ __('Dashboard') }}
+                                </x-nav-link>
+                            </div>
+                        @endauth
             </div>
 
             <!-- Settings Dropdown / Auth Links -->
@@ -74,11 +77,14 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         @auth
-            <div class="pt-2 pb-3 space-y-1">
-                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                    {{ __('Dashboard') }}
-                </x-responsive-nav-link>
-            </div>
+                    <div class="pt-2 pb-3 space-y-1">
+                                <x-responsive-nav-link :href="route('forum')" :active="request()->routeIs('forum')">
+                                    {{ __('Ruang Bersama') }}
+                                </x-responsive-nav-link>
+                                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                                    {{ __('Dashboard') }}
+                                </x-responsive-nav-link>
+                            </div>
         @endauth
 
         <!-- Responsive Settings Options -->

@@ -3,22 +3,20 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\FactCheckResource\Pages\ManageFactChecks;
-use App\Models\FactCheck;
 use Filament\Forms;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 
 class FactCheckResource extends Resource
 {
-    protected static ?string $model = FactCheck::class;
-
     protected static ?string $navigationLabel = 'Cek Fakta';
 
     protected static ?string $modelLabel = 'Cek Fakta';
 
-    public static function form(Forms\Form $form): Forms\Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Forms\Components\TextInput::make('claim')
                     ->label('Klaim')

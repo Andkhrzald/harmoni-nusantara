@@ -105,7 +105,7 @@
                     Ruang digital inklusif untuk mempererat toleransi, berbagi inspirasi, dan merayakan indahnya perbedaan di tanah air tercinta.
                 </p>
                 <div class="flex flex-wrap gap-4">
-                    <a href="{{ route('register') }}" class="bg-primary text-white px-8 py-4 rounded-xl font-semibold hover:bg-primary-600 transition-all shadow-lg shadow-primary/20 hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-2">
+                    <a href="{{ route('forum') }}" class="bg-primary text-white px-8 py-4 rounded-xl font-semibold hover:bg-primary-600 transition-all shadow-lg shadow-primary/20 hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-2">
                         <span class="material-symbols-outlined">forum</span>
                         Mulai Berdialog
                     </a>

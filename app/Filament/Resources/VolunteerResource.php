@@ -3,22 +3,20 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\VolunteerResource\Pages\ManageVolunteers;
-use App\Models\Volunteer;
 use Filament\Forms;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 
 class VolunteerResource extends Resource
 {
-    protected static ?string $model = Volunteer::class;
-
     protected static ?string $navigationLabel = 'Relawan';
 
     protected static ?string $modelLabel = 'Relawan';
 
-    public static function form(Forms\Form $form): Forms\Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Forms\Components\Select::make('user_id')
                     ->label('User')
@@ -49,7 +47,7 @@ class VolunteerResource extends Resource
                         'active' => 'Aktif',
                     ])
                     ->required(),
-                Forms\Components\DatePicker::join('joined_at', ['joined_at_date', 'joined_at_time'])
+                Forms\Components\DatePicker::make('joined_at')
                     ->label('Tanggal Gabung'),
             ]);
     }
