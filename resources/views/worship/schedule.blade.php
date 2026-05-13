@@ -22,6 +22,7 @@
 @endphp
 
 <x-app-layout>
+    @section('title', 'Jadwal Sholat')
     <x-slot name="header">
         <div class="flex items-center gap-3">
             <span class="material-symbols-outlined text-2xl text-primary">schedule</span>

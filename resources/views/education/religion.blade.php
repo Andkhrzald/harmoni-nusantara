@@ -1,4 +1,8 @@
 @php
+    $pageTitle = $religionName ?? 'Edukasi';
+@endphp
+@section('title', $pageTitle)
+@php
     $religionMeta = [
         'islam'    => ['icon' => 'mosque',        'primary' => 'emerald', 'gradient' => 'from-emerald-900 via-primary to-emerald-700', 'accent' => 'accent-gold', 'badge' => 'bg-emerald-50 text-emerald-700'],
         'kristen'  => ['icon' => 'church',        'primary' => 'blue',    'gradient' => 'from-blue-900 via-blue-700 to-blue-600',       'accent' => 'yellow-300', 'badge' => 'bg-blue-50 text-blue-700'],

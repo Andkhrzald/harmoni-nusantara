@@ -1,4 +1,5 @@
 <x-app-layout>
+    @section('title', 'Dashboard')
     @php
         $user = Auth::user();
         $initial = strtoupper(substr($user->name, 0, 1));

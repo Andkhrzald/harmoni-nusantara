@@ -1,4 +1,5 @@
 <x-app-layout>
+    @section('title', $content->title)
     @php
         $isVideo = $content->content_type === 'video';
         $isArticle = $content->content_type === 'article';

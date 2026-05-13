@@ -4,7 +4,13 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>{{ config('app.name', 'Harmoni Nusantara') }}</title>
+    <title>
+            @hasSection('title')
+                @yield('title') | Harmoni Nusantara
+            @else
+                Harmoni Nusantara - Platform Toleransi Indonesia
+            @endif
+        </title>
     <meta name="description" content="Platform digital inklusif untuk mempererat toleransi dan merayakan keberagaman agama di Indonesia" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">

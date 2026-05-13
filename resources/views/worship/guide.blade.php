@@ -1,4 +1,6 @@
-@php
+<x-app-layout>
+    @section('title', 'Panduan Ritual ' . ucfirst($religion))
+    @php
     $validSlugs = ['islam', 'kristen', 'katolik', 'hindu', 'buddha', 'konghucu'];
     $current = in_array($religion, $validSlugs) ? $religion : 'islam';
 

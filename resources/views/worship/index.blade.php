@@ -1,4 +1,5 @@
 <x-app-layout>
+    @section('title', 'Asisten Ibadah')
     <x-slot name="header">
         <div class="flex items-center gap-3">
             <span class="material-symbols-outlined text-2xl text-primary">self_improvement</span>
