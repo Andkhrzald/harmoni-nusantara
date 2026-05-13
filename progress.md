@@ -348,3 +348,29 @@ Seeder sudah jalan: 1 room "Ruang Bersama Harmoni Nusantara", 1 creator (admin),
    - AI akan merespon otomatis dalam 5-10 detik
 
 > **Troubleshooting:** Kalau AI tidak merespon, cek isi `.env` sudah benar, lalu `php artisan optimize` ulang. Kalau masih error, cek log di `storage/logs/laravel.log`.
+
+---
+
+### 📝 Update 14 Mei 2026 — Forum Redesign + Avatar + Auto-delete (by Andikha)
+
+#### ✅ Fitur Baru
+
+| Fitur | Detail |
+|-------|--------|
+| **🎨 Forum UI Redesign** | Chat bubble ala WhatsApp (user kanan hijau, AI kiri putih), sidebar premium, header gradient, mobile responsive |
+| **🖼️ Avatar Upload** | Upload foto profil saat register & edit profil, tampil di forum & navbar (fallback inisial jika tidak ada) |
+| **🧹 Auto-delete 24 Jam** | Model pruning — pesan forum otomatis terhapus tiap jam jika >24 jam |
+
+#### ✅ File yang Diubah/Dibuat
+
+| Status | File | Perubahan |
+|--------|------|-----------|
+| ✏️ Rewrite | `resources/views/forum/index.blade.php` | Redesign total UI chat profesional |
+| ✏️ Edit | `app/Http/Controllers/ProfileController.php` | Tambah upload avatar + fix view path |
+| ✏️ Edit | `resources/views/profile/partials/update-profile-information-form.blade.php` | Tambah input avatar + preview |
+| ✏️ Edit | `resources/views/auth/register.blade.php` | Tambah upload avatar (opsional) + desain lebih menarik |
+| ✏️ Edit | `app/Http/Controllers/Auth/RegisteredUserController.php` | Simpan avatar saat registrasi |
+| ✏️ Edit | `app/Models/ForumMessage.php` | Tambah Prunable trait — hapus otomatis 24 jam |
+| ✏️ Edit | `routes/console.php` | Schedule model:prune tiap jam |
+| ✏️ Edit | `resources/views/layouts/navigation.blade.php` | Tampilkan avatar user di dropdown |
+| 🔧 Baru | `php artisan storage:link` | Symlink public/storage → storage/app/public |
