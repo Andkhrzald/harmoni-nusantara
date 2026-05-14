@@ -20,7 +20,7 @@ jobs:
           MSG=$(printf '📢 *Push Notification*\n👤 *User:* %s\n💬 *Commit:* %s\n🔗 *Repo:* %s' \
             "${ACTOR}" "${COMMIT_MSG}" "${REPO}")
 
-          curl -s -X POST "${WA_API_URL}" \
+          curl -sS --fail -X POST "${WA_API_URL}" \
             -H "Authorization: ${WA_API_TOKEN}" \
-            -F "target=${WA_GROUP_ID}" \
-            -F "message=${MSG}"
+            --data-urlencode "target=${WA_GROUP_ID}" \
+            --data-urlencode "message=${MSG}"
