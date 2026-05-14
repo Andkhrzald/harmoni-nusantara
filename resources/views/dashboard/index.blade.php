@@ -114,6 +114,7 @@
                     <div class="space-y-2">
                         @php
                             $quickLinks = [
+                                ['route' => 'forum', 'icon' => 'forum', 'label' => 'Ruang Bersama', 'color' => 'text-purple-600', 'bg' => 'bg-purple-50'],
                                 ['route' => 'edukasi.index', 'icon' => 'school', 'label' => 'Jelajahi Edukasi', 'color' => 'text-emerald-600', 'bg' => 'bg-emerald-50'],
                                 ['route' => 'ibadah.schedule', 'icon' => 'schedule', 'label' => 'Jadwal Sholat', 'color' => 'text-primary', 'bg' => 'bg-primary-50'],
                                 ['route' => 'ibadah.index', 'icon' => 'self_improvement', 'label' => 'Panduan Ibadah', 'color' => 'text-secondary', 'bg' => 'bg-secondary-50'],

@@ -3,7 +3,6 @@
         <h2 class="text-lg font-medium text-gray-900">
             {{ __('Profile Information') }}
         </h2>
-
         <p class="mt-1 text-sm text-gray-600">
             {{ __("Update your account's profile information and email address.") }}
         </p>
@@ -13,9 +12,29 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
+
+        <div class="flex items-center gap-6">
+            <div class="relative shrink-0">
+                @if ($user->avatar)
+                    <img src="{{ Storage::url($user->avatar) }}" alt="{{ $user->name }}"
+                         class="w-20 h-20 rounded-full object-cover border-2 border-gray-200">
+                @else
+                    <span class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center text-2xl font-bold text-primary border-2 border-gray-200">
+                        {{ strtoupper(substr($user->name, 0, 1)) }}
+                    </span>
+                @endif
+            </div>
+            <div class="flex-1">
+                <x-input-label for="avatar" :value="__('Profile Photo')" />
+                <input id="avatar" name="avatar" type="file" accept="image/jpeg,image/png,image/jpg,image/gif,image/webp"
+                       class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary hover:file:bg-primary-100 transition-colors cursor-pointer" />
+                <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
+                <p class="text-xs text-gray-400 mt-1">Maksimal 2MB. Format: JPG, PNG, GIF, WebP.</p>
+            </div>
+        </div>
 
         <div>
             <x-input-label for="name" :value="__('Name')" />
@@ -37,12 +56,6 @@
                             {{ __('Click here to re-send the verification email.') }}
                         </button>
                     </p>
-
-                    @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-green-600">
-                            {{ __('A new verification link has been sent to your email address.') }}
-                        </p>
-                    @endif
                 </div>
             @endif
         </div>

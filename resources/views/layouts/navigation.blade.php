@@ -11,13 +11,16 @@
                 </div>
 
                 <!-- Navigation Links -->
-                @auth
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                            {{ __('Dashboard') }}
-                        </x-nav-link>
-                    </div>
-                @endauth
+                        @auth
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <x-nav-link :href="route('forum')" :active="request()->routeIs('forum')">
+                                    {{ __('Ruang Bersama') }}
+                                </x-nav-link>
+                                <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                                    {{ __('Dashboard') }}
+                                </x-nav-link>
+                            </div>
+                        @endauth
             </div>
 
             <!-- Settings Dropdown / Auth Links -->
@@ -25,7 +28,14 @@
                 @auth
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
-                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                            <button class="inline-flex items-center gap-2 px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                @if (Auth::user()->avatar)
+                                    <img src="{{ Storage::url(Auth::user()->avatar) }}" alt="" class="w-7 h-7 rounded-full object-cover">
+                                @else
+                                    <span class="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center text-xs font-semibold text-primary">
+                                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                                    </span>
+                                @endif
                                 <div>{{ Auth::user()->name }}</div>
 
                                 <div class="ms-1">
@@ -74,11 +84,14 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         @auth
-            <div class="pt-2 pb-3 space-y-1">
-                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                    {{ __('Dashboard') }}
-                </x-responsive-nav-link>
-            </div>
+                    <div class="pt-2 pb-3 space-y-1">
+                                <x-responsive-nav-link :href="route('forum')" :active="request()->routeIs('forum')">
+                                    {{ __('Ruang Bersama') }}
+                                </x-responsive-nav-link>
+                                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                                    {{ __('Dashboard') }}
+                                </x-responsive-nav-link>
+                            </div>
         @endauth
 
         <!-- Responsive Settings Options -->

@@ -5,6 +5,8 @@ namespace App\Filament;
 use App\Filament\Resources\DonationProjectResource;
 use App\Filament\Resources\EducationContentResource;
 use App\Filament\Resources\FactCheckResource;
+use App\Filament\Resources\ForumMessageResource;
+use App\Filament\Resources\ForumParticipantResource;
 use App\Filament\Resources\ReligionCategoryResource;
 use App\Filament\Resources\VolunteerResource;
 use Filament\Panel;
@@ -17,7 +19,7 @@ class AdminPanel extends PanelProvider
         return $panel
             ->id('admin')
             ->path('admin')
-            ->title('Harmoni Nusantara - Admin')
+            ->brandName('Harmoni Nusantara - Admin')
             ->login()
             ->resources([
                 ReligionCategoryResource::class,
@@ -25,6 +27,8 @@ class AdminPanel extends PanelProvider
                 DonationProjectResource::class,
                 FactCheckResource::class,
                 VolunteerResource::class,
+                ForumMessageResource::class,
+                ForumParticipantResource::class,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources');
     }

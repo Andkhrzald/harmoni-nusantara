@@ -218,6 +218,7 @@ Semua views render OK ✅ (20+ file tested, 0 error)
 
 ---
 
+
 # Progress — by Rehan
 
 ## Ringkasan Pekerjaan
@@ -265,3 +266,316 @@ Sumber title:
 |--------|------|------------|
 
 | ✏️ Edit | `resources/views/education/religion.blade.php` | Format `@section('title')` disederhanakan |
+=======
+### 📅 Update 14 Mei 2026 — Fitur "Ruang Bersama" (Forum Diskusi + AI Chatbot)
+
+#### ✅ Ringkasan
+Fitur baru **Ruang Bersama** — satu ruang chat besar (seperti grup WhatsApp) dengan integrasi AI chatbot Google Gemini. User bisa berdialog tentang agama, toleransi, dan etika. Tombol **"Mulai Berdialog"** di halaman utama sekarang mengarah ke `/forum`.
+
+#### ✅ Alur User
+```
+[/] → Tombol "Mulai Berdialog" → /forum
+  ├─ Guest: UI chat di-blur + overlay "Gabung Komunitas" → Register/Login → balik ke /forum (viewer)
+  ├─ Viewer (login, pending): Baca chat (read-only), prompt di-blur + tombol "Minta Bergabung"
+  ├─ Member (disetujui): Full akses → tulis pesan + @ai untuk chatbot
+  └─ Creator/Admin: Full akses + setujui anggota baru
+```
+
+#### ✅ Database — 3 Tabel Baru
+
+| Tabel | Kolom |
+|---|---|
+| `forum_rooms` | id, name, description, user_id (creator), is_active, timestamps |
+| `forum_messages` | id, forum_room_id, user_id (nullable → AI), content, is_ai, created_at |
+| `forum_participants` | id, forum_room_id, user_id, role (creator/member/viewer), status (active/pending/banned), timestamps |
+
+Seeder sudah jalan: 1 room "Ruang Bersama Harmoni Nusantara", 1 creator (admin), 2 message awal (sambutan + AI).
+
+#### ✅ Fitur & File
+
+| Area | File | Keterangan |
+|---|---|---|
+| **Migration** | `database/migrations/2026_05_14_000001_create_forum_rooms_table.php` | Tabel rooms |
+| | `database/migrations/2026_05_14_000002_create_forum_messages_table.php` | Tabel messages |
+| | `database/migrations/2026_05_14_000003_create_forum_participants_table.php` | Tabel participants |
+| **Model** | `app/Models/ForumRoom.php` | Relasi: creator, messages, participants |
+| | `app/Models/ForumMessage.php` | Relasi: room, user (dengan default name "AI Assistant") |
+| | `app/Models/ForumParticipant.php` | Relasi: room, user |
+| | `app/Models/User.php` | ✏️ Tambah relasi: forumMessages, forumParticipants, forumRooms |
+| **Service** | `app/Services/GeminiService.php` | Integrasi Google Gemini API dengan system prompt toleransi & agama |
+| **Controller** | `app/Http/Controllers/ForumController.php` | index(), storeMessage() + deteksi @ai, requestJoin(), approveMember() |
+| **Routes** | `routes/web.php` | ➕ GET /forum, POST /forum/message, POST /forum/request-join, POST /forum/approve/{user} |
+| **Views** | `resources/views/forum/index.blade.php` | Halaman utama Ruang Bersama — 3 kondisi UI (guest/viewer/member) |
+| | `resources/views/welcome.blade.php` | ✏️ Ubah tombol "Mulai Berdialog" → route('forum') |
+| | `resources/views/layouts/navigation.blade.php` | ✏️ Tambah link "Ruang Bersama" di nav (desktop + mobile) |
+| | `resources/views/dashboard/index.blade.php` | ✏️ Tambah akses cepat "Ruang Bersama" |
+| | `resources/views/components/navbar.blade.php` | ✏️ Tambah deteksi route forum |
+| **Seeder** | `database/seeders/ForumSeeder.php` | Seed 1 room + 1 creator + 2 messages awal |
+| | `database/seeders/DatabaseSeeder.php` | ✏️ Tambah ForumSeeder::class |
+| **Filament** | `app/Filament/Resources/ForumMessageResource.php` | Admin panel: kelola pesan (list, search, delete, filter AI/human) |
+| | `app/Filament/Resources/ForumParticipantResource.php` | Admin panel: kelola anggota (approve, ban, ubah role) |
+| | `app/Filament/AdminPanel.php` | ✏️ Daftarkan 2 resource baru |
+| **Config** | `config/services.php` | ✏️ Tambah konfigurasi 'gemini' |
+| | `.env` | ✏️ Tambah GEMINI_API_KEY |
+
+#### 🧠 AI Chatbot (Google Gemini)
+
+- **Trigger:** User mengetik `@ai` di pesan → otomatis AI merespon
+- **System prompt:** Sejarah agama, panduan ibadah, etika, toleransi — dalam Bahasa Indonesia
+- **Keamanan:** Safety threshold BLOCK_ONLY_HIGH untuk konten berbahaya
+- **Error handling:** Timeout 30s, fallback pesan jika API gagal
+- **History:** 10 pesan terakhir user + AI dikirim sebagai konteks
+
+#### 🔧 Eksekusi
+- ✅ `php artisan migrate` — 3 migration sukses
+- ✅ `php artisan db:seed --class=ForumSeeder` — data awal berhasil
+- ✅ `vendor/bin/pint --format agent` — formatting fixed
+- ✅ Semua route terdaftar dan berfungsi
+
+#### 📊 Database State (Update)
+
+| Table | Records |
+|---|---|
+| `forum_rooms` | **1** (Ruang Bersama Harmoni Nusantara) |
+| `forum_messages` | **2** (sambutan admin + AI) |
+| `forum_participants` | **1** (creator: admin) |
+
+---
+
+### 📝 Commit Messages (14 Mei 2026)
+
+1. `feat: add forum rooms, messages, and participants migrations & models`
+2. `feat: add ForumController with chat, join request, and member approval`
+3. `feat: add GeminiService integration for AI chatbot in forum`
+4. `feat: add forum UI with guest/viewer/member access levels`
+5. `feat: add Filament resources for forum messages & participants`
+6. `feat: update navigation, dashboard, and welcome page with forum links`
+7. `chore: add ForumSeeder with initial room and messages`
+8. `chore: update DatabaseSeeder to include ForumSeeder`
+
+### ⚠️ Checklist AI Chatbot — Selesai?
+
+| Item | Status |
+|------|--------|
+| Migration 3 tabel | ✅ Done |
+| Models (ForumRoom, ForumMessage, ForumParticipant) | ✅ Done |
+| User model relasi | ✅ Done |
+| GeminiService | ✅ Done |
+| ForumController + routes | ✅ Done |
+| Forum UI (3 level akses) | ✅ Done |
+| Filament resources | ✅ Done |
+| Seeder | ✅ Done |
+| **🔑 GEMINI_API_KEY di .env (nyata)** | **❌ Belum** |
+| **🧪 Test @ai di forum** | **❌ Belum** |
+| **🐘 `php artisan optimize`** | **❌ Belum** |
+
+### 🚀 Langkah Aktivasi AI Chatbot (Google Gemini)
+
+1. **Daftar & dapatkan API Key:**
+   - Buka https://ai.google.dev/
+   - Klik **"Get an API Key"** → **"Create API Key"**
+   - Login pakai Google Account
+   - Pilih project (atau buat baru) → salin key (format: `AIzaSy...`)
+   - **Gratis**, tanpa kartu kredit — 60 request/menit
+
+2. **Masukkan key ke `.env`:**
+   - Buka file `.env` di root project
+   - Cari baris: `GEMINI_API_KEY=`
+   - Isi dengan key asli: `GEMINI_API_KEY=AIzaSy...key_asli_kamu...`
+   - **JANGAN** pakai tanda kutip
+
+3. **Jalankan optimize:**
+   ```bash
+   php artisan optimize
+   ```
+   (Ini clear cache & baca ulang config)
+
+4. **Test:**
+   - Buka `/forum` (login sebagai member)
+   - Ketik pesan dengan `@ai` di awalnya, misal:
+     > `@ai apa itu toleransi beragama?`
+   - AI akan merespon otomatis dalam 5-10 detik
+
+> **Troubleshooting:** Kalau AI tidak merespon, cek isi `.env` sudah benar, lalu `php artisan optimize` ulang. Kalau masih error, cek log di `storage/logs/laravel.log`.
+
+---
+
+### 📝 Update 14 Mei 2026 — Forum Redesign + Avatar + Auto-delete (by Andikha)
+
+#### ✅ Fitur Baru
+
+| Fitur | Detail |
+|-------|--------|
+| **🎨 Forum UI Redesign** | Chat bubble ala WhatsApp (user kanan hijau, AI kiri putih), sidebar premium, header gradient, mobile responsive |
+| **🖼️ Avatar Upload** | Upload foto profil saat register & edit profil, tampil di forum & navbar (fallback inisial jika tidak ada) |
+| **🧹 Auto-delete 24 Jam** | Model pruning — pesan forum otomatis terhapus tiap jam jika >24 jam |
+
+#### ✅ File yang Diubah/Dibuat
+
+| Status | File | Perubahan |
+|--------|------|-----------|
+| ✏️ Rewrite | `resources/views/forum/index.blade.php` | Redesign total UI chat profesional |
+| ✏️ Edit | `app/Http/Controllers/ProfileController.php` | Tambah upload avatar + fix view path |
+| ✏️ Edit | `resources/views/profile/partials/update-profile-information-form.blade.php` | Tambah input avatar + preview |
+| ✏️ Edit | `resources/views/auth/register.blade.php` | Tambah upload avatar (opsional) + desain lebih menarik |
+| ✏️ Edit | `app/Http/Controllers/Auth/RegisteredUserController.php` | Simpan avatar saat registrasi |
+| ✏️ Edit | `app/Models/ForumMessage.php` | Tambah Prunable trait — hapus otomatis 24 jam |
+| ✏️ Edit | `routes/console.php` | Schedule model:prune tiap jam |
+| ✏️ Edit | `resources/views/layouts/navigation.blade.php` | Tampilkan avatar user di dropdown |
+| 🔧 Baru | `php artisan storage:link` | Symlink public/storage → storage/app/public |
+
+---
+
+### 📅 Update 14 Mei 2026 — Fitur "Kisah Bahagia Mereka" (Testimoni Pengguna) — by Rehan
+
+#### ✅ Ringkasan
+Menambahkan section **"Kisah Bahagia Mereka"** di halaman utama (`/`) setelah section donasi. Menampilkan testimoni pengguna tentang dampak positif menggunakan Harmoni Nusantara. Dilengkapi form submit testimoni inline dengan moderasi admin.
+
+#### ✅ Alur User
+```
+[/] → Scroll ke bawah section donasi
+  ├─ Melihat card testimoni (foto, nama, cerita)
+  ├─ Klik "Bagikan Kisah" → form inline muncul
+  │   ├─ Isi nama, foto (opsional), cerita
+  │   └─ Submit → status "menunggu moderasi"
+  └─ Admin di /dashboard/testimoni setujui/tolak
+      └─ Disetujui → tampil di landing page
+```
+
+#### ✅ Database — 1 Tabel Baru
+
+| Tabel | Kolom |
+|-------|-------|
+| `testimonials` | id, user_id (nullable FK), name, photo (nullable), content (text), is_approved (boolean default false), timestamps |
+
+#### ✅ Fitur & File
+
+| Area | File | Keterangan |
+|------|------|-----------|
+| **Migration** | `database/migrations/2026_05_14_052712_create_testimonials_table.php` | Tabel testimonials |
+| **Model** | `app/Models/Testimonial.php` | Relasi user, scope approved/pending |
+| **Controller** | `app/Http/Controllers/TestimonialController.php` | store(), approve(), reject() |
+| **Routes** | `routes/web.php` | ➕ POST /testimoni, GET /dashboard/testimoni, PATCH approve, DELETE reject |
+| **Views (Landing)** | `resources/views/welcome.blade.php` | ✏️ Tambah section "Kisah Bahagia Mereka" (setelah donasi) + testimonial cards + form input inline dengan validasi |
+| **Views (Dashboard)** | `resources/views/dashboard/testimonials.blade.php` | ➕ Baru — Tabel daftar testimoni + tombol Setujui/Hapus |
+| **Controller (Dashboard)** | `app/Http/Controllers/DashboardController.php` | ✏️ Tambah method testimonials() |
+| **Storage** | `php artisan storage:link` | Symlink untuk upload foto testimoni |
+| **Formatting** | `vendor/bin/pint --format agent` | Fixed no_unused_imports + indentation |
+
+#### ✅ Detail Section Landing Page
+
+```
+┌─────────────────────────────────────────────────────┐
+│            ✨ Kisah Bahagia Mereka                    │
+│    Dampak nyata dari penggunaan Harmoni Nusantara    │
+├─────────────────┬─────────────────┬─────────────────┤
+│  💬 "Cerita..." │  💬 "Cerita..." │  💬 "Cerita..." │
+│  👤 Nama User   │  👤 Nama User   │  👤 Nama User   │
+├─────────────────┴─────────────────┴─────────────────┤
+│              Bagikan Kisah Anda                      │
+│  ┌─────────────────────────────────────────────────┐ │
+│  │ Nama [___________]                              │ │
+│  │ Foto [Choose File]                              │ │
+│  │ Cerita [________________________]               │ │
+│  │ [Kirim Kisah →]                                 │ │
+│  └─────────────────────────────────────────────────┘ │
+│    *Testimoni akan ditampilkan setelah diverifikasi   │
+└─────────────────────────────────────────────────────┘
+```
+
+#### ✅ Flow Moderasi
+
+```
+User submit testimoni
+  → is_approved = false (default)
+  → Admin buka /dashboard/testimoni
+  → Lihat daftar testimoni pending
+  → Klik "Setujui" → is_approved = true → tampil di landing
+  → Klik "Hapus" → testimoni di-delete dari DB
+```
+
+#### 🔧 Eksekusi
+- ✅ `php artisan make:model Testimonial -m` — model + migration
+- ✅ `php artisan make:controller TestimonialController` — controller
+- ✅ `php artisan migrate` — 1 migration sukses
+- ✅ `php artisan storage:link` — storage link created
+- ✅ `vendor/bin/pint --format agent` — formatting fixed
+
+---
+
+### 📝 Update 14 Mei 2026 — Refactor Testimoni: Page Terpisah + Title + Avatar Otomatis — by Rehan
+
+#### ✅ Perubahan dari Versi Sebelumnya
+
+| Aspek | Sebelum | Sesudah | Alasan |
+|-------|---------|---------|--------|
+| **Form testimoni** | Inline di halaman welcome (baris 454-507) | **Halaman terpisah** `/testimoni/buat` dengan layout dashboard | UX lebih fokus, konsisten dengan halaman lain |
+| **Foto testimoni** | Upload manual (field `photo`, disimpan di storage) | **Otomatis dari avatar user** (`user->avatar`) atau inisial | Tidak redundan, user sudah punya foto profil |
+| **Field nama** | Input manual oleh user | **Auto dari `auth()->user()->name`** (read-only) | Mencegah data palsu, lebih akurat |
+| **Identitas card** | Label statis "Pengguna Harmoni Nusantara" | **Judul dinamis** (`title`) — contoh: "Penerima Beasiswa Jakarta 2025" | Memberi konteks peran pengguna |
+| **Foto di dashboard** | Tampilkan upload `$testimonial->photo` | Tampilkan **avatar user** dari `$testimonial->user->avatar` | Konsisten dengan profile user |
+
+#### ✅ Database — Perubahan
+
+| Migration | Kolom | Tipe |
+|-----------|-------|------|
+| ➕ Baru: `xxxx_add_title_to_testimonials_table` | `title` | string(255), nullable, after('name') |
+
+#### ✅ File yang Diubah/Dibuat
+
+| Status | File | Perubahan |
+|--------|------|-----------|
+| ➕ Baru | `database/migrations/2026_05_14_054823_add_title_to_testimonials_table.php` | Kolom `title` di testimonials |
+| ✏️ Rewrite | `app/Models/Testimonial.php` | Ubah fillable: hapus `photo`, tambah `title` + accessor `getAvatarUrlAttribute()` |
+| ✏️ Rewrite | `app/Http/Controllers/TestimonialController.php` | Tambah `create()`, hapus semua logic photo, validasi title + content, name auto dari auth |
+| ➕ Baru | `resources/views/testimonials/create.blade.php` | Halaman form testimoni terpisah — avatar preview, nama auto, input judul + cerita |
+| ✏️ Edit | `routes/web.php` | ➕ `GET /testimoni/buat` → `TestimonialController@create` |
+| ✏️ Edit | `resources/views/welcome.blade.php` | Cards: avatar dari user + title. Hapus form inline → ganti tombol link ke `/testimoni/buat` |
+| ✏️ Edit | `resources/views/dashboard/testimonials.blade.php` | Kolom Foto → avatar user. Tambah kolom Judul antara Nama dan Cerita |
+
+#### 🔄 Alur User Baru
+
+```
+[Landing Page /]
+  ↓ Scroll ke section Kisah Bahagia Mereka
+  ├─ Lihat testimonial cards → avatar user + nama + title (e.g. "Penerima Beasiswa") + cerita
+  │
+  ├─ [Jika LOGIN]:
+  │     Tombol "Bagikan Kisah Anda" → /testimoni/buat
+  │       → Preview avatar + nama (auto, disabled)
+  │       → Input Judul (optional): "Penerima Beasiswa Jakarta 2025"
+  │       → Input Cerita (required)
+  │       → Submit → redirect ke / dengan flash sukses
+  │
+  └─ [Jika GUEST]:
+        "Masuk atau daftar untuk membagikan kisah Anda"
+```
+
+#### 🧩 Detail Form (`/testimoni/buat`)
+
+```
+┌─ Bagikan Kisah Anda ─────────────────────────────┐
+│                                                    │
+│   [ 🖼️ Avatar ]  Nama User (auto)                 │
+│                   Nama akan otomatis terisi        │
+│                                                    │
+│   Judul / Peran (opsional)                        │
+│   [ Penerima Beasiswa Jakarta 2025          ]     │
+│   Misalnya: Penerima Beasiswa, Relawan, dll.      │
+│                                                    │
+│   Cerita Anda *                                    │
+│   [ Ceritakan pengalaman Anda...             ]     │
+│   [____________________________]                   │
+│                                                    │
+│   [Kirim Kisah →]  [Batal]                         │
+│   ℹ️ Kisah akan ditampilkan setelah diverifikasi    │
+└────────────────────────────────────────────────────┘
+```
+
+#### 🔧 Eksekusi
+
+- ✅ `php artisan make:migration add_title_to_testimonials_table` — migration
+- ✅ `php artisan migrate` — kolom `title` siap
+- ✅ Semua route terdaftar (5 route testimoni)
+- ✅ `vendor/bin/pint --format agent` — formatting fixed
+

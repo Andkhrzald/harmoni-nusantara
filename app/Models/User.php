@@ -43,4 +43,19 @@ class User extends Authenticatable
     {
         return $this->hasMany(Consultation::class);
     }
+
+    public function forumMessages()
+    {
+        return $this->hasMany(ForumMessage::class);
+    }
+
+    public function forumParticipants()
+    {
+        return $this->hasMany(ForumParticipant::class);
+    }
+
+    public function forumRooms()
+    {
+        return $this->hasMany(ForumRoom::class, 'user_id');
+    }
 }

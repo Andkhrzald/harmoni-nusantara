@@ -5,13 +5,18 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\FactCheckController;
+use App\Http\Controllers\ForumController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\VolunteerController;
 use App\Http\Controllers\WorshipController;
+use App\Models\Testimonial;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    $testimonials = Testimonial::approved()->latest()->take(6)->get();
+
+    return view('welcome', compact('testimonials'));
 })->name('home');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
@@ -75,6 +80,23 @@ Route::prefix('aksi')->name('aksi.')->group(function () {
         Route::post('/', [ConsultationController::class, 'store'])->name('store')->middleware('auth');
         Route::get('/{id}', [ConsultationController::class, 'show'])->name('show')->middleware('auth');
         Route::post('/{id}/message', [ConsultationController::class, 'sendMessage'])->name('message')->middleware('auth');
+    });
+});
+
+Route::get('/forum', [ForumController::class, 'index'])->name('forum');
+
+Route::middleware('auth')->group(function () {
+    Route::post('/forum/message', [ForumController::class, 'storeMessage'])->name('forum.message');
+    Route::post('/forum/request-join', [ForumController::class, 'requestJoin'])->name('forum.request-join');
+    Route::post('/forum/approve/{user}', [ForumController::class, 'approveMember'])->name('forum.approve');
+
+    Route::get('/testimoni/buat', [TestimonialController::class, 'create'])->name('testimoni.create');
+    Route::post('/testimoni', [TestimonialController::class, 'store'])->name('testimoni.store');
+
+    Route::middleware(['auth', 'role:admin,penyuluh'])->prefix('dashboard')->name('dashboard.')->group(function () {
+        Route::get('/testimoni', [DashboardController::class, 'testimonials'])->name('testimonials');
+        Route::patch('/testimoni/{id}/approve', [TestimonialController::class, 'approve'])->name('testimoni.approve');
+        Route::delete('/testimoni/{id}/reject', [TestimonialController::class, 'reject'])->name('testimoni.reject');
     });
 });
 

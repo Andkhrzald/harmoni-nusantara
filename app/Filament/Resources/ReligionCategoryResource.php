@@ -3,27 +3,20 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ReligionCategoryResource\Pages\ManageReligionCategories;
-use App\Models\ReligionCategory;
-use Filament\Forms;
 use Filament\Forms;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 
 class ReligionCategoryResource extends Resource
 {
-    protected static ?string $model = ReligionCategory::class;
-
     protected static ?string $navigationLabel = 'Kategori Agama';
 
     protected static ?string $modelLabel = 'Kategori Agama';
 
-    protected static ?string $navigationLabel = 'Kategori Agama';
-
-    protected static ?string $modelLabel = 'Kategori Agama';
-
-    public static function form(Forms\Form $form): Forms\Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Forms\Components\TextInput::make('slug')
                     ->label('Slug')

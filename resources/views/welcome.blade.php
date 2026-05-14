@@ -105,7 +105,7 @@
                     Ruang digital inklusif untuk mempererat toleransi, berbagi inspirasi, dan merayakan indahnya perbedaan di tanah air tercinta.
                 </p>
                 <div class="flex flex-wrap gap-4">
-                    <a href="{{ route('register') }}" class="bg-primary text-white px-8 py-4 rounded-xl font-semibold hover:bg-primary-600 transition-all shadow-lg shadow-primary/20 hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-2">
+                    <a href="{{ route('forum') }}" class="bg-primary text-white px-8 py-4 rounded-xl font-semibold hover:bg-primary-600 transition-all shadow-lg shadow-primary/20 hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-2">
                         <span class="material-symbols-outlined">forum</span>
                         Mulai Berdialog
                     </a>
@@ -407,6 +407,68 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- Kisah Bahagia Mereka Section -->
+        <section class="py-20 px-4 sm:px-6 lg:px-10 bg-primary-50/50">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-12">
+                    <span class="inline-flex items-center gap-2 bg-primary-200/50 text-primary-800 px-4 py-1.5 rounded-full text-sm font-medium mb-4">
+                        <span class="material-symbols-outlined text-sm">auto_awesome</span>
+                        Testimoni Pengguna
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-primary mb-3">Kisah Bahagia Mereka</h2>
+                    <p class="text-on-surface-variant max-w-2xl mx-auto">
+                        Dampak nyata dari penggunaan Harmoni Nusantara dalam kehidupan sehari-hari
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                    @forelse($testimonials as $testimonial)
+                        <div class="bg-white rounded-2xl p-6 shadow-sm border border-accent-sand/50 hover:shadow-md transition-shadow flex flex-col">
+                            <span class="material-symbols-outlined text-3xl text-secondary/30 mb-3">format_quote</span>
+                            <p class="text-on-surface-variant leading-relaxed line-clamp-4 flex-1">{{ $testimonial->content }}</p>
+                            <div class="flex items-center gap-3 mt-4 pt-4 border-t border-accent-sand/30">
+                                @if($testimonial->user && $testimonial->user->avatar)
+                                    <img src="{{ Storage::url($testimonial->user->avatar) }}" alt="{{ $testimonial->name }}" class="w-10 h-10 rounded-full object-cover">
+                                @else
+                                    <span class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary font-bold text-sm">
+                                        {{ strtoupper(substr($testimonial->name, 0, 1)) }}
+                                    </span>
+                                @endif
+                                <div>
+                                    <p class="font-semibold text-primary text-sm">{{ $testimonial->name }}</p>
+                                    <p class="text-xs text-on-surface-variant font-medium">{{ $testimonial->title ?? 'Pengguna Harmoni Nusantara' }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="bg-white/60 rounded-2xl p-8 border border-dashed border-accent-sand/50 text-center md:col-span-2 lg:col-span-3">
+                            <span class="material-symbols-outlined text-5xl text-accent-sand mb-3">edit_note</span>
+                            <p class="text-on-surface-variant">Belum ada kisah yang dibagikan. Jadilah yang pertama!</p>
+                        </div>
+                    @endforelse
+                </div>
+
+                @auth
+                <div class="text-center">
+                    <a href="{{ route('testimoni.create') }}"
+                       class="inline-flex items-center gap-2 bg-secondary text-white px-8 py-3.5 rounded-xl font-semibold shadow-lg shadow-secondary/20 hover:shadow-xl hover:opacity-90 hover:-translate-y-0.5 transition-all">
+                        <span class="material-symbols-outlined">edit_note</span>
+                        Bagikan Kisah Anda
+                    </a>
+                </div>
+                @else
+                <div class="text-center max-w-lg mx-auto bg-white/60 rounded-2xl p-8 border border-dashed border-accent-sand/50">
+                    <span class="material-symbols-outlined text-4xl text-accent-sand mb-2">lock</span>
+                    <p class="text-on-surface-variant">
+                        <a href="{{ route('login') }}" class="text-secondary hover:underline font-medium">Masuk</a> atau
+                        <a href="{{ route('register') }}" class="text-secondary hover:underline font-medium">daftar</a>
+                        untuk membagikan kisah Anda.
+                    </p>
+                </div>
+                @endauth
             </div>
         </section>
 

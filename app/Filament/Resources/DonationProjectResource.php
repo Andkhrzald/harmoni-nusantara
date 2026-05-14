@@ -3,22 +3,20 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\DonationProjectResource\Pages\ManageDonationProjects;
-use App\Models\DonationProject;
 use Filament\Forms;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 
 class DonationProjectResource extends Resource
 {
-    protected static ?string $model = DonationProject::class;
-
     protected static ?string $navigationLabel = 'Proyek Donasi';
 
     protected static ?string $modelLabel = 'Proyek Donasi';
 
-    public static function form(Forms\Form $form): Forms\Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Forms\Components\TextInput::make('title')
                     ->label('Judul')

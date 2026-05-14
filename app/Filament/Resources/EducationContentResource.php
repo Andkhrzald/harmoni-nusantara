@@ -3,22 +3,20 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\EducationContentResource\Pages\ManageEducationContents;
-use App\Models\EducationContent;
 use Filament\Forms;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 
 class EducationContentResource extends Resource
 {
-    protected static ?string $model = EducationContent::class;
-
     protected static ?string $navigationLabel = 'Konten Edukasi';
 
     protected static ?string $modelLabel = 'Konten Edukasi';
 
-    public static function form(Forms\Form $form): Forms\Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Forms\Components\TextInput::make('title')
                     ->label('Judul')

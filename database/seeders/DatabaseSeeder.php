@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ReligionCategorySeeder::class,
             EducationContentSeeder::class,
+            ForumSeeder::class,
         ]);
 
         User::factory()->create([

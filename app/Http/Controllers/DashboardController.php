@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Testimonial;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -9,6 +10,13 @@ class DashboardController extends Controller
     public function index(): View
     {
         return view('dashboard.index');
+    }
+
+    public function testimonials(): View
+    {
+        $testimonials = Testimonial::with('user')->latest()->get();
+
+        return view('dashboard.testimonials', compact('testimonials'));
     }
 
     public function donations(): View

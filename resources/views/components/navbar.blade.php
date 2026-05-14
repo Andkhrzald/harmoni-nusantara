@@ -8,7 +8,8 @@
 
     $isPublic = str_starts_with($routeName, 'edukasi')
              || str_starts_with($routeName, 'ibadah')
-             || str_starts_with($routeName, 'aksi');
+             || str_starts_with($routeName, 'aksi')
+             || str_starts_with($routeName, 'forum');
 @endphp
 
 @if ($isPublic && $slug && in_array($slug, $valid))
