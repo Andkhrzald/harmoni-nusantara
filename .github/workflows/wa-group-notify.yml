@@ -17,10 +17,8 @@ jobs:
           COMMIT_MSG: ${{ github.event.head_commit.message }}
           REPO: ${{ github.repository }}
         run: |
-          MSG="📢 *Push Notification*
-        👤 *User:* ${ACTOR}
-        💬 *Commit:* ${COMMIT_MSG}
-        🔗 *Repo:* ${REPO}"
+          MSG=$(printf '📢 *Push Notification*\n👤 *User:* %s\n💬 *Commit:* %s\n🔗 *Repo:* %s' \
+            "${ACTOR}" "${COMMIT_MSG}" "${REPO}")
 
           curl -s -X POST "${WA_API_URL}" \
             -H "Authorization: ${WA_API_TOKEN}" \
