@@ -1,5 +1,5 @@
 <x-app-layout>
-    @section('title', 'Dashboard')
+    @section('title', 'Harmoni Nusantara - platform sosialisasi agama')
     @php
         $user = Auth::user();
         $initial = strtoupper(substr($user->name, 0, 1));

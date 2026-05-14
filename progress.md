@@ -215,3 +215,53 @@ Semua views render OK ✅ (20+ file tested, 0 error)
 #### ✅ File diubah
 - `database/seeders/EducationContentSeeder.php` — 33 konten untuk 6 agama
 - `resources/views/dashboard/index.blade.php` — redesign total
+
+---
+
+# Progress — by Rehan
+
+## Ringkasan Pekerjaan
+
+---
+
+### 🐛 Bug yang Diperbaiki  
+---
+
+### 🆕 Perubahan yang Dilakukan
+
+#### 2. Perbaikan Format Title Halaman Per Agama
+**File:** `resources/views/education/religion.blade.php` — baris 4
+- **SEBELUMNYA:** `@section('title', $pageTitle . ' - Agama')` → title tampil "Islam - Agama - Laravel" (redundans)
+- **SEKARANG:** `@section('title', $pageTitle)` → title tampil "Islam - Harmoni Nusantara" — bersih, sesuai nama agama dari database
+
+---
+
+### 📁 Alur Perubahan
+
+```
+Sebelum:
+  Browser tab → "Islam - Agama 
+                         ↑         
+                    (redundan)  
+
+Sesudah:
+  Browser tab → "Islam 
+                    ↑         
+              ($religionName)  
+
+Sumber title:
+  .env APP_NAME="Harmoni Nusantara"
+    → config/page-title.php (default)
+      → TitleServiceProvider (inject ke semua view)
+        → layouts/app.blade.php (render <title>)
+          → @section('title', $pageTitle) di religion.blade.php
+```
+
+---
+
+### 📁 File yang Diubah
+
+| Status | File | Keterangan |
+|--------|------|------------|
+
+| ✏️ Edit | `resources/views/education/religion.blade.php` | Format `@section('title')` disederhanakan |

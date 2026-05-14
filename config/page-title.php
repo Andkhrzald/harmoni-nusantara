@@ -3,7 +3,7 @@
 return [
     'default' => env('APP_NAME', 'Harmoni Nusantara'),
 
-    'separator' => ' | ',
+    'separator' => ' - ',
 
     'format' => ':title:separator:default',
 ];

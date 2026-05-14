@@ -1,5 +1,5 @@
 <x-app-layout>
-    @section('title', 'Wisata Religi Virtual')
+    @section('title', 'Wisata Religi Virtual - Edukasi')
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Wisata Religi Virtual') }}
