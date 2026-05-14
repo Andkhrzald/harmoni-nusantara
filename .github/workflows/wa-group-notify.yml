@@ -1,0 +1,28 @@
+name: WA Group Notify
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send WhatsApp notification to group
+        env:
+          WA_API_URL: ${{ secrets.WA_API_URL }}
+          WA_API_TOKEN: ${{ secrets.WA_API_TOKEN }}
+          WA_GROUP_ID: ${{ secrets.WA_GROUP_ID }}
+          ACTOR: ${{ github.actor }}
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
+          REPO: ${{ github.repository }}
+        run: |
+          MSG="📢 *Push Notification*
+        👤 *User:* ${ACTOR}
+        💬 *Commit:* ${COMMIT_MSG}
+        🔗 *Repo:* ${REPO}"
+
+          curl -s -X POST "${WA_API_URL}" \
+            -H "Authorization: ${WA_API_TOKEN}" \
+            -F "target=${WA_GROUP_ID}" \
+            -F "message=${MSG}"
