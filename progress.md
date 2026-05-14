@@ -217,56 +217,6 @@ Semua views render OK ✅ (20+ file tested, 0 error)
 - `resources/views/dashboard/index.blade.php` — redesign total
 
 ---
-
-
-# Progress — by Rehan
-
-## Ringkasan Pekerjaan
-
----
-
-### 🐛 Bug yang Diperbaiki  
----
-
-### 🆕 Perubahan yang Dilakukan
-
-#### 2. Perbaikan Format Title Halaman Per Agama
-**File:** `resources/views/education/religion.blade.php` — baris 4
-- **SEBELUMNYA:** `@section('title', $pageTitle . ' - Agama')` → title tampil "Islam - Agama - Laravel" (redundans)
-- **SEKARANG:** `@section('title', $pageTitle)` → title tampil "Islam - Harmoni Nusantara" — bersih, sesuai nama agama dari database
-
----
-
-### 📁 Alur Perubahan
-
-```
-Sebelum:
-  Browser tab → "Islam - Agama 
-                         ↑         
-                    (redundan)  
-
-Sesudah:
-  Browser tab → "Islam 
-                    ↑         
-              ($religionName)  
-
-Sumber title:
-  .env APP_NAME="Harmoni Nusantara"
-    → config/page-title.php (default)
-      → TitleServiceProvider (inject ke semua view)
-        → layouts/app.blade.php (render <title>)
-          → @section('title', $pageTitle) di religion.blade.php
-```
-
----
-
-### 📁 File yang Diubah
-
-| Status | File | Keterangan |
-|--------|------|------------|
-
-| ✏️ Edit | `resources/views/education/religion.blade.php` | Format `@section('title')` disederhanakan |
-=======
 ### 📅 Update 14 Mei 2026 — Fitur "Ruang Bersama" (Forum Diskusi + AI Chatbot)
 
 #### ✅ Ringkasan
@@ -579,3 +529,29 @@ User submit testimoni
 - ✅ Semua route terdaftar (5 route testimoni)
 - ✅ `vendor/bin/pint --format agent` — formatting fixed
 
+### 📅 Update 14 Mei 2026 — Dashboard Layout Sidebar + Redesign
+
+##### File Baru
+| File | Fungsi |
+|------|--------|
+| `app/View/Components/DashboardLayout.php` | Component class untuk layout dashboard |
+| `resources/views/layouts/dashboard.blade.php` | Layout lengkap: sidebar + topbar + main content |
+
+##### File Diubah
+| File | Perubahan |
+|------|-----------|
+| `resources/views/dashboard/index.blade.php` | Ganti `x-app-layout` → `x-dashboard-layout` |
+| `resources/views/dashboard/donations.blade.php` | Ganti layout + redesign tabel donasi |
+| `resources/views/dashboard/learning.blade.php` | Ganti layout + redesign card progres |
+| `resources/views/dashboard/consultations.blade.php` | Ganti layout + redesign list konsultasi |
+| `resources/views/profile/edit.blade.php` | Ganti layout + konsisten dengan dashboard |
+
+##### Fitur Sidebar
+- Sidebar fixed (w-64) di desktop, slide-in di mobile dengan backdrop overlay
+- Active state highlight hijau (`primary`) + dot indikator
+- Breadcrumb otomatis di topbar sesuai halaman aktif
+- User info + avatar initial + role di bottom sidebar
+- Tombol logout di sidebar
+- **Cek Fakta** muncul khusus role `admin`/`penyuluh`
+- `x-cloak` untuk mencegah flash layout
+- Tombol "Ke Situs" di topbar untuk navigasi ke halaman publik

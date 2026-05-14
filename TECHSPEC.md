@@ -28,7 +28,7 @@ Indonesia memiliki keragaman agama yang tinggi (Islam, Kristen Protestan, Katoli
 
 ### 1.2 Solution
 **Harmony Digital** adalah platform web berbasis Laravel yang menyediakan:
-- Edukasi keagamaan lintas iman yang dikurasi oleh penyuluh resmi
+- Edukasi keagamaan lintas iman
 - Informasi ibadah praktis berbasis API real-time
 - Ruang diskusi moderat yang terenkripsi
 - Aksi sosial kolaboratif lintas agama
