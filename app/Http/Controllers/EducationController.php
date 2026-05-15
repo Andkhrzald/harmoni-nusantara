@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\EducationContent;
 use App\Models\ReligionCategory;
+use App\Services\YouTubeService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 
 class EducationController extends Controller
@@ -46,15 +48,36 @@ class EducationController extends Controller
         return view('education.show', compact('content'));
     }
 
-    public function gallery(): View
+    public function gallery(Request $request): View
     {
-        $videos = EducationContent::where('status', 'approved')
-            ->where('content_type', 'video')
-            ->with('religion')
-            ->latest()
-            ->paginate(12);
+        $religions = ReligionCategory::all();
 
-        return view('education.gallery', compact('videos'));
+        $activeSlug = in_array($request->get('religion'), $religions->pluck('slug')->toArray())
+            ? $request->get('religion')
+            : 'islam';
+
+        $activeReligion = $religions->firstWhere('slug', $activeSlug);
+        $searchQuery = 'cerita sejarah '.$activeReligion->name;
+
+        $youtubeService = new YouTubeService;
+        $videos = Cache::remember('yt_gallery_'.$activeSlug, now()->addHours(6), function () use ($youtubeService, $searchQuery) {
+            return $youtubeService->searchVideos($searchQuery, 12);
+        });
+
+        return view('education.gallery', compact('religions', 'activeSlug', 'videos'));
+    }
+
+    public function youtubeSearch(Request $request): View
+    {
+        $query = $request->get('q', '');
+        $videos = [];
+
+        if ($query) {
+            $youtubeService = new YouTubeService;
+            $videos = $youtubeService->searchVideos($query);
+        }
+
+        return view('education.youtube-search', compact('query', 'videos'));
     }
 
     public function virtualTour(): View

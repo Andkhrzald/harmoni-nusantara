@@ -34,13 +34,11 @@ class WorshipController extends Controller
 
     public function map(): View
     {
-        $lat = request('lat', -6.2);
-        $lng = request('lng', 106.8);
+        $lat = request('lat');
+        $lng = request('lng');
+        $mapsKey = config('services.google.maps_key');
 
-        $mapsService = new GoogleMapsService;
-        $places = $mapsService->findNearbyWorshipPlaces($lat, $lng, 5000);
-
-        return view('worship.map', compact('places', 'lat', 'lng'));
+        return view('worship.map', compact('lat', 'lng', 'mapsKey'));
     }
 
     public function findNearbyPlaces(): JsonResponse

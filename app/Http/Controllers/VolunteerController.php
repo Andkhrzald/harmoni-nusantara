@@ -51,7 +51,7 @@ class VolunteerController extends Controller
             'status' => 'pending',
         ]);
 
-        return redirect()->route('aksi.volunteers.index')
+        return redirect()->route('aksi.relawan.index')
             ->with('success', 'Pendaftaran relator berhasil! Kami akan menghubungi Anda segera.');
     }
 

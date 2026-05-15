@@ -69,7 +69,7 @@ class EducationContentResource extends Resource
                         'infographic' => 'Infografis',
                     ]),
                 Tables\Filters\Filter::make('is_published')
-                    ->query(fn ($query) => $query->where('is_published', true))
+                    ->query(fn ($query) => $query->whereRaw('"is_published" = true'))
                     ->label('Hanya Dipublikasikan'),
             ])
             ->actions([

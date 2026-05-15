@@ -8,7 +8,7 @@
 
     <div class="py-12">
         <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
-            <form action="{{ route('aksi.volunteers.store') }}" method="POST" class="space-y-6">
+            <form action="{{ route('aksi.relawan.store') }}" method="POST" class="space-y-6">
                 @csrf
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Program Relawan</label>

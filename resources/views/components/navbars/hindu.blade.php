@@ -15,13 +15,13 @@
                 </a>
             </div>
             <div class="hidden lg:flex items-center gap-1">
-                <a href="{{ route('edukasi.religion', 'hindu') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-all {{ $isActive('edukasi') ? 'text-yellow-200 bg-white/10' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
+                <a href="{{ route('edukasi.agama', 'hindu') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-all {{ $isActive('edukasi') ? 'text-yellow-200 bg-white/10' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
                     <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px]">menu_book</span> Weda</span>
                 </a>
-                <a href="{{ route('ibadah.guide', 'hindu') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-all {{ $isActive('ibadah.guide') ? 'text-yellow-200 bg-white/10' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
+                <a href="{{ route('ibadah.panduan', 'hindu') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-all {{ $isActive('ibadah.panduan') ? 'text-yellow-200 bg-white/10' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
                     <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px]">live_help</span> Panduan</span>
                 </a>
-                <a href="{{ route('ibadah.etiquette', 'hindu') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-all {{ $isActive('ibadah.etiquette') ? 'text-yellow-200 bg-white/10' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
+                <a href="{{ route('ibadah.etiket', 'hindu') }}" class="px-3 py-2 rounded-lg text-sm font-medium transition-all {{ $isActive('ibadah.etiket') ? 'text-yellow-200 bg-white/10' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
                     <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[18px]">account_balance</span> Etiket</span>
                 </a>
                 @auth
@@ -56,9 +56,9 @@
     </div>
     <div x-show="mobile" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="lg:hidden border-t border-white/10 bg-orange-700" style="display: none;">
         <div class="px-4 py-3 space-y-0.5">
-            <a href="{{ route('edukasi.religion', 'hindu') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">menu_book</span> Weda & Edukasi</a>
-            <a href="{{ route('ibadah.guide', 'hindu') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">live_help</span> Panduan Ibadah</a>
-            <a href="{{ route('ibadah.etiquette', 'hindu') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">account_balance</span> Etiket Pura</a>
+            <a href="{{ route('edukasi.agama', 'hindu') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">menu_book</span> Weda & Edukasi</a>
+            <a href="{{ route('ibadah.panduan', 'hindu') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">live_help</span> Panduan Ibadah</a>
+            <a href="{{ route('ibadah.etiket', 'hindu') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">account_balance</span> Etiket Pura</a>
             <div class="border-t border-white/10 my-2"></div>
             @auth
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">dashboard</span> Dashboard</a>

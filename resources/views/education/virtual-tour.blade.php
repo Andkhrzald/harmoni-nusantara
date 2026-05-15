@@ -21,7 +21,7 @@
                         <div class="p-4">
                             <h4 class="font-semibold">{{ $tour->title }}</h4>
                             <p class="text-sm text-gray-500 mt-1">{{ $tour->religion->name ?? '' }}</p>
-                            <a href="{{ route('edukasi.show', $tour->slug) }}" class="inline-block mt-3 text-indigo-600 hover:text-indigo-800">
+                            <a href="{{ route('edukasi.video.show', $tour->slug) }}" class="inline-block mt-3 text-indigo-600 hover:text-indigo-800">
                                 Mulai Tur →
                             </a>
                         </div>

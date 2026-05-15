@@ -35,22 +35,28 @@
 
         $navItems = [
             ['route' => 'dashboard', 'label' => 'Dashboard', 'icon' => 'dashboard'],
-            ['route' => 'dashboard.donations', 'label' => 'Donasi', 'icon' => 'volunteer_activism'],
             ['route' => 'dashboard.learning', 'label' => 'Belajar', 'icon' => 'menu_book'],
-            ['route' => 'dashboard.consultations', 'label' => 'Konsultasi', 'icon' => 'forum'],
         ];
 
         $ibadahActive = request()->routeIs('ibadah.*');
 
         $ibadahItems = [
-            ['route' => 'ibadah.schedule', 'label' => 'Jadwal Ibadah', 'icon' => 'calendar_month'],
-            ['route' => 'ibadah.map', 'label' => 'Peta Rumah Ibadah', 'icon' => 'map'],
-            ['route' => 'ibadah.guide', 'label' => 'Panduan Ritual', 'icon' => 'self_improvement'],
-            ['route' => 'ibadah.etiquette', 'label' => 'Etiket Bertamu', 'icon' => 'handshake'],
+            ['route' => 'ibadah.jadwal', 'label' => 'Jadwal Ibadah', 'icon' => 'calendar_month'],
+            ['route' => 'ibadah.peta', 'label' => 'Peta Rumah Ibadah', 'icon' => 'map'],
         ];
 
+        $edukasiActive = request()->routeIs('edukasi.*');
+
+        $edukasiItems = [
+            ['route' => 'edukasi.index', 'label' => 'Konten Edukasi', 'icon' => 'menu_book'],
+            ['route' => 'edukasi.video.index', 'label' => 'Galeri Video', 'icon' => 'play_circle'],
+            ['route' => 'edukasi.video.cari', 'label' => 'Cari Video YouTube', 'icon' => 'youtube_activity'],
+        ];
+
+        // Cek Fakta tersedia untuk semua user terdaftar
+
         if ($user->role === 'admin' || $user->role === 'penyuluh') {
-            $navItems[] = ['route' => 'aksi.cek-fakta.index', 'label' => 'Cek Fakta', 'icon' => 'fact_check'];
+            $navItems[] = ['route' => 'aksi.fakta.create', 'label' => 'Tambah Fakta', 'icon' => 'add_circle'];
         }
 
         $navItems[] = ['route' => 'profile.edit', 'label' => 'Profil', 'icon' => 'person'];
@@ -150,6 +156,49 @@
                         @endforeach
                     </div>
                 </div>
+
+                {{-- Edukasi group (expandable) --}}
+                <div x-data="{ open: @js($edukasiActive) }" class="space-y-0.5">
+                    <button @click="open = !open"
+                            @class([
+                                'flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium transition-all group',
+                                'bg-primary-50 text-primary shadow-sm' => $edukasiActive,
+                                'text-gray-600 hover:bg-gray-50 hover:text-gray-900' => !$edukasiActive,
+                            ])>
+                        <span @class([
+                            'material-symbols-outlined text-lg transition-all',
+                            'text-primary' => $edukasiActive,
+                            'text-gray-400 group-hover:text-gray-600' => !$edukasiActive,
+                        ])>school</span>
+                        <span class="flex-1 text-left">Edukasi</span>
+                        <span class="material-symbols-outlined text-base transition-transform duration-200"
+                              :class="{ 'rotate-90': open }">chevron_right</span>
+                    </button>
+
+                    <div x-show="open"
+                         x-cloak
+                         x-transition:enter="transition-all ease-out duration-200"
+                         x-transition:enter-start="opacity-0 -translate-y-1"
+                         x-transition:enter-end="opacity-100 translate-y-0"
+                         x-transition:leave="transition-all ease-in duration-150"
+                         x-transition:leave-start="opacity-100 translate-y-0"
+                         x-transition:leave-end="opacity-0 -translate-y-1"
+                         class="ml-3 space-y-0.5 border-l-2 border-primary-100 pl-2">
+                        @foreach ($edukasiItems as $item)
+                            @php $subActive = request()->routeIs($item['route']); @endphp
+                            <a href="{{ route($item['route']) }}"
+                               @class([
+                                   'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all',
+                                   'bg-primary-50 text-primary' => $subActive,
+                                   'text-gray-500 hover:bg-gray-50 hover:text-gray-700' => !$subActive,
+                               ])>
+                                <span class="material-symbols-outlined text-base text-gray-400">{{ $item['icon'] }}</span>
+                                {{ $item['label'] }}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+
             </nav>
 
             {{-- Bottom: User & Logout --}}

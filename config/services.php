@@ -39,4 +39,14 @@ return [
         'api_key' => env('GEMINI_API_KEY'),
     ],
 
+    'google' => [
+        'maps_key' => env('GOOGLE_MAPS_KEY'),
+        'youtube_key' => env('GOOGLE_YOUTUBE_KEY'),
+        'factcheck_key' => env('GOOGLE_FACTCHECK_KEY'),
+    ],
+
+    'calendarific' => [
+        'key' => env('CALENDARIFIC_API_KEY'),
+    ],
+
 ];

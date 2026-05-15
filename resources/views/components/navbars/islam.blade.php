@@ -82,7 +82,7 @@
                                     </span>
                                 </div>
                             @endforeach
-                            <a href="{{ route('ibadah.schedule') }}"
+                            <a href="{{ route('ibadah.jadwal') }}"
                                class="mt-1 flex items-center justify-center gap-1 px-3 py-2 text-xs text-primary font-medium hover:bg-primary-50 rounded-lg transition-colors">
                                 <span>Lihat Semua Wilayah</span>
                                 <span class="material-symbols-outlined text-sm">arrow_forward</span>
@@ -92,30 +92,30 @@
                 </div>
 
                 {{-- Nav links --}}
-                <a href="{{ route('ibadah.schedule') }}"
+                <a href="{{ route('ibadah.jadwal') }}"
                    class="px-3 py-2 rounded-lg text-sm font-medium transition-all
-                          {{ $isActive('ibadah.schedule') ? 'text-accent-gold bg-white/10' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
+                          {{ $isActive('ibadah.jadwal') ? 'text-accent-gold bg-white/10' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
                     <span class="flex items-center gap-1.5">
                         <span class="material-symbols-outlined text-[18px]">schedule</span> Jadwal
                     </span>
                 </a>
-                <a href="{{ route('edukasi.religion', 'islam') }}"
+                <a href="{{ route('edukasi.agama', 'islam') }}"
                    class="px-3 py-2 rounded-lg text-sm font-medium transition-all
                           {{ $isActive('edukasi') ? 'text-accent-gold bg-white/10' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
                     <span class="flex items-center gap-1.5">
                         <span class="material-symbols-outlined text-[18px]">menu_book</span> Al-Qur'an
                     </span>
                 </a>
-                <a href="{{ route('ibadah.guide', 'islam') }}"
+                <a href="{{ route('ibadah.panduan', 'islam') }}"
                    class="px-3 py-2 rounded-lg text-sm font-medium transition-all
-                          {{ $isActive('ibadah.guide') ? 'text-accent-gold bg-white/10' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
+                          {{ $isActive('ibadah.panduan') ? 'text-accent-gold bg-white/10' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
                     <span class="flex items-center gap-1.5">
                         <span class="material-symbols-outlined text-[18px]">live_help</span> Panduan
                     </span>
                 </a>
-                <a href="{{ route('ibadah.etiquette', 'islam') }}"
+                <a href="{{ route('ibadah.etiket', 'islam') }}"
                    class="px-3 py-2 rounded-lg text-sm font-medium transition-all
-                          {{ $isActive('ibadah.etiquette') ? 'text-accent-gold bg-white/10' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
+                          {{ $isActive('ibadah.etiket') ? 'text-accent-gold bg-white/10' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
                     <span class="flex items-center gap-1.5">
                         <span class="material-symbols-outlined text-[18px]">account_balance</span> Etiket
                     </span>
@@ -217,23 +217,23 @@
          class="lg:hidden border-t border-white/10 bg-emerald-800/95 backdrop-blur"
          style="display: none;">
         <div class="px-4 py-3 space-y-0.5">
-            <a href="{{ route('ibadah.schedule') }}"
+            <a href="{{ route('ibadah.jadwal') }}"
                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all">
                 <span class="material-symbols-outlined text-lg">schedule</span> Jadwal Sholat
             </a>
-            <a href="{{ route('edukasi.religion', 'islam') }}"
+            <a href="{{ route('edukasi.agama', 'islam') }}"
                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all">
                 <span class="material-symbols-outlined text-lg">menu_book</span> Al-Qur'an & Edukasi
             </a>
-            <a href="{{ route('ibadah.guide', 'islam') }}"
+            <a href="{{ route('ibadah.panduan', 'islam') }}"
                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all">
                 <span class="material-symbols-outlined text-lg">live_help</span> Panduan Ibadah
             </a>
-            <a href="{{ route('ibadah.etiquette', 'islam') }}"
+            <a href="{{ route('ibadah.etiket', 'islam') }}"
                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all">
                 <span class="material-symbols-outlined text-lg">account_balance</span> Etiket Masjid
             </a>
-            <a href="{{ route('ibadah.map') }}"
+            <a href="{{ route('ibadah.peta') }}"
                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all">
                 <span class="material-symbols-outlined text-lg">map</span> Peta Masjid
             </a>

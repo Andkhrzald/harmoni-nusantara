@@ -106,7 +106,7 @@
             {{-- Breadcrumb / Pilih agama --}}
             @if ($religion)
                 <div class="mb-4">
-                    <a href="{{ route('ibadah.etiquette') }}" class="text-sm text-gray-400 hover:text-gray-600 inline-flex items-center gap-1">
+                    <a href="{{ route('ibadah.etiket') }}" class="text-sm text-gray-400 hover:text-gray-600 inline-flex items-center gap-1">
                         <span class="material-symbols-outlined text-sm">arrow_back</span>
                         Semua Etiket
                     </a>
@@ -119,7 +119,7 @@
                     <div class="flex gap-1 min-w-max">
                         @foreach ($validSlugs as $slug)
                             @php $m = $religionMeta[$slug]; @endphp
-                            <a href="{{ route('ibadah.etiquette', $slug) }}"
+                            <a href="{{ route('ibadah.etiket', $slug) }}"
                                class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200
                                       {{ $current === $slug ? 'bg-gray-100 text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50' }}">
                                 <span class="material-symbols-outlined text-lg {{ $current === $slug ? 'text-primary' : 'text-gray-400' }}">
@@ -174,7 +174,7 @@
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
                     @foreach ($validSlugs as $slug)
                         @php $m = $religionMeta[$slug]; @endphp
-                        <a href="{{ route('ibadah.etiquette', $slug) }}"
+                        <a href="{{ route('ibadah.etiket', $slug) }}"
                            class="group flex flex-col items-center p-6 bg-white rounded-2xl shadow-sm hover:shadow-md transition-all border border-gray-50 hover:border-gray-200">
                             <span class="material-symbols-outlined text-3xl text-gray-400 group-hover:text-primary transition-colors">{{ $m['icon'] }}</span>
                             <p class="mt-2 text-sm font-medium text-gray-700">{{ $m['place'] }}</p>

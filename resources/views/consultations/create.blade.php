@@ -14,7 +14,7 @@
                     Semua percakapan akan dienkripsi untuk menjaga privasi Anda.
                 </p>
 
-                <form action="{{ route('aksi.consultations.store') }}" method="POST">
+                <form action="{{ route('aksi.konsultasi.store') }}" method="POST">
                     @csrf
                     <div class="mb-6">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Topik Konsultasi</label>

@@ -65,7 +65,7 @@ class DonationProjectResource extends Resource
             ])
             ->filters([
                 Tables\Filters\Filter::make('is_active')
-                    ->query(fn ($query) => $query->where('is_active', true))
+                    ->query(fn ($query) => $query->whereRaw('"is_active" = true'))
                     ->label('Hanya Aktif'),
             ])
             ->actions([

@@ -108,11 +108,11 @@
                     @php
                         $quickLinks = [
                             ['route' => 'edukasi.index', 'icon' => 'school', 'label' => 'Jelajahi Edukasi', 'color' => 'text-emerald-600', 'bg' => 'bg-emerald-50'],
-                            ['route' => 'ibadah.schedule', 'icon' => 'schedule', 'label' => 'Jadwal Sholat', 'color' => 'text-primary', 'bg' => 'bg-primary-50'],
+                            ['route' => 'ibadah.jadwal', 'icon' => 'schedule', 'label' => 'Jadwal Sholat', 'color' => 'text-primary', 'bg' => 'bg-primary-50'],
                             ['route' => 'ibadah.index', 'icon' => 'self_improvement', 'label' => 'Panduan Ibadah', 'color' => 'text-secondary', 'bg' => 'bg-secondary-50'],
                             ['route' => 'aksi.donasi.index', 'icon' => 'volunteer_activism', 'label' => 'Donasi', 'color' => 'text-red-600', 'bg' => 'bg-red-50'],
-                            ['route' => 'aksi.volunteers.index', 'icon' => 'groups', 'label' => 'Jadi Relawan', 'color' => 'text-blue-600', 'bg' => 'bg-blue-50'],
-                            ['route' => 'aksi.cek-fakta.index', 'icon' => 'fact_check', 'label' => 'Cek Fakta', 'color' => 'text-amber-600', 'bg' => 'bg-amber-50'],
+                            ['route' => 'aksi.relawan.index', 'icon' => 'groups', 'label' => 'Jadi Relawan', 'color' => 'text-blue-600', 'bg' => 'bg-blue-50'],
+                            ['route' => 'aksi.fakta.index', 'icon' => 'fact_check', 'label' => 'Cek Fakta', 'color' => 'text-amber-600', 'bg' => 'bg-amber-50'],
                         ];
                     @endphp
                     @foreach ($quickLinks as $link)

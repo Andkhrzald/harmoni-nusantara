@@ -11,7 +11,7 @@
             <div class="bg-white shadow-sm rounded-lg p-6 mb-6">
                 <h3 class="font-semibold text-lg mb-2">Bergabung dengan Relawan Harmoni Nusantara</h3>
                 <p class="text-gray-600 mb-4">Wujudkan perdamaian dan toleransi lintas agama melalui aksi nyata.</p>
-                <a href="{{ route('aksi.volunteers.create') }}" class="inline-block bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">
+                <a href="{{ route('aksi.relawan.create') }}" class="inline-block bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">
                     Daftar Jadi Relawan
                 </a>
             </div>

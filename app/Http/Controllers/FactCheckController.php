@@ -64,7 +64,7 @@ class FactCheckController extends Controller
             'published_at' => now(),
         ]);
 
-        return redirect()->route('aksi.cek-fakta.index')
+        return redirect()->route('aksi.fakta.index')
             ->with('success', 'Hasil cek fakta berhasil dipublish!');
     }
 

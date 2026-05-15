@@ -38,7 +38,7 @@
                     @endforelse
                 </div>
 
-                <form action="{{ route('aksi.consultations.message', $consultation->id) }}" method="POST">
+                <form action="{{ route('aksi.konsultasi.message', $consultation->id) }}" method="POST">
                     @csrf
                     <div class="flex gap-4">
                         <input type="text" name="message" class="flex-1 border rounded-lg px-4 py-2" placeholder="Tulis pesan..." required>

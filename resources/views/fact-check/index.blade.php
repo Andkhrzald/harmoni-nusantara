@@ -9,7 +9,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white shadow-sm rounded-lg p-6 mb-6">
-                <form action="{{ route('aksi.cek-fakta.check') }}" method="GET" class="flex gap-4">
+                <form action="{{ route('aksi.fakta.cek') }}" method="GET" class="flex gap-4">
                     <input type="text" name="q" class="flex-1 border rounded-lg px-4 py-2" placeholder="Masukkan klaim atau berita yang ingin dicek...">
                     <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">
                         Cek Fakta
@@ -19,7 +19,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @forelse($factChecks as $factCheck)
-                    <a href="{{ route('aksi.cek-fakta.show', $factCheck->id) }}" class="bg-white shadow-sm rounded-lg p-6 hover:shadow-md">
+                    <a href="{{ route('aksi.fakta.show', $factCheck->id) }}" class="bg-white shadow-sm rounded-lg p-6 hover:shadow-md">
                         <div class="flex items-center justify-between mb-3">
                             <span class="px-3 py-1 text-xs rounded-full
                                 @if($factCheck->verdict === 'hoax') bg-red-100 text-red-800

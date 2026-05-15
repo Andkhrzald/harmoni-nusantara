@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class CalendarificService
 {
@@ -13,34 +14,65 @@ class CalendarificService
     {
         $cacheKey = "holidays_{$country}_{$month}_{$year}";
 
-        return Cache::remember($cacheKey, now()->addDays(7), function () use ($month, $year, $country) {
-            $apiKey = config('services.calendarific.key');
+        if ($cached = Cache::get($cacheKey)) {
+            return $cached;
+        }
 
-            $response = Http::get("{$this->baseUrl}/holidays", [
-                'api_key' => $apiKey,
+        try {
+            $response = Http::timeout(10)->get("{$this->baseUrl}/holidays", [
+                'api_key' => config('services.calendarific.key'),
                 'year' => $year,
                 'month' => $month,
                 'country' => $country,
             ]);
 
-            return $response->json('response.holidays') ?? [];
-        });
+            $data = $response->json('response.holidays') ?? [];
+
+            if ($data) {
+                Cache::put($cacheKey, $data, now()->addDays(7));
+            }
+
+            return $data;
+        } catch (\Exception $e) {
+            Log::error('CalendarificService::getHolidays failed', [
+                'error' => $e->getMessage(),
+                'month' => $month,
+                'year' => $year,
+            ]);
+
+            return [];
+        }
     }
 
     public function getHolidaysForYear(int $year, string $country = 'ID'): array
     {
         $cacheKey = "holidays_{$country}_{$year}";
 
-        return Cache::remember($cacheKey, now()->addDays(7), function () use ($year, $country) {
-            $apiKey = config('services.calendarific.key');
+        if ($cached = Cache::get($cacheKey)) {
+            return $cached;
+        }
 
-            $response = Http::get("{$this->baseUrl}/holidays", [
-                'api_key' => $apiKey,
+        try {
+            $response = Http::timeout(10)->get("{$this->baseUrl}/holidays", [
+                'api_key' => config('services.calendarific.key'),
                 'year' => $year,
                 'country' => $country,
             ]);
 
-            return $response->json('response.holidays') ?? [];
-        });
+            $data = $response->json('response.holidays') ?? [];
+
+            if ($data) {
+                Cache::put($cacheKey, $data, now()->addDays(7));
+            }
+
+            return $data;
+        } catch (\Exception $e) {
+            Log::error('CalendarificService::getHolidaysForYear failed', [
+                'error' => $e->getMessage(),
+                'year' => $year,
+            ]);
+
+            return [];
+        }
     }
 }

@@ -29,7 +29,7 @@
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
                     @foreach($religions as $religion)
                         @php $meta = $religionMeta[$religion->slug] ?? ['icon' => 'menu_book', 'gradient' => 'from-gray-50 to-gray-100', 'text' => 'text-gray-700']; @endphp
-                        <a href="{{ route('edukasi.religion', $religion->slug) }}"
+                        <a href="{{ route('edukasi.agama', $religion->slug) }}"
                            class="group flex flex-col items-center p-5 bg-gradient-to-br {{ $meta['gradient'] }} rounded-xl
                                   border border-transparent hover:border-current hover:shadow-md transition-all duration-200">
                             <span class="material-symbols-outlined text-3xl {{ $meta['text'] }} group-hover:scale-110 transition-transform duration-300">
@@ -49,7 +49,7 @@
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                     @forelse($featuredContents as $content)
-                        <a href="{{ route('edukasi.show', $content->slug) }}"
+                        <a href="{{ route('edukasi.video.show', $content->slug) }}"
                            class="group border border-gray-100 rounded-xl overflow-hidden hover:shadow-md transition-shadow">
                             @if($content->thumbnail_url)
                                 <img src="{{ $content->thumbnail_url }}" alt="{{ $content->title }}"
@@ -84,7 +84,7 @@
 
             {{-- Quick links --}}
             <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-                <a href="{{ route('edukasi.gallery') }}"
+                <a href="{{ route('edukasi.video.index') }}"
                    class="group flex items-center gap-4 bg-gradient-to-r from-indigo-50 to-indigo-100 p-5 rounded-xl hover:shadow-md transition-all">
                     <span class="material-symbols-outlined text-3xl text-indigo-500">play_circle</span>
                     <div>

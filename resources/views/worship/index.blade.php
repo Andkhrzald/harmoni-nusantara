@@ -12,7 +12,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
                 {{-- Jadwal Ibadah --}}
-                <a href="{{ route('ibadah.schedule') }}" class="group relative bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
+                <a href="{{ route('ibadah.jadwal') }}" class="group relative bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
                     <div class="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <span class="material-symbols-outlined text-4xl text-emerald-600 relative">schedule</span>
                     <h3 class="font-semibold text-gray-800 mt-3 relative">Jadwal Sholat</h3>
@@ -20,7 +20,7 @@
                 </a>
 
                 {{-- Peta --}}
-                <a href="{{ route('ibadah.map') }}" class="group relative bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
+                <a href="{{ route('ibadah.peta') }}" class="group relative bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
                     <div class="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <span class="material-symbols-outlined text-4xl text-blue-600 relative">map</span>
                     <h3 class="font-semibold text-gray-800 mt-3 relative">Peta Rumah Ibadah</h3>
@@ -28,7 +28,7 @@
                 </a>
 
                 {{-- Panduan Ritual --}}
-                <a href="{{ route('ibadah.guide', 'islam') }}" class="group relative bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
+                <a href="{{ route('ibadah.panduan', 'islam') }}" class="group relative bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
                     <div class="absolute inset-0 bg-gradient-to-br from-secondary-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <span class="material-symbols-outlined text-4xl text-secondary relative">live_help</span>
                     <h3 class="font-semibold text-gray-800 mt-3 relative">Panduan Ibadah</h3>
@@ -36,7 +36,7 @@
                 </a>
 
                 {{-- Etiket --}}
-                <a href="{{ route('ibadah.etiquette', 'islam') }}" class="group relative bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
+                <a href="{{ route('ibadah.etiket', 'islam') }}" class="group relative bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
                     <div class="absolute inset-0 bg-gradient-to-br from-amber-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <span class="material-symbols-outlined text-4xl text-amber-600 relative">account_balance</span>
                     <h3 class="font-semibold text-gray-800 mt-3 relative">Etiket Bertamu</h3>

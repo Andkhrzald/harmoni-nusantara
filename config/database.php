@@ -97,6 +97,14 @@ return [
             'prefix_indexes' => true,
             'search_path' => 'public',
             'sslmode' => env('DB_SSLMODE', 'prefer'),
+            // Diperlukan saat menggunakan Supabase PgBouncer (port 6543, transaction mode).
+            // PgBouncer tidak menyimpan server-side prepared statements antar transaksi,
+            // sehingga PDO::ATTR_EMULATE_PREPARES mengalihkan pembuatan prepared
+            // statement ke sisi klien (PHP) agar tidak bergantung pada koneksi PostgreSQL
+            // yang persisten.
+            'options' => [
+                PDO::ATTR_EMULATE_PREPARES => true,
+            ],
         ],
 
         'sqlsrv' => [

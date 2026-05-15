@@ -46,11 +46,11 @@
                         Semua Agama
                     </a>
                     @if ($religion->slug === 'islam')
-                        <a href="{{ route('ibadah.schedule') }}" class="inline-flex items-center gap-1 text-xs bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-full transition-colors">
+                        <a href="{{ route('ibadah.jadwal') }}" class="inline-flex items-center gap-1 text-xs bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-full transition-colors">
                             <span class="material-symbols-outlined text-sm">schedule</span>
                             Jadwal Sholat
                         </a>
-                        <a href="{{ route('ibadah.guide', 'islam') }}" class="inline-flex items-center gap-1 text-xs bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-full transition-colors">
+                        <a href="{{ route('ibadah.panduan', 'islam') }}" class="inline-flex items-center gap-1 text-xs bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-full transition-colors">
                             <span class="material-symbols-outlined text-sm">live_help</span>
                             Panduan Ibadah
                         </a>
@@ -62,18 +62,18 @@
             <div class="bg-white shadow-sm sm:rounded-xl p-4 mb-6">
                 <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
                     <div class="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
-                        <a href="{{ route('edukasi.religion', [$religion->slug, 'filter' => 'all']) }}"
+                        <a href="{{ route('edukasi.agama', [$religion->slug, 'filter' => 'all']) }}"
                            class="px-3 py-1.5 text-sm font-medium rounded-md transition-all
                                   {{ $filter === 'all' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
                             Semua
                         </a>
-                        <a href="{{ route('edukasi.religion', [$religion->slug, 'filter' => 'article']) }}"
+                        <a href="{{ route('edukasi.agama', [$religion->slug, 'filter' => 'article']) }}"
                            class="px-3 py-1.5 text-sm font-medium rounded-md transition-all flex items-center gap-1
                                   {{ $filter === 'article' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
                             <span class="material-symbols-outlined text-sm">article</span>
                             Artikel
                         </a>
-                        <a href="{{ route('edukasi.religion', [$religion->slug, 'filter' => 'video']) }}"
+                        <a href="{{ route('edukasi.agama', [$religion->slug, 'filter' => 'video']) }}"
                            class="px-3 py-1.5 text-sm font-medium rounded-md transition-all flex items-center gap-1
                                   {{ $filter === 'video' ? 'bg-white text-gray-800 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
                             <span class="material-symbols-outlined text-sm">play_circle</span>
@@ -81,7 +81,7 @@
                         </a>
                     </div>
 
-                    <form method="GET" action="{{ route('edukasi.religion', $religion->slug) }}" class="flex-1 flex gap-2 w-full sm:w-auto">
+                    <form method="GET" action="{{ route('edukasi.agama', $religion->slug) }}" class="flex-1 flex gap-2 w-full sm:w-auto">
                         @if ($filter !== 'all')
                             <input type="hidden" name="filter" value="{{ $filter }}">
                         @endif
@@ -92,7 +92,7 @@
                                    class="w-full pl-9 pr-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none">
                         </div>
                         @if ($search)
-                            <a href="{{ route('edukasi.religion', [$religion->slug, 'filter' => $filter !== 'all' ? $filter : null]) }}"
+                            <a href="{{ route('edukasi.agama', [$religion->slug, 'filter' => $filter !== 'all' ? $filter : null]) }}"
                                class="px-3 py-1.5 text-sm text-gray-500 hover:text-gray-700">Reset</a>
                         @endif
                     </form>
@@ -104,7 +104,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                     @foreach($contents as $content)
                         @php $isVideo = $content->content_type === 'video'; @endphp
-                        <a href="{{ route('edukasi.show', $content->slug) }}"
+                        <a href="{{ route('edukasi.video.show', $content->slug) }}"
                            class="group bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-md transition-all">
                             <div class="relative overflow-hidden">
                                 @if($content->thumbnail_url)
@@ -157,7 +157,7 @@
                         @endif
                     </p>
                     @if ($search || $filter !== 'all')
-                        <a href="{{ route('edukasi.religion', $religion->slug) }}"
+                        <a href="{{ route('edukasi.agama', $religion->slug) }}"
                            class="mt-4 inline-flex items-center gap-1 text-sm text-primary hover:text-primary-700 font-medium">
                             <span class="material-symbols-outlined text-sm">refresh</span>
                             Tampilkan semua konten

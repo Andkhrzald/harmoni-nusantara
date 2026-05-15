@@ -9,7 +9,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="mb-6">
-                <a href="{{ route('aksi.consultations.create') }}" class="inline-block bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">
+                <a href="{{ route('aksi.konsultasi.create') }}" class="inline-block bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">
                     + Konsultasi Baru
                 </a>
             </div>
@@ -40,7 +40,7 @@
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-500">{{ $consultation->created_at->format('d M Y') }}</td>
                             <td class="px-6 py-4">
-                                <a href="{{ route('aksi.consultations.show', $consultation->id) }}" class="text-indigo-600 hover:text-indigo-800">Lihat</a>
+                                <a href="{{ route('aksi.konsultasi.show', $consultation->id) }}" class="text-indigo-600 hover:text-indigo-800">Lihat</a>
                             </td>
                         </tr>
                         @empty

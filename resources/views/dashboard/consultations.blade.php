@@ -8,7 +8,7 @@
                     <span class="material-symbols-outlined text-secondary">forum</span>
                     Riwayat Konsultasi
                 </h3>
-                <a href="{{ route('aksi.consultations.create') }}"
+                <a href="{{ route('aksi.konsultasi.create') }}"
                    class="inline-flex items-center gap-1.5 text-sm bg-primary text-white px-4 py-2 rounded-xl hover:bg-primary-700 transition-colors">
                     <span class="material-symbols-outlined text-sm">add</span>
                     Konsultasi Baru
@@ -19,7 +19,7 @@
                 <div class="text-center py-12">
                     <span class="material-symbols-outlined text-5xl text-gray-300">question_answer</span>
                     <p class="text-gray-500 mt-3">Anda belum memiliki konsultasi.</p>
-                    <a href="{{ route('aksi.consultations.create') }}" class="inline-flex items-center gap-1 mt-4 text-sm text-primary hover:text-primary-700 font-medium">
+                    <a href="{{ route('aksi.konsultasi.create') }}" class="inline-flex items-center gap-1 mt-4 text-sm text-primary hover:text-primary-700 font-medium">
                         Mulai Konsultasi Baru
                         <span class="material-symbols-outlined text-sm">arrow_forward</span>
                     </a>
@@ -27,7 +27,7 @@
             @else
                 <div class="space-y-3">
                     @foreach($consultations as $consultation)
-                        <a href="{{ route('aksi.consultations.show', $consultation->id) }}"
+                        <a href="{{ route('aksi.konsultasi.show', $consultation->id) }}"
                            class="block border border-gray-100 rounded-xl p-4 hover:border-gray-200 hover:shadow-sm transition-all">
                             <div class="flex justify-between items-start">
                                 <div class="min-w-0 flex-1">

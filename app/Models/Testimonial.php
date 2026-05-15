@@ -31,11 +31,11 @@ class Testimonial extends Model
 
     public function scopeApproved($query)
     {
-        return $query->where('is_approved', true);
+        return $query->whereRaw('"is_approved" = true');
     }
 
     public function scopePending($query)
     {
-        return $query->where('is_approved', false);
+        return $query->whereRaw('"is_approved" = false');
     }
 }

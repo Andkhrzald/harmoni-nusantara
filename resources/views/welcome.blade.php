@@ -53,7 +53,7 @@
                 ];
                 @endphp
                 @foreach($religions as $religion)
-                <a href="{{ route('edukasi.religion', $religion['slug']) }}" 
+                <a href="{{ route('edukasi.agama', $religion['slug']) }}" 
                    class="px-4 py-2 text-on-surface-variant hover:text-primary hover:bg-primary-50 rounded-lg font-medium text-sm transition-all duration-200">
                     {{ $religion['name'] }}
                 </a>
@@ -153,7 +153,7 @@
                     ];
                     @endphp
                     @foreach($faiths as $faith)
-                    <a href="{{ route('edukasi.religion', $faith['slug']) }}" class="group relative aspect-square rounded-2xl overflow-hidden">
+                    <a href="{{ route('edukasi.agama', $faith['slug']) }}" class="group relative aspect-square rounded-2xl overflow-hidden">
                         <img src="{{ $faith['image'] }}" alt="{{ $faith['name'] }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                         <div class="absolute bottom-0 left-0 right-0 p-4">
@@ -212,7 +212,7 @@
                         @endforeach
                     </div>
                     <div class="mt-6 text-center">
-                        <a href="{{ route('ibadah.schedule') }}" class="text-primary hover:text-primary-700 font-medium text-sm inline-flex items-center gap-1">
+                        <a href="{{ route('ibadah.jadwal') }}" class="text-primary hover:text-primary-700 font-medium text-sm inline-flex items-center gap-1">
                             Lihat Semua Wilayah 
                             <span class="material-symbols-outlined text-sm">arrow_forward</span>
                         </a>
@@ -279,7 +279,7 @@
                         <h2 class="text-3xl sm:text-4xl font-bold text-primary mb-3">Kisah Inspiratif</h2>
                         <p class="text-on-surface-variant">Inspirasi dari tokoh agama dan pemuda nusantara</p>
                     </div>
-                    <a href="{{ route('edukasi.gallery') }}" class="hidden sm:inline-flex items-center gap-2 text-secondary hover:text-secondary-700 font-medium transition-colors">
+                    <a href="{{ route('edukasi.video.index') }}" class="hidden sm:inline-flex items-center gap-2 text-secondary hover:text-secondary-700 font-medium transition-colors">
                         Lihat Semua 
                         <span class="material-symbols-outlined">arrow_forward</span>
                     </a>
@@ -344,7 +344,7 @@
                 </div>
                 
                 <div class="text-center mt-6 sm:hidden">
-                    <a href="{{ route('edukasi.gallery') }}" class="inline-flex items-center gap-2 text-secondary font-medium">
+                    <a href="{{ route('edukasi.video.index') }}" class="inline-flex items-center gap-2 text-secondary font-medium">
                         Lihat Semua Cerita
                         <span class="material-symbols-outlined">arrow_forward</span>
                     </a>
@@ -504,8 +504,8 @@
                     <h4 class="font-semibold text-primary mb-4">Navigasi</h4>
                     <ul class="space-y-2">
                         <li><a href="{{ route('edukasi.index') }}" class="text-on-surface-variant hover:text-primary transition-colors">Edukasi</a></li>
-                        <li><a href="{{ route('ibadah.schedule') }}" class="text-on-surface-variant hover:text-primary transition-colors">Jadwal Ibadah</a></li>
-                        <li><a href="{{ route('edukasi.gallery') }}" class="text-on-surface-variant hover:text-primary transition-colors">Kisah Inspiratif</a></li>
+                        <li><a href="{{ route('ibadah.jadwal') }}" class="text-on-surface-variant hover:text-primary transition-colors">Jadwal Ibadah</a></li>
+                        <li><a href="{{ route('edukasi.video.index') }}" class="text-on-surface-variant hover:text-primary transition-colors">Kisah Inspiratif</a></li>
                         <li><a href="{{ route('aksi.donasi.index') }}" class="text-on-surface-variant hover:text-primary transition-colors">Donasi</a></li>
                     </ul>
                 </div>
