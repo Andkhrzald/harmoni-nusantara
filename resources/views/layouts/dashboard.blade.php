@@ -86,7 +86,7 @@
                 <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-700 to-primary flex items-center justify-center">
                     <span class="material-symbols-outlined text-white text-sm">public</span>
                 </span>
-                <span class="text-lg font-bold text-gray-800 tracking-tight">Harmony</span>
+                <span class="text-lg font-bold text-gray-800 tracking-tight">Harmoni</span>
             </div>
 
             {{-- Nav Items --}}
@@ -241,7 +241,7 @@
                     <a href="{{ route('home') }}"
                        class="hidden sm:inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-primary px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors">
                         <span class="material-symbols-outlined text-base">arrow_back</span>
-                        Ke Situs
+                        Halaman utama
                     </a>
                     <span class="w-8 h-8 rounded-full bg-primary-100 text-primary flex items-center justify-center text-sm font-semibold">
                         {{ $initials }}

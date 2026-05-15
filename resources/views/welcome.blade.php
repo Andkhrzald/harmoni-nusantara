@@ -35,34 +35,69 @@
 
 <body class="bg-surface-light text-on-surface font-sans antialiased">
     <!-- TopNavBar -->
-    <nav class="glass-effect sticky top-0 z-50 border-b border-accent-sand/50">
+    <nav x-data="{ 
+        mobileMenuOpen: false,
+        agamaDropdownOpen: false,
+        mobileAgamaOpen: false
+    }" class="glass-effect sticky top-0 z-50 border-b border-accent-sand/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-4 flex justify-between items-center">
             <a href="{{ route('home') }}" class="text-2xl font-bold text-primary tracking-tight flex items-center gap-2">
                 <span class="material-symbols-outlined text-secondary text-3xl">auto_awesome</span>
                 <span>Harmoni<span class="text-primary-700">Nusantara</span></span>
             </a>
+            
+            <!-- Desktop Menu -->
             <div class="hidden lg:flex items-center gap-1">
-                @php
-                $religions = [
-                    ['slug' => 'islam', 'name' => 'Islam', 'icon' => 'mosque'],
-                    ['slug' => 'kristen', 'name' => 'Kristen', 'icon' => 'church'],
-                    ['slug' => 'katolik', 'name' => 'Katolik', 'icon' => 'cross'],
-                    ['slug' => 'hindu', 'name' => 'Hindu', 'icon' => 'spa'],
-                    ['slug' => 'buddha', 'name' => 'Buddha', 'icon' => 'self_improvement'],
-                    ['slug' => 'konghucu', 'name' => 'Konghucu', 'icon' => 'elderly'],
-                ];
-                @endphp
-                @foreach($religions as $religion)
-                <a href="{{ route('edukasi.agama', $religion['slug']) }}" 
-                   class="px-4 py-2 text-on-surface-variant hover:text-primary hover:bg-primary-50 rounded-lg font-medium text-sm transition-all duration-200">
-                    {{ $religion['name'] }}
+                <a href="#about" class="px-4 py-2 text-on-surface-variant hover:text-primary hover:bg-primary-50 rounded-lg font-medium text-sm transition-all duration-200">
+                    About
                 </a>
-                @endforeach
+                <a href="#jadwal" class="px-4 py-2 text-on-surface-variant hover:text-primary hover:bg-primary-50 rounded-lg font-medium text-sm transition-all duration-200">
+                    Jadwal Ibadah
+                </a>
+                <a href="#kisah" class="px-4 py-2 text-on-surface-variant hover:text-primary hover:bg-primary-50 rounded-lg font-medium text-sm transition-all duration-200">
+                    Kisah Inspiratif
+                </a>
+                
+                <!-- Dropdown Agama -->
+                <div class="relative" x-data="{ open: false }" @click.outside="open = false" @click="open = !open">
+                    <button class="flex items-center gap-1 px-4 py-2 text-on-surface-variant hover:text-primary hover:bg-primary-50 rounded-lg font-medium text-sm transition-all duration-200">
+                        Agama
+                        <span class="material-symbols-outlined text-lg transition-transform" :class="open ? 'rotate-180' : ''">expand_more</span>
+                    </button>
+                    <div x-show="open"
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 translate-y-1"
+                         x-transition:enter-end="opacity-100 translate-y-0"
+                         x-transition:leave="transition ease-in duration-150"
+                         x-transition:leave-start="opacity-100 translate-y-0"
+                         x-transition:leave-end="opacity-0 translate-y-1"
+                         class="absolute top-full mt-1 left-0 w-48 bg-white rounded-xl shadow-lg border border-accent-sand/50 py-2 z-50"
+                         style="display: none;">
+                        @php
+                        $religions = [
+                            ['slug' => 'islam', 'name' => 'Islam', 'icon' => 'mosque'],
+                            ['slug' => 'kristen', 'name' => 'Kristen', 'icon' => 'church'],
+                            ['slug' => 'katolik', 'name' => 'Katolik', 'icon' => 'cross'],
+                            ['slug' => 'hindu', 'name' => 'Hindu', 'icon' => 'spa'],
+                            ['slug' => 'buddha', 'name' => 'Buddha', 'icon' => 'self_improvement'],
+                            ['slug' => 'konghucu', 'name' => 'Konghucu', 'icon' => 'elderly'],
+                        ];
+                        @endphp
+                        @foreach($religions as $religion)
+                        <a href="{{ route('edukasi.agama', $religion['slug']) }}" 
+                           class="flex items-center gap-3 px-4 py-2.5 text-on-surface-variant hover:text-primary hover:bg-primary-50 transition-colors">
+                            <span class="material-symbols-outlined text-lg">{{ $religion['icon'] }}</span>
+                            {{ $religion['name'] }}
+                        </a>
+                        @endforeach
+                    </div>
+                </div>
             </div>
-            <div class="flex items-center gap-3">
+            
+            <div class="hidden lg:flex items-center gap-3">
                 @if (Route::has('login'))
                     @auth
-                        <a href="{{ url('/dashboard') }}" class="hidden lg:inline-flex bg-primary text-white px-5 py-2.5 rounded-lg font-semibold text-sm hover:bg-primary-600 transition-all shadow-sm hover:shadow-md">
+                        <a href="{{ url('/dashboard') }}" class="bg-primary text-white px-5 py-2.5 rounded-lg font-semibold text-sm hover:bg-primary-600 transition-all shadow-sm hover:shadow-md">
                             Dashboard
                         </a>
                     @else
@@ -74,9 +109,67 @@
                         @endif
                     @endauth
                 @endif
-                <button class="lg:hidden p-2 hover:bg-primary-50 rounded-lg transition-colors">
-                    <span class="material-symbols-outlined text-primary">menu</span>
-                </button>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <button @click="mobileMenuOpen = !mobileMenuOpen" class="lg:hidden p-2 hover:bg-primary-50 rounded-lg transition-colors">
+                <span class="material-symbols-outlined text-primary" x-text="mobileMenuOpen ? 'close' : 'menu'"></span>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu Drawer -->
+        <div x-show="mobileMenuOpen"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 -translate-y-4"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 -translate-y-4"
+             class="lg:hidden absolute top-full left-0 right-0 bg-white border-b border-accent-sand/50 shadow-lg"
+             style="display: none;">
+            <div class="px-4 py-4 space-y-3 max-h-[80vh] overflow-y-auto">
+                <a href="#about" @click="mobileMenuOpen = false" class="block px-4 py-3 text-on-surface-variant hover:text-primary hover:bg-primary-50 rounded-lg font-medium transition-colors">
+                    About
+                </a>
+                <a href="#jadwal" @click="mobileMenuOpen = false" class="block px-4 py-3 text-on-surface-variant hover:text-primary hover:bg-primary-50 rounded-lg font-medium transition-colors">
+                    Jadwal Ibadah
+                </a>
+                <a href="#kisah" @click="mobileMenuOpen = false" class="block px-4 py-3 text-on-surface-variant hover:text-primary hover:bg-primary-50 rounded-lg font-medium transition-colors">
+                    Kisah Inspiratif
+                </a>
+                
+                <!-- Mobile Agama Dropdown -->
+                <div class="border-t border-accent-sand/30 pt-3">
+                    <button @click="mobileAgamaOpen = !mobileAgamaOpen" class="flex items-center justify-between w-full px-4 py-3 text-on-surface-variant hover:bg-primary-50 rounded-lg font-medium transition-colors">
+                        <span>Agama</span>
+                        <span class="material-symbols-outlined transition-transform" :class="mobileAgamaOpen ? 'rotate-180' : ''">expand_more</span>
+                    </button>
+                    <div x-show="mobileAgamaOpen" class="mt-2 space-y-1 pl-4" style="display: none;">
+                        @foreach($religions as $religion)
+                        <a href="{{ route('edukasi.agama', $religion['slug']) }}" class="flex items-center gap-3 px-4 py-2.5 text-on-surface-variant hover:text-primary hover:bg-primary-50 rounded-lg transition-colors">
+                            <span class="material-symbols-outlined text-lg">{{ $religion['icon'] }}</span>
+                            {{ $religion['name'] }}
+                        </a>
+                        @endforeach
+                    </div>
+                </div>
+                
+                <div class="border-t border-accent-sand/30 pt-3 flex flex-col gap-2">
+                    @if (Route::has('login'))
+                        @auth
+                            <a href="{{ url('/dashboard') }}" class="bg-primary text-white px-5 py-3 rounded-lg font-semibold text-sm text-center hover:bg-primary-600 transition-all">
+                                Dashboard
+                            </a>
+                        @else
+                            <a href="{{ route('login') }}" class="text-center px-4 py-3 text-on-surface-variant hover:text-primary hover:bg-primary-50 rounded-lg font-medium transition-colors">Masuk</a>
+                            @if (Route::has('register'))
+                                <a href="{{ route('register') }}" class="bg-primary text-white px-5 py-3 rounded-lg font-semibold text-sm text-center hover:bg-primary-600 transition-all">
+                                    Daftar
+                                </a>
+                            @endif
+                        @endauth
+                    @endif
+                </div>
             </div>
         </div>
     </nav>
@@ -133,6 +226,59 @@
             </div>
         </section>
 
+        <!-- About Section -->
+        <section id="about" class="py-20 px-4 sm:px-6 lg:px-10 bg-white">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <span class="inline-flex items-center gap-2 bg-primary-100 text-primary-700 px-4 py-1.5 rounded-full text-sm font-medium mb-4">
+                            <span class="material-symbols-outlined text-sm">info</span>
+                            Tentang Kami
+                        </span>
+                        <h2 class="text-3xl sm:text-4xl font-bold text-primary mb-6">Harmoni Nusantara</h2>
+                        <p class="text-on-surface-variant text-lg leading-relaxed mb-6">
+                            Harmoni Nusantara adalah platform digital inklusif yang dibangun untuk mempererat toleransi dan merayakan keberagaman agama di Indonesia. Kami percaya bahwa perbedaan adalah anugerah yang harus dijaga bersama.
+                        </p>
+                        <p class="text-on-surface-variant leading-relaxed mb-8">
+                            Melalui edukasi, dialog, dan aksi nyata, kami berkomitmen menjadi jembatan bagi setiap pemeluk agama untuk saling memahami, menghargai, dan bekerja sama demi Indonesia yang lebih inklusif.
+                        </p>
+                        
+                        <div class="grid grid-cols-3 gap-4">
+                            <div class="text-center p-4 bg-primary-50 rounded-xl">
+                                <span class="material-symbols-outlined text-3xl text-primary mb-2">favorite</span>
+                                <p class="font-semibold text-primary text-sm">Toleransi</p>
+                            </div>
+                            <div class="text-center p-4 bg-secondary-50 rounded-xl">
+                                <span class="material-symbols-outlined text-3xl text-secondary mb-2">group</span>
+                                <p class="font-semibold text-secondary text-sm">Inklusivitas</p>
+                            </div>
+                            <div class="text-center p-4 bg-primary-50 rounded-xl">
+                                <span class="material-symbols-outlined text-3xl text-primary mb-2">handshake</span>
+                                <p class="font-semibold text-primary text-sm">Persatuan</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-4">
+                                <img src="https://images.unsplash.com/photo-1604152135912-04a022e23696?w=400&q=80" alt="Masjid" class="w-full rounded-2xl shadow-lg" />
+                                <img src="https://images.unsplash.com/photo-1548625361-e80e71c60b68?w=400&q=80" alt="Gereja" class="w-full rounded-2xl shadow-lg" />
+                            </div>
+                            <div class="space-y-4 pt-8">
+                                <img src="https://images.unsplash.com/photo-1545454675-3531b543be5d?w=400&q=80" alt="Pura" class="w-full rounded-2xl shadow-lg" />
+                                <img src="https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=400&q=80" alt="Vihara" class="w-full rounded-2xl shadow-lg" />
+                            </div>
+                        </div>
+                        <div class="absolute -bottom-4 -right-4 bg-primary text-white px-6 py-4 rounded-2xl shadow-xl">
+                            <p class="text-3xl font-bold">6+</p>
+                            <p class="text-sm">Agama di Indonesia</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Faith Diversity Section -->
         <section class="py-20 px-4 sm:px-6 lg:px-10 bg-surface">
             <div class="max-w-7xl mx-auto">
@@ -182,7 +328,7 @@
         </section>
 
         <!-- Widget Section -->
-        <section class="py-20 px-4 sm:px-6 lg:px-10 max-w-7xl mx-auto">
+        <section id="jadwal" class="py-20 px-4 sm:px-6 lg:px-10 max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 <!-- Jadwal Ibadah Widget -->
                 <div class="lg:col-span-4 bg-surface rounded-2xl p-6 border border-accent-sand/50 hover:shadow-lg transition-shadow">
@@ -272,7 +418,7 @@
         </section>
 
         <!-- Featured Stories -->
-        <section class="py-20 px-4 sm:px-6 lg:px-10 bg-primary-50/50">
+        <section id="kisah" class="py-20 px-4 sm:px-6 lg:px-10 bg-primary-50/50">
             <div class="max-w-7xl mx-auto">
                 <div class="flex justify-between items-end mb-12">
                     <div>
