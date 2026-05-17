@@ -335,16 +335,20 @@
             ];
             $typeIcon = fn($t) => $typeMeta[$t]['icon'] ?? 'star';
             $typeLabel = fn($t) => $typeMeta[$t]['label'] ?? $t;
+            $filterCounts = [
+                'all' => $highlights->count(),
+                'worship_place' => $highlights->where('type', 'worship_place')->count(),
+                'figure' => $highlights->where('type', 'figure')->count(),
+                'historical_site' => $highlights->where('type', 'historical_site')->count(),
+            ];
         @endphp
 
          <section class="py-20 px-4 sm:px-6 lg:px-10 bg-surface"
                   x-data="{
-            activeFilter: 'all',
+            activeFilter: 'worship_place',
             selected: null,
             showAll: false,
-            showCount: 8,
-            typeIcon: '{{ $typeIcon('worship_place') }}',
-            typeLabel: '{{ $typeLabel('worship_place') }}',
+            filterCounts: {{ Js::from($filterCounts) }},
         }">
             <div class="max-w-7xl mx-auto">
                 {{-- Header --}}
@@ -359,15 +363,7 @@
 
                 {{-- Filter Chips --}}
                 <div class="flex flex-wrap justify-center gap-2 mb-12">
-                    <button @click="activeFilter = 'all'"
-                            :class="activeFilter === 'all'
-                                ? 'bg-primary text-white shadow-md shadow-primary/20'
-                                : 'bg-white text-on-surface-variant hover:bg-primary-50 border border-accent-sand/50'"
-                            class="px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-1.5">
-                        <span class="material-symbols-outlined text-lg">apps</span>
-                        Semua
-                    </button>
-                    <button @click="activeFilter = 'worship_place'"
+                    <button @click="activeFilter = 'worship_place'; showAll = false"
                             :class="activeFilter === 'worship_place'
                                 ? 'bg-secondary text-white shadow-md shadow-secondary/20'
                                 : 'bg-white text-on-surface-variant hover:bg-primary-50 border border-accent-sand/50'"
@@ -375,7 +371,7 @@
                         <span class="material-symbols-outlined text-lg">temple_buddhist</span>
                         Tempat Ibadah
                     </button>
-                    <button @click="activeFilter = 'figure'"
+                    <button @click="activeFilter = 'figure'; showAll = false"
                             :class="activeFilter === 'figure'
                                 ? 'bg-secondary text-white shadow-md shadow-secondary/20'
                                 : 'bg-white text-on-surface-variant hover:bg-primary-50 border border-accent-sand/50'"
@@ -383,7 +379,7 @@
                         <span class="material-symbols-outlined text-lg">person</span>
                         Tokoh Agama
                     </button>
-                    <button @click="activeFilter = 'historical_site'"
+                    <button @click="activeFilter = 'historical_site'; showAll = false"
                             :class="activeFilter === 'historical_site'
                                 ? 'bg-secondary text-white shadow-md shadow-secondary/20'
                                 : 'bg-white text-on-surface-variant hover:bg-primary-50 border border-accent-sand/50'"
@@ -391,15 +387,25 @@
                         <span class="material-symbols-outlined text-lg">fort</span>
                         Situs Sejarah
                     </button>
+                    <button @click="activeFilter = 'all'; showAll = false"
+                            :class="activeFilter === 'all'
+                                ? 'bg-primary text-white shadow-md shadow-primary/20'
+                                : 'bg-white text-on-surface-variant hover:bg-primary-50 border border-accent-sand/50'"
+                            class="px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-lg">apps</span>
+                        Semua
+                    </button>
                 </div>
 
                 {{-- Card Grid --}}
+                @php $typeIdx = ['worship_place' => 0, 'figure' => 0, 'historical_site' => 0]; @endphp
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     @forelse($highlights as $item)
                     @php
                         $rm = $religionMeta[$item->religion->slug] ?? null;
+                        $ti = $typeIdx[$item->type]++;
                     @endphp
-                    <div x-show="showAll || activeFilter !== 'all' || {{ $loop->index }} < 8"
+                    <div x-show="(activeFilter === 'all' || activeFilter === '{{ $item->type }}') && (showAll || {{ $ti }} < 8)"
                          x-transition:enter="transition ease-out duration-300"
                          x-transition:enter-start="opacity-0 scale-95"
                          x-transition:enter-end="opacity-100 scale-100"
@@ -478,16 +484,13 @@
                 </div>
 
                 {{-- Toggle button --}}
-                @if($highlights->count() > 8)
-                <div class="flex justify-center mt-10">
+                <div class="flex justify-center mt-10" x-show="filterCounts[activeFilter] > 8">
                     <button @click="showAll = !showAll"
-                            x-text="showAll ? 'Sembunyikan' : 'Tampilkan Semua ({{ $highlights->count() }})'"
                             class="inline-flex items-center gap-2 bg-white text-primary border-2 border-primary/30 px-7 py-3 rounded-xl font-semibold text-sm hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 shadow-sm hover:shadow-md">
                         <span class="material-symbols-outlined text-lg" x-text="showAll ? 'expand_less' : 'expand_more'"></span>
-                        <span x-text="showAll ? 'Sembunyikan' : 'Tampilkan Semua ({{ $highlights->count() }})'"></span>
+                        <span x-text="showAll ? 'Sembunyikan' : 'Tampilkan Semua (' + filterCounts[activeFilter] + ')'"></span>
                     </button>
                 </div>
-                @endif
             </div>
 
             {{-- ✦ Detail Modal --}}
