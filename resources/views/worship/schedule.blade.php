@@ -104,7 +104,7 @@
 
                     <p class="text-xs text-gray-400 mt-4 flex items-center gap-1">
                         <span class="material-symbols-outlined text-xs">info</span>
-                        Waktu sholat untuk {{ $city }}, Indonesia — Metode Kemenag RI (Aladhan API)
+                        Waktu sholat untuk {{ $city }}, Indonesia
                     </p>
                 </div>
 

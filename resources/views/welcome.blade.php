@@ -57,6 +57,9 @@
                 <a href="#kisah" class="px-4 py-2 text-on-surface-variant hover:text-primary hover:bg-primary-50 rounded-lg font-medium text-sm transition-all duration-200">
                     Kisah Inspiratif
                 </a>
+                <a href="{{ route('edukasi.index') }}" class="px-4 py-2 text-on-surface-variant hover:text-primary hover:bg-primary-50 rounded-lg font-medium text-sm transition-all duration-200">
+                    Konten Edukasi
+                </a>
                 
                 <!-- Dropdown Agama -->
                 <div class="relative" x-data="{ open: false }" @click.outside="open = false" @click="open = !open">
@@ -85,8 +88,7 @@
                         @endphp
                         @foreach($religions as $religion)
                         <a href="{{ route('edukasi.agama', $religion['slug']) }}" 
-                           class="flex items-center gap-3 px-4 py-2.5 text-on-surface-variant hover:text-primary hover:bg-primary-50 transition-colors">
-                            <span class="material-symbols-outlined text-lg">{{ $religion['icon'] }}</span>
+                           class="block px-4 py-2.5 text-on-surface-variant hover:text-primary hover:bg-primary-50 transition-colors">
                             {{ $religion['name'] }}
                         </a>
                         @endforeach
@@ -136,6 +138,9 @@
                 </a>
                 <a href="#kisah" @click="mobileMenuOpen = false" class="block px-4 py-3 text-on-surface-variant hover:text-primary hover:bg-primary-50 rounded-lg font-medium transition-colors">
                     Kisah Inspiratif
+                </a>
+                <a href="{{ route('edukasi.index') }}" @click="mobileMenuOpen = false" class="block px-4 py-3 text-on-surface-variant hover:text-primary hover:bg-primary-50 rounded-lg font-medium transition-colors">
+                    Konten Edukasi
                 </a>
                 
                 <!-- Mobile Agama Dropdown -->
@@ -227,58 +232,91 @@
         </section>
 
         <!-- About Section -->
-        <section id="about" class="py-20 px-4 sm:px-6 lg:px-10 bg-white">
+        <section id="about" class="py-24 px-4 sm:px-6 lg:px-10 bg-gradient-to-b from-white via-surface-light to-white">
             <div class="max-w-7xl mx-auto">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Header -->
+                <div class="text-center mb-16">
+                    <span class="inline-flex items-center gap-2 bg-primary-100 text-primary-700 px-4 py-1.5 rounded-full text-sm font-medium mb-4">
+                        <span class="material-symbols-outlined text-sm">info</span>
+                        Tentang Kami
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-primary mb-4">Merajut Keberagaman,<br/>Membangun Harmoni</h2>
+                    <p class="text-on-surface-variant max-w-2xl mx-auto text-lg">Platform digital inklusif yang menghubungkan hati-hati lintas keyakinan demi Indonesia yang lebih damai.</p>
+                </div>
+
+                <!-- Main Content -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
                     <div>
-                        <span class="inline-flex items-center gap-2 bg-primary-100 text-primary-700 px-4 py-1.5 rounded-full text-sm font-medium mb-4">
-                            <span class="material-symbols-outlined text-sm">info</span>
-                            Tentang Kami
-                        </span>
-                        <h2 class="text-3xl sm:text-4xl font-bold text-primary mb-6">Harmoni Nusantara</h2>
+                        <h3 class="text-2xl font-bold text-primary mb-6">Menjadi Jembatan Antar Umat</h3>
                         <p class="text-on-surface-variant text-lg leading-relaxed mb-6">
-                            Harmoni Nusantara adalah platform digital inklusif yang dibangun untuk mempererat toleransi dan merayakan keberagaman agama di Indonesia. Kami percaya bahwa perbedaan adalah anugerah yang harus dijaga bersama.
+                            <strong>Harmoni Nusantara</strong> lahir dari kesadaran bahwa Indonesia adalah rumah bersama bagi pemeluk enam agama. Kami percaya bahwa <em>perbedaan keyakinan bukanlah pemisah, melainkan kekuatan</em> yang memperkaya budaya bangsa.
                         </p>
                         <p class="text-on-surface-variant leading-relaxed mb-8">
-                            Melalui edukasi, dialog, dan aksi nyata, kami berkomitmen menjadi jembatan bagi setiap pemeluk agama untuk saling memahami, menghargai, dan bekerja sama demi Indonesia yang lebih inklusif.
+                            Melalui platform ini, kami menghubungkan sesama anak bangsa untuk saling memahami, menghargai, dan bekerja sama — mulai dari edukasi lintas agama, temukan jadwal & tempat ibadah, hingga partisipasi dalam aksi sosial yang membawa manfaat bagi semua.
                         </p>
                         
-                        <div class="grid grid-cols-3 gap-4">
-                            <div class="text-center p-4 bg-primary-50 rounded-xl">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="text-center p-4 bg-primary-50 rounded-xl border border-primary-100">
                                 <span class="material-symbols-outlined text-3xl text-primary mb-2">favorite</span>
                                 <p class="font-semibold text-primary text-sm">Toleransi</p>
+                                <p class="text-xs text-on-surface-variant mt-1">Menghormati perbedaan</p>
                             </div>
-                            <div class="text-center p-4 bg-secondary-50 rounded-xl">
+                            <div class="text-center p-4 bg-secondary-50 rounded-xl border border-secondary-100">
                                 <span class="material-symbols-outlined text-3xl text-secondary mb-2">group</span>
                                 <p class="font-semibold text-secondary text-sm">Inklusivitas</p>
+                                <p class="text-xs text-on-surface-variant mt-1">Terbukanya semua</p>
                             </div>
-                            <div class="text-center p-4 bg-primary-50 rounded-xl">
+                            <div class="text-center p-4 bg-primary-50 rounded-xl border border-primary-100">
                                 <span class="material-symbols-outlined text-3xl text-primary mb-2">handshake</span>
                                 <p class="font-semibold text-primary text-sm">Persatuan</p>
+                                <p class="text-xs text-on-surface-variant mt-1">Berasatu dalam perbedaan</p>
+                            </div>
+                            <div class="text-center p-4 bg-secondary-50 rounded-xl border border-secondary-100">
+                                <span class="material-symbols-outlined text-3xl text-secondary mb-2">volunteer_activism</span>
+                                <p class="font-semibold text-secondary text-sm">Gotong Royong</p>
+                                <p class="text-xs text-on-surface-variant mt-1">Berkarya bersama</p>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="relative">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="space-y-4">
-                                <img src="https://images.unsplash.com/photo-1604152135912-04a022e23696?w=400&q=80" alt="Masjid" class="w-full rounded-2xl shadow-lg" />
-                                <img src="https://images.unsplash.com/photo-1548625361-e80e71c60b68?w=400&q=80" alt="Gereja" class="w-full rounded-2xl shadow-lg" />
+                    <div class="relative flex flex-col items-center justify-center h-full min-h-[300px] bg-gradient-to-br from-primary-50 via-white to-secondary-50 rounded-3xl p-8 border border-accent-sand/30">
+                        <div class="text-center mb-6">
+                            <span class="material-symbols-outlined text-6xl text-primary mb-4">auto_awesome</span>
+                            <h3 class="text-2xl font-bold text-primary">Harmoni Nusantara</h3>
+                            <p class="text-on-surface-variant mt-2">Merajut Keberagaman dalam Harmoni</p>
+                        </div>
+                        <div class="flex flex-wrap justify-center gap-6 mt-6">
+                            <div class="text-center">
+                                <span class="material-symbols-outlined text-3xl text-accent-gold">mosque</span>
+                                <p class="text-xs mt-1">Islam</p>
                             </div>
-                            <div class="space-y-4 pt-8">
-                                <img src="https://images.unsplash.com/photo-1545454675-3531b543be5d?w=400&q=80" alt="Pura" class="w-full rounded-2xl shadow-lg" />
-                                <img src="https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=400&q=80" alt="Vihara" class="w-full rounded-2xl shadow-lg" />
+                            <div class="text-center">
+                                <span class="material-symbols-outlined text-3xl text-blue-600">church</span>
+                                <p class="text-xs mt-1">Kristen</p>
+                            </div>
+                            <div class="text-center">
+                                <span class="material-symbols-outlined text-3xl text-violet-600">church</span>
+                                <p class="text-xs mt-1">Katolik</p>
+                            </div>
+                            <div class="text-center">
+                                <span class="material-symbols-outlined text-3xl text-orange-500">temple_hindu</span>
+                                <p class="text-xs mt-1">Hindu</p>
+                            </div>
+                            <div class="text-center">
+                                <span class="material-symbols-outlined text-3xl text-amber-500">self_improvement</span>
+                                <p class="text-xs mt-1">Buddha</p>
+                            </div>
+                            <div class="text-center">
+                                <span class="material-symbols-outlined text-3xl text-red-500">elderly</span>
+                                <p class="text-xs mt-1">Konghucu</p>
                             </div>
                         </div>
-                        <div class="absolute -bottom-4 -right-4 bg-primary text-white px-6 py-4 rounded-2xl shadow-xl">
-                            <p class="text-3xl font-bold">6+</p>
+                        <div class="absolute -bottom-4 -right-4 bg-gradient-to-br from-primary to-primary-600 text-white px-6 py-4 rounded-2xl shadow-xl">
+                            <p class="text-3xl font-bold">6</p>
                             <p class="text-sm">Agama di Indonesia</p>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-
         <!-- Faith Diversity Section -->
         <section class="py-20 px-4 sm:px-6 lg:px-10 bg-surface">
             <div class="max-w-7xl mx-auto">
@@ -619,7 +657,7 @@
         </section>
 
         <!-- CTA Section -->
-        <section class="py-20 px-4 sm:px-6 lg:px-10 bg-primary">
+        <!-- <section class="py-20 px-4 sm:px-6 lg:px-10 bg-primary">
             <div class="max-w-4xl mx-auto text-center">
                 <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6">Mari Bersama Membangun Indonesia yang Inklusif</h2>
                 <p class="text-white/80 text-lg mb-8 max-w-2xl mx-auto">Bergabunglah dengan komunitas kami untuk menciptakan dialog yang bermakna antar pemeluk berbagai agama.</p>
@@ -632,7 +670,7 @@
                     </a>
                 </div>
             </div>
-        </section>
+        </section> -->
     </main>
 
     <!-- Footer -->

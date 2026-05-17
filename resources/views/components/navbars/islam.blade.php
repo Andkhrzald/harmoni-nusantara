@@ -23,8 +23,15 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
 
+            {{-- Back Button --}}
+            <div class="flex items-center gap-2">
+                <a href="{{ route('home') }}" class="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-all" title="Kembali ke Beranda">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                </a>
+            </div>
+
             {{-- Logo --}}
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 ml-2">
                 <a href="{{ route('home') }}" class="flex items-center gap-2.5 group">
                     <span class="material-symbols-outlined text-accent-gold text-3xl
                                  group-hover:scale-110 transition-transform duration-300">
