@@ -325,21 +325,23 @@
                 'historical_site' => ['icon' => 'fort', 'label' => 'Situs Sejarah'],
             ];
             $religionMeta = [
-                'islam'    => ['name' => 'Islam',              'icon' => 'mosque',       'badge' => 'bg-emerald-500/90',  'text' => 'text-emerald-600'],
-                'kristen'  => ['name' => 'Kristen Protestan',  'icon' => 'church',       'badge' => 'bg-blue-500/90',     'text' => 'text-blue-600'],
-                'katolik'  => ['name' => 'Katolik',            'icon' => 'church',       'badge' => 'bg-violet-500/90',   'text' => 'text-violet-600'],
-                'hindu'    => ['name' => 'Hindu',              'icon' => 'temple_hindu',  'badge' => 'bg-orange-500/90',   'text' => 'text-orange-600'],
-                'buddha'   => ['name' => 'Buddha',             'icon' => 'self_improvement','badge' => 'bg-amber-500/90',  'text' => 'text-amber-600'],
-                'konghucu' => ['name' => 'Konghucu',           'icon' => 'elderly',      'badge' => 'bg-red-500/90',     'text' => 'text-red-600'],
+                'islam'    => ['name' => 'Islam',              'icon' => 'mosque',       'badge' => 'bg-emerald-500/90',  'gradient' => 'from-emerald-600 to-emerald-800'],
+                'kristen'  => ['name' => 'Kristen Protestan',  'icon' => 'church',       'badge' => 'bg-blue-500/90',     'gradient' => 'from-blue-600 to-blue-800'],
+                'katolik'  => ['name' => 'Katolik',            'icon' => 'church',       'badge' => 'bg-violet-500/90',   'gradient' => 'from-violet-600 to-violet-800'],
+                'hindu'    => ['name' => 'Hindu',              'icon' => 'temple_hindu',  'badge' => 'bg-orange-500/90',   'gradient' => 'from-orange-600 to-orange-800'],
+                'buddha'   => ['name' => 'Buddha',             'icon' => 'self_improvement','badge' => 'bg-amber-500/90',  'gradient' => 'from-amber-600 to-amber-800'],
+                'konghucu' => ['name' => 'Konghucu',           'icon' => 'elderly',      'badge' => 'bg-red-500/90',     'gradient' => 'from-red-600 to-red-800'],
             ];
             $typeIcon = fn($t) => $typeMeta[$t]['icon'] ?? 'star';
             $typeLabel = fn($t) => $typeMeta[$t]['label'] ?? $t;
         @endphp
 
-        <section class="py-20 px-4 sm:px-6 lg:px-10 bg-surface"
-                 x-data="{
+         <section class="py-20 px-4 sm:px-6 lg:px-10 bg-surface"
+                  x-data="{
             activeFilter: 'all',
             selected: null,
+            showAll: false,
+            showCount: 8,
             typeIcon: '{{ $typeIcon('worship_place') }}',
             typeLabel: '{{ $typeLabel('worship_place') }}',
         }">
@@ -396,7 +398,7 @@
                     @php
                         $rm = $religionMeta[$item->religion->slug] ?? null;
                     @endphp
-                    <div x-show="activeFilter === 'all' || activeFilter === '{{ $item->type }}'"
+                    <div x-show="showAll || activeFilter !== 'all' || {{ $loop->index }} < 8"
                          x-transition:enter="transition ease-out duration-300"
                          x-transition:enter-start="opacity-0 scale-95"
                          x-transition:enter-end="opacity-100 scale-100"
@@ -406,7 +408,7 @@
                             type: '{{ $item->type }}',
                             typeLabel: '{{ $typeLabel($item->type) }}',
                             typeIcon: '{{ $typeIcon($item->type) }}',
-                            image: '{{ $item->image_url }}',
+                            image: {{ $item->image_url ? "'" . $item->image_url . "'" : 'null' }},
                             religion: '{{ addslashes($rm['name'] ?? '') }}',
                             religionSlug: '{{ $item->religion->slug }}',
                             religionBadge: '{{ $rm['badge'] ?? 'bg-primary' }}',
@@ -414,7 +416,7 @@
                             location: {{ json_encode($item->location) }},
                             reference: '{{ $item->reference_url }}',
                          }">
-                        {{-- Image --}}
+                        {{-- Image area --}}
                         <div class="aspect-[4/3] overflow-hidden">
                             @if($item->image_url)
                             <img src="{{ $item->image_url }}"
@@ -422,8 +424,11 @@
                                  class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                  loading="lazy">
                             @else
-                            <div class="w-full h-full bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center">
-                                <span class="material-symbols-outlined text-6xl text-primary-300">{{ $typeIcon($item->type) }}</span>
+                            <div class="w-full h-full bg-gradient-to-br {{ $rm['gradient'] ?? 'from-primary-600 to-primary-800' }} flex items-center justify-center">
+                                <div class="text-center px-4">
+                                    <span class="material-symbols-outlined text-6xl text-white/60 block mb-2">{{ $rm['icon'] ?? 'person' }}</span>
+                                    <span class="text-white/40 text-xs font-medium uppercase tracking-wider">{{ strtoupper($item->religion->slug) }}</span>
+                                </div>
                             </div>
                             @endif
                             <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-60 group-hover:opacity-80 transition-opacity"></div>
@@ -441,7 +446,7 @@
                         <div class="absolute bottom-0 left-0 right-0 p-4">
                             <h3 class="text-white font-bold text-base leading-snug mb-1.5 drop-shadow-sm">{{ $item->name }}</h3>
                             @if($rm)
-                            <div class="flex items-center gap-1.5">
+                            <div class="flex items-center gap-1.5 flex-wrap">
                                 <span class="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full {{ $rm['badge'] }} text-white shadow-sm">
                                     <span class="material-symbols-outlined text-xs">{{ $rm['icon'] }}</span>
                                     {{ $rm['name'] }}
@@ -470,6 +475,18 @@
                     </div>
                     @endforelse
                 </div>
+
+                {{-- Toggle button --}}
+                @if($highlights->count() > 8)
+                <div class="flex justify-center mt-10">
+                    <button @click="showAll = !showAll"
+                            x-text="showAll ? 'Sembunyikan' : 'Tampilkan Semua ({{ $highlights->count() }})'"
+                            class="inline-flex items-center gap-2 bg-white text-primary border-2 border-primary/30 px-7 py-3 rounded-xl font-semibold text-sm hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 shadow-sm hover:shadow-md">
+                        <span class="material-symbols-outlined text-lg" x-text="showAll ? 'expand_less' : 'expand_more'"></span>
+                        <span x-text="showAll ? 'Sembunyikan' : 'Tampilkan Semua ({{ $highlights->count() }})'"></span>
+                    </button>
+                </div>
+                @endif
             </div>
 
             {{-- ✦ Detail Modal --}}
@@ -506,10 +523,20 @@
 
                         {{-- Hero image --}}
                         <div class="relative h-56 sm:h-72 overflow-hidden">
-                            <img :src="selected?.image"
-                                 :alt="selected?.name"
-                                 class="w-full h-full object-cover"
-                                 loading="lazy">
+                            <template x-if="selected?.image">
+                                <img :src="selected.image"
+                                     :alt="selected.name"
+                                     class="w-full h-full object-cover"
+                                     loading="lazy">
+                            </template>
+                            <template x-if="!selected?.image">
+                                <div class="w-full h-full bg-gradient-to-br from-primary-600 to-primary-800 flex items-center justify-center">
+                                    <div class="text-center">
+                                        <span class="material-symbols-outlined text-8xl text-white/30 block mb-2" x-text="selected?.typeIcon || 'star'"></span>
+                                        <span class="text-white/20 text-xs font-medium uppercase tracking-widest" x-text="selected?.religion || ''"></span>
+                                    </div>
+                                </div>
+                            </template>
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
 
                             {{-- Badge overlay --}}
