@@ -58,4 +58,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(ForumRoom::class, 'user_id');
     }
+
+    public function favorites()
+    {
+        return $this->hasMany(UserFavorite::class);
+    }
+
+    public function hasFavorited($contentId): bool
+    {
+        return $this->favorites()->where('content_id', $contentId)->exists();
+    }
 }

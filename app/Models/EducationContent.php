@@ -36,4 +36,9 @@ class EducationContent extends Model
     {
         return $this->hasMany(UserLearningProgress::class);
     }
+
+    public function favoritedBy(): HasMany
+    {
+        return $this->hasMany(UserFavorite::class, 'content_id');
+    }
 }
