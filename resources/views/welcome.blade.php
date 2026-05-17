@@ -317,37 +317,253 @@
                         </div>
                     </div>
                 </div>
-        <!-- Faith Diversity Section -->
-        <section class="py-20 px-4 sm:px-6 lg:px-10 bg-surface">
+        {{-- Keberagaman Agama di Indonesia — Enhanced Section --}}
+        @php
+            $typeMeta = [
+                'worship_place' => ['icon' => 'temple_buddhist', 'label' => 'Tempat Ibadah'],
+                'figure' => ['icon' => 'person', 'label' => 'Tokoh Agama'],
+                'historical_site' => ['icon' => 'fort', 'label' => 'Situs Sejarah'],
+            ];
+            $religionMeta = [
+                'islam'    => ['name' => 'Islam',              'icon' => 'mosque',       'badge' => 'bg-emerald-500/90',  'text' => 'text-emerald-600'],
+                'kristen'  => ['name' => 'Kristen Protestan',  'icon' => 'church',       'badge' => 'bg-blue-500/90',     'text' => 'text-blue-600'],
+                'katolik'  => ['name' => 'Katolik',            'icon' => 'church',       'badge' => 'bg-violet-500/90',   'text' => 'text-violet-600'],
+                'hindu'    => ['name' => 'Hindu',              'icon' => 'temple_hindu',  'badge' => 'bg-orange-500/90',   'text' => 'text-orange-600'],
+                'buddha'   => ['name' => 'Buddha',             'icon' => 'self_improvement','badge' => 'bg-amber-500/90',  'text' => 'text-amber-600'],
+                'konghucu' => ['name' => 'Konghucu',           'icon' => 'elderly',      'badge' => 'bg-red-500/90',     'text' => 'text-red-600'],
+            ];
+            $typeIcon = fn($t) => $typeMeta[$t]['icon'] ?? 'star';
+            $typeLabel = fn($t) => $typeMeta[$t]['label'] ?? $t;
+        @endphp
+
+        <section class="py-20 px-4 sm:px-6 lg:px-10 bg-surface"
+                 x-data="{
+            activeFilter: 'all',
+            selected: null,
+            typeIcon: '{{ $typeIcon('worship_place') }}',
+            typeLabel: '{{ $typeLabel('worship_place') }}',
+        }">
             <div class="max-w-7xl mx-auto">
-                <div class="text-center mb-16">
-                    <h2 class="text-3xl sm:text-4xl font-bold text-primary mb-4">Keberagaman Agama di Indonesia</h2>
-                    <p class="text-on-surface-variant max-w-2xl mx-auto">Indonesia memiliki tradisi religius yang kaya dengan enam agama resmi yang hidup berdampingan dalam harmoni.</p>
+                {{-- Header --}}
+                <div class="text-center mb-10">
+                    <span class="inline-flex items-center gap-2 bg-primary-100 text-primary-700 px-4 py-1.5 rounded-full text-sm font-medium mb-4">
+                        <span class="material-symbols-outlined text-sm">diversity_3</span>
+                        Keberagaman
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-primary mb-3">Keberagaman Agama di Indonesia</h2>
+                    <p class="text-on-surface-variant max-w-2xl mx-auto">Jelajahi tempat ibadah, tokoh, dan situs bersejarah dari enam agama resmi yang hidup berdampingan dalam harmoni.</p>
                 </div>
-                
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+
+                {{-- Filter Chips --}}
+                <div class="flex flex-wrap justify-center gap-2 mb-12">
+                    <button @click="activeFilter = 'all'"
+                            :class="activeFilter === 'all'
+                                ? 'bg-primary text-white shadow-md shadow-primary/20'
+                                : 'bg-white text-on-surface-variant hover:bg-primary-50 border border-accent-sand/50'"
+                            class="px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-lg">apps</span>
+                        Semua
+                    </button>
+                    <button @click="activeFilter = 'worship_place'"
+                            :class="activeFilter === 'worship_place'
+                                ? 'bg-secondary text-white shadow-md shadow-secondary/20'
+                                : 'bg-white text-on-surface-variant hover:bg-primary-50 border border-accent-sand/50'"
+                            class="px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-lg">temple_buddhist</span>
+                        Tempat Ibadah
+                    </button>
+                    <button @click="activeFilter = 'figure'"
+                            :class="activeFilter === 'figure'
+                                ? 'bg-secondary text-white shadow-md shadow-secondary/20'
+                                : 'bg-white text-on-surface-variant hover:bg-primary-50 border border-accent-sand/50'"
+                            class="px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-lg">person</span>
+                        Tokoh Agama
+                    </button>
+                    <button @click="activeFilter = 'historical_site'"
+                            :class="activeFilter === 'historical_site'
+                                ? 'bg-secondary text-white shadow-md shadow-secondary/20'
+                                : 'bg-white text-on-surface-variant hover:bg-primary-50 border border-accent-sand/50'"
+                            class="px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-lg">fort</span>
+                        Situs Sejarah
+                    </button>
+                </div>
+
+                {{-- Card Grid --}}
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    @forelse($highlights as $item)
                     @php
-                    $faiths = [
-                        ['name' => 'Islam', 'slug' => 'islam', 'image' => 'https://images.unsplash.com/photo-1584559582124-bafe7ab03a12?w=400&q=80', 'followers' => ''],
-                        ['name' => 'Kristen', 'slug' => 'kristen', 'image' => 'https://images.unsplash.com/photo-1548625361-e80e71c60b68?w=400&q=80', 'followers' => ''],
-                        ['name' => 'Katolik', 'slug' => 'katolik', 'image' => 'https://images.unsplash.com/photo-1548625361-e80e71c60b68?w=400&q=80', 'followers' => ''],
-                        ['name' => 'Hindu', 'slug' => 'hindu', 'image' => 'https://images.unsplash.com/photo-1545454675-3531b543be5d?w=400&q=80', 'followers' => ''],
-                        ['name' => 'Buddha', 'slug' => 'buddha', 'image' => 'https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=400&q=80', 'followers' => ''],
-                        ['name' => 'Konghucu', 'slug' => 'konghucu', 'image' => 'https://images.unsplash.com/photo-1518659526054-190340b32700?w=400&q=80', 'followers' => ''],
-                    ];
+                        $rm = $religionMeta[$item->religion->slug] ?? null;
                     @endphp
-                    @foreach($faiths as $faith)
-                    <a href="{{ route('edukasi.agama', $faith['slug']) }}" class="group relative aspect-square rounded-2xl overflow-hidden">
-                        <img src="{{ $faith['image'] }}" alt="{{ $faith['name'] }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 right-0 p-4">
-                            <p class="text-white font-bold text-lg">{{ $faith['name'] }}</p>
-                            <p class="text-white/80 text-sm">{{ $faith['followers'] }} penduduk</p>
+                    <div x-show="activeFilter === 'all' || activeFilter === '{{ $item->type }}'"
+                         x-transition:enter="transition ease-out duration-300"
+                         x-transition:enter-start="opacity-0 scale-95"
+                         x-transition:enter-end="opacity-100 scale-100"
+                         class="group relative rounded-2xl overflow-hidden cursor-pointer bg-white border border-accent-sand/30 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                         @click="selected = {
+                            name: '{{ addslashes($item->name) }}',
+                            type: '{{ $item->type }}',
+                            typeLabel: '{{ $typeLabel($item->type) }}',
+                            typeIcon: '{{ $typeIcon($item->type) }}',
+                            image: '{{ $item->image_url }}',
+                            religion: '{{ addslashes($rm['name'] ?? '') }}',
+                            religionSlug: '{{ $item->religion->slug }}',
+                            religionBadge: '{{ $rm['badge'] ?? 'bg-primary' }}',
+                            description: {{ json_encode($item->description) }},
+                            location: {{ json_encode($item->location) }},
+                            reference: '{{ $item->reference_url }}',
+                         }">
+                        {{-- Image --}}
+                        <div class="aspect-[4/3] overflow-hidden">
+                            @if($item->image_url)
+                            <img src="{{ $item->image_url }}"
+                                 alt="{{ $item->name }}"
+                                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                 loading="lazy">
+                            @else
+                            <div class="w-full h-full bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-6xl text-primary-300">{{ $typeIcon($item->type) }}</span>
+                            </div>
+                            @endif
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-60 group-hover:opacity-80 transition-opacity"></div>
                         </div>
-                    </a>
-                    @endforeach
+
+                        {{-- Type Badge --}}
+                        <div class="absolute top-3 left-3">
+                            <span class="inline-flex items-center gap-1 bg-white/90 backdrop-blur-sm text-on-surface-variant text-xs font-medium px-2.5 py-1 rounded-full shadow-sm">
+                                <span class="material-symbols-outlined text-sm">{{ $typeIcon($item->type) }}</span>
+                                {{ $typeLabel($item->type) }}
+                            </span>
+                        </div>
+
+                        {{-- Bottom overlay --}}
+                        <div class="absolute bottom-0 left-0 right-0 p-4">
+                            <h3 class="text-white font-bold text-base leading-snug mb-1.5 drop-shadow-sm">{{ $item->name }}</h3>
+                            @if($rm)
+                            <div class="flex items-center gap-1.5">
+                                <span class="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full {{ $rm['badge'] }} text-white shadow-sm">
+                                    <span class="material-symbols-outlined text-xs">{{ $rm['icon'] }}</span>
+                                    {{ $rm['name'] }}
+                                </span>
+                                @if($item->location)
+                                <span class="text-white/70 text-xs flex items-center gap-0.5">
+                                    <span class="material-symbols-outlined text-xs">location_on</span>
+                                    {{ Str::limit($item->location, 20) }}
+                                </span>
+                                @endif
+                            </div>
+                            @endif
+                        </div>
+
+                        {{-- Hover indicator --}}
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none">
+                            <div class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                                <span class="material-symbols-outlined text-white text-3xl">touch_app</span>
+                            </div>
+                        </div>
+                    </div>
+                    @empty
+                    <div class="col-span-full text-center py-16 bg-white/60 rounded-2xl border border-dashed border-accent-sand/50">
+                        <span class="material-symbols-outlined text-6xl text-accent-sand">search_off</span>
+                        <p class="text-on-surface-variant mt-3">Belum ada data keberagamaan. Silakan kembali nanti.</p>
+                    </div>
+                    @endforelse
                 </div>
             </div>
+
+            {{-- ✦ Detail Modal --}}
+            <template x-teleport="body">
+                <div x-show="selected"
+                     x-transition:enter="transition ease-out duration-200"
+                     x-transition:enter-start="opacity-0"
+                     x-transition:enter-end="opacity-100"
+                     x-transition:leave="transition ease-in duration-150"
+                     x-transition:leave-start="opacity-100"
+                     x-transition:leave-end="opacity-0"
+                     class="fixed inset-0 z-[100] flex items-start sm:items-center justify-center p-0 sm:p-6 overflow-y-auto"
+                     @click.self="selected = null"
+                     @keydown.escape.window="selected = null"
+                     style="display: none;">
+                    {{-- Backdrop --}}
+                    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
+
+                    {{-- Modal panel --}}
+                    <div x-show="selected"
+                         x-transition:enter="transition ease-out duration-300"
+                         x-transition:enter-start="opacity-0 translate-y-8 scale-95"
+                         x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                         x-transition:leave="transition ease-in duration-200"
+                         x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+                         x-transition:leave-end="opacity-0 translate-y-4 scale-95"
+                         class="relative z-10 w-full sm:max-w-2xl bg-surface-light rounded-none sm:rounded-2xl shadow-2xl overflow-hidden my-0 sm:my-8"
+                         style="display: none;">
+                        {{-- Close button --}}
+                        <button @click="selected = null"
+                                class="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/30 hover:bg-black/50 backdrop-blur-sm flex items-center justify-center transition-colors">
+                            <span class="material-symbols-outlined text-white text-xl">close</span>
+                        </button>
+
+                        {{-- Hero image --}}
+                        <div class="relative h-56 sm:h-72 overflow-hidden">
+                            <img :src="selected?.image"
+                                 :alt="selected?.name"
+                                 class="w-full h-full object-cover"
+                                 loading="lazy">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+
+                            {{-- Badge overlay --}}
+                            <div class="absolute bottom-4 left-4 right-4 flex items-start justify-between gap-3">
+                                <div>
+                                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                                        <span class="inline-flex items-center gap-1 bg-white/90 backdrop-blur-sm text-on-surface-variant text-xs font-medium px-3 py-1 rounded-full shadow-sm">
+                                            <span class="material-symbols-outlined text-sm" x-text="selected?.typeIcon"></span>
+                                            <span x-text="selected?.typeLabel"></span>
+                                        </span>
+                                        <span class="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full text-white shadow-sm"
+                                              :class="selected?.religionBadge">
+                                            <span class="material-symbols-outlined text-xs" x-text="selected?.religionSlug === 'islam' ? 'mosque' : selected?.religionSlug === 'kristen' || selected?.religionSlug === 'katolik' ? 'church' : selected?.religionSlug === 'hindu' ? 'temple_hindu' : selected?.religionSlug === 'buddha' ? 'self_improvement' : 'elderly'"></span>
+                                            <span x-text="selected?.religion"></span>
+                                        </span>
+                                    </div>
+                                    <h3 class="text-white font-bold text-xl sm:text-2xl drop-shadow-sm leading-snug" x-text="selected?.name"></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Content --}}
+                        <div class="p-5 sm:p-7 space-y-5">
+                            {{-- Description --}}
+                            <div>
+                                <h4 class="text-sm font-semibold text-primary uppercase tracking-wider mb-3">Deskripsi</h4>
+                                <p class="text-on-surface-variant text-sm sm:text-base leading-relaxed" x-text="selected?.description"></p>
+                            </div>
+
+                            {{-- Location --}}
+                            <template x-if="selected?.location">
+                                <div class="flex items-start gap-2.5 p-4 bg-primary-50/70 rounded-xl border border-primary-100/50">
+                                    <span class="material-symbols-outlined text-primary mt-0.5">location_on</span>
+                                    <div>
+                                        <p class="text-xs font-semibold text-primary uppercase tracking-wider mb-0.5">Lokasi</p>
+                                        <p class="text-on-surface-variant text-sm" x-text="selected?.location"></p>
+                                    </div>
+                                </div>
+                            </template>
+
+                            {{-- Reference Link --}}
+                            <template x-if="selected?.reference">
+                                <a :href="selected?.reference"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   class="flex items-center justify-center gap-2 w-full bg-primary text-white px-6 py-3.5 rounded-xl font-semibold text-sm hover:bg-primary-600 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">
+                                    <span class="material-symbols-outlined">search</span>
+                                    Cari di Google — <span x-text="selected?.name"></span>
+                                </a>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </template>
         </section>
 
         {{-- Explore Edukasi CTA --}}

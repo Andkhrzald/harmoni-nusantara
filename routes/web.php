@@ -10,14 +10,16 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\VolunteerController;
 use App\Http\Controllers\WorshipController;
+use App\Models\ReligiousHighlight;
 use App\Models\Testimonial;
 use Illuminate\Support\Facades\Route;
 
 // ─── Landing ────────────────────────────────────────────────────────────────
 Route::get('/', function () {
     $testimonials = Testimonial::approved()->latest()->take(6)->get();
+    $highlights = ReligiousHighlight::with('religion')->ordered()->get();
 
-    return view('welcome', compact('testimonials'));
+    return view('welcome', compact('testimonials', 'highlights'));
 })->name('home');
 
 // ─── Dashboard (auth) ────────────────────────────────────────────────────────
