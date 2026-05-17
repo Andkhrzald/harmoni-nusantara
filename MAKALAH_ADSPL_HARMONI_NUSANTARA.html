@@ -1,0 +1,1069 @@
+<div class="page-break"></div>
+<h1>BAB I: PENDAHULUAN</h1>
+<h3>1.1 Latar Belakang</h3>
+<p>Indonesia merupakan negara dengan keragaman agama yang tinggi. Berdasarkan data Kementerian Agama RI, terdapat 6 agama resmi yang diakui: Islam, Kristen Protestan, Katolik, Hindu, Buddha, dan Konghucu. Minimnya platform digital yang memfasilitasi pemahaman lintas iman secara moderat menyebabkan potensi miskomunikasi dan intoleransi.</p>
+<p>Harmoni Nusantara hadir sebagai solusi platform web yang menyediakan: Edukasi keagamaan lintas iman untuk 6 agama resmi, informasi ibadah praktis berbasis API real-time, ruang diskusi moderat dengan AI chatbot, aksi sosial kolaboratif lintas agama, konsultasi privat terenkripsi, dan cek fakta berita keagamaan.</p>
+
+<h3>1.2 Rumusan Masalah</h3>
+<ol>
+<li>Bagaimana merancang sistem platform moderasi dan literasi beragama yang dapat diakses oleh seluruh kalangan masyarakat?</li>
+<li>Bagaimana merancang basis data yang mampu menampung data multi-agama, multi-konten, donasi, konsultasi, dan forum diskusi?</li>
+<li>Bagaimana mengintegrasikan layanan eksternal (API Aladhan, Google Maps, YouTube, Calendarific, Fact Check, Gemini AI) ke dalam sistem?</li>
+<li>Bagaimana menerapkan keamanan data (enkripsi pesan konsultasi) pada platform berbasis web?</li>
+</ol>
+
+<h3>1.3 Batasan Masalah</h3>
+<ol>
+<li>Sistem berbasis web (desktop & mobile responsive).</li>
+<li>6 agama resmi Indonesia (Islam, Kristen, Katolik, Hindu, Buddha, Konghucu).</li>
+<li>Framework: Laravel 13, PHP 8.4, PostgreSQL (Supabase).</li>
+<li>Tidak membahas implementasi payment gateway secara detail.</li>
+<li>Tidak membahas deployment dan infrastruktur production secara mendalam.</li>
+</ol>
+
+<h3>1.4 Tujuan Penelitian</h3>
+<ol>
+<li>Menghasilkan analisis dan desain sistem platform moderasi beragama.</li>
+<li>Menghasilkan rancangan ERD, LRS, dan spesifikasi file database.</li>
+<li>Menghasilkan use case diagram, activity diagram, sequence diagram, class diagram, dan deployment diagram.</li>
+<li>Menghasilkan rancangan user interface dan dokumen input/output.</li>
+<li>Menghasilkan spesifikasi pengujian perangkat lunak dan spesifikasi hardware/software.</li>
+</ol>
+
+<h1>BAB II: TINJAUAN PUSTAKA</h1>
+<h3>2.1 Konsep Dasar Analisa dan Desain Sistem</h3>
+<p>Menurut Satzinger, Jackson, dan Burd (2024), analisis dan desain sistem adalah proses sistematis untuk mengidentifikasi masalah, merencanakan solusi, dan merancang sistem informasi. Metode SDLC yang digunakan adalah model Waterfall dengan tahapan: analisis kebutuhan, desain sistem, implementasi, pengujian, deployment, dan maintenance.</p>
+
+<h3>2.2 Unified Modeling Language (UML)</h3>
+<p>UML adalah bahasa pemodelan standar untuk menggambarkan artefak sistem perangkat lunak (Fowler, 2018). Diagram yang digunakan: Use Case Diagram (interaksi aktor-sistem), Activity Diagram (alur kerja), Sequence Diagram (interaksi objek), Class Diagram (struktur statis), dan Deployment Diagram (konfigurasi hardware/software).</p>
+
+<h3>2.3 Framework Laravel</h3>
+<p>Laravel adalah framework PHP berbasis MVC (Model-View-Controller) yang menyediakan Eloquent ORM, Migration & Seeder, Blade templating, Middleware, dan Livewire untuk komponen reaktif server-side.</p>
+
+<h3>2.4 Technology Stack</h3>
+<table>
+<tr><th>Layer</th><th>Teknologi</th><th>Versi</th></tr>
+<tr><td>Backend Framework</td><td>Laravel</td><td>13.7+</td></tr>
+<tr><td>Bahasa Pemrograman</td><td>PHP</td><td>8.4</td></tr>
+<tr><td>Database</td><td>PostgreSQL (Supabase)</td><td>15+</td></tr>
+<tr><td>Frontend Rendering</td><td>Blade + Alpine.js</td><td>3.15+</td></tr>
+<tr><td>Reaktif UI</td><td>Livewire</td><td>4.3+</td></tr>
+<tr><td>CSS Framework</td><td>Tailwind CSS</td><td>3.x</td></tr>
+<tr><td>Admin Panel</td><td>Filament</td><td>5.x</td></tr>
+<tr><td>Testing</td><td>Pest PHP</td><td>4.x</td></tr>
+<tr><td>Code Formatter</td><td>Laravel Pint</td><td>1.x</td></tr>
+</table>
+
+<h3>2.5 API Eksternal</h3>
+<table>
+<tr><th>Layanan</th><th>Provider</th><th>Fungsi</th></tr>
+<tr><td>Jadwal Sholat</td><td>Aladhan API</td><td>Waktu sholat harian & bulanan</td></tr>
+<tr><td>Hari Besar</td><td>Calendarific API</td><td>Kalender hari besar semua agama</td></tr>
+<tr><td>Peta Ibadah</td><td>Google Maps + Places API</td><td>Lokasi rumah ibadah terdekat</td></tr>
+<tr><td>Video Edukasi</td><td>YouTube Data API v3</td><td>Pencarian & galeri video</td></tr>
+<tr><td>Cek Fakta</td><td>Google Fact Check API</td><td>Verifikasi berita keagamaan</td></tr>
+<tr><td>AI Chatbot</td><td>Google Gemini API</td><td>Asisten diskusi di forum</td></tr>
+<tr><td>Text-to-Speech</td><td>Web Speech API</td><td>Aksesibilitas baca teks</td></tr>
+</table><div class="page-break"></div>
+<h1>BAB III: ANALISIS SISTEM</h1>
+
+<h3>3.1 Analisis Sistem Berjalan</h3>
+<p>Saat ini belum ada platform terintegrasi yang menyediakan edukasi 6 agama, informasi ibadah, ruang diskusi, dan aksi sosial dalam satu aplikasi web. Masyarakat harus mengakses berbagai sumber terpisah untuk mendapatkan informasi lintas iman.</p>
+
+<h3>3.2 Analisis Sistem Usulan</h3>
+<p>Harmoni Nusantara mengusulkan platform terpadu dengan 7 modul: Autentikasi, Edukasi & Literasi, Asisten Ibadah, Aksi Sosial (donasi, relawan, cek fakta, konsultasi), Forum Diskusi (Ruang Bersama + AI chatbot), Testimoni Pengguna, dan Dashboard/Admin Panel.</p>
+
+<h3>3.3 Identifikasi Aktor</h3>
+<p class="fig-caption">Tabel 3.1 Identifikasi Aktor</p>
+<table>
+<tr><th>No</th><th>Aktor</th><th>Deskripsi</th><th>Hak Akses</th></tr>
+<tr><td>1</td><td>Guest</td><td>Pengunjung belum login</td><td>Lihat konten publik: edukasi, jadwal ibadah, peta, campaign donasi, hasil cek fakta</td></tr>
+<tr><td>2</td><td>User</td><td>Pengguna terdaftar</td><td>Semua akses Guest + donasi, relawan, konsultasi, forum, testimoni, dashboard</td></tr>
+<tr><td>3</td><td>Penyuluh</td><td>Ahli agama kurasi admin</td><td>Semua akses User + upload konten, jawab konsultasi, submit cek fakta</td></tr>
+<tr><td>4</td><td>Admin</td><td>Administrator platform</td><td>Semua akses + manajemen user, approve konten, kelola platform, Filament panel</td></tr>
+</table>
+
+<h3>3.4 Use Case Diagram</h3>
+<p class="fig-caption">Gambar 3.1 Use Case Diagram Harmoni Nusantara</p>
+<pre>
++-----------------------------------------------------------------------+
+|                          HARMONI NUSANTARA                            |
+|                                                                        |
+|  +---------------------------------------------------------------+   |
+|  |  MODUL EDUKASI (Semua Aktor)                                  |   |
+|  |  [Lihat Artikel] [Tonton Video] [Cari Konten] [Filter Agama]  |   |
+|  +---------------------------------------------------------------+   |
+|  +---------------------------------------------------------------+   |
+|  |  MODUL IBADAH (Semua Aktor)                                   |   |
+|  |  [Jadwal Sholat] [Peta Ibadah] [Panduan Ritual] [Etiket]     |   |
+|  +---------------------------------------------------------------+   |
+|  +---------------------------------------------------------------+   |
+|  |  MODUL AKSI SOSIAL (Login Required)                           |   |
+|  |  [Donasi] [Relawan] [Cek Fakta] [Konsultasi Terenkripsi]     |   |
+|  +---------------------------------------------------------------+   |
+|  +---------------------------------------------------------------+   |
+|  |  MODUL FORUM (Login + Member)                                 |   |
+|  |  [Baca Chat] [Kirim Pesan] [AI Chatbot @ai]                   |   |
+|  +---------------------------------------------------------------+   |
+|                                                                        |
+|  +----------+  +----------+  +----------+  +----------+              |
+|  |  GUEST   |  |   USER   |  | PENYULUH |  |  ADMIN   |              |
+|  |(No Login)|  |Terdaftar |  |  (Ahli)  |  |  (Full)  |              |
+|  +----------+  +----------+  +----------+  +----------+              |
++-----------------------------------------------------------------------+
+</pre>
+<p class="keterangan">Gambar dapat digambar ulang dengan Draw.io, Lucidchart, atau Visio.</p>
+
+<h3>3.5 Skenario Use Case</h3>
+<p class="fig-caption">Tabel 3.2 Skenario Use Case</p>
+<table>
+<tr><th>Kode</th><th>Use Case</th><th>Aktor</th><th>Deskripsi</th></tr>
+<tr><td>UC-01</td><td>Login</td><td>User, Penyuluh, Admin</td><td>Autentikasi pengguna terdaftar</td></tr>
+<tr><td>UC-02</td><td>Register</td><td>Guest</td><td>Pendaftaran akun baru</td></tr>
+<tr><td>UC-03</td><td>Logout</td><td>Semua (login)</td><td>Keluar dari sesi</td></tr>
+<tr><td>UC-04</td><td>Lihat Konten Edukasi</td><td>Semua</td><td>Melihat artikel/video 6 agama</td></tr>
+<tr><td>UC-05</td><td>Filter by Agama</td><td>Semua</td><td>Menyaring konten per agama</td></tr>
+<tr><td>UC-06</td><td>Cari Konten</td><td>Semua</td><td>Pencarian judul/isi konten</td></tr>
+<tr><td>UC-07</td><td>Tonton Video</td><td>Semua</td><td>Video YouTube embed</td></tr>
+<tr><td>UC-08</td><td>Lihat Jadwal Sholat</td><td>Semua</td><td>API Aladhan: 6 waktu sholat</td></tr>
+<tr><td>UC-09</td><td>Cari Rumah Ibadah</td><td>Semua</td><td>Google Maps Places API</td></tr>
+<tr><td>UC-10</td><td>Panduan Ritual</td><td>Semua</td><td>Panduan ibadah per agama</td></tr>
+<tr><td>UC-11</td><td>Etiket Bertamu</td><td>Semua</td><td>Etiket rumah ibadah</td></tr>
+<tr><td>UC-12</td><td>Lihat Campaign Donasi</td><td>Semua</td><td>Daftar donasi aktif</td></tr>
+<tr><td>UC-13</td><td>Melakukan Donasi</td><td>User [Auth]</td><td>Transaksi donasi</td></tr>
+<tr><td>UC-14</td><td>Daftar Relawan</td><td>User [Auth]</td><td>Pendaftaran relawan</td></tr>
+<tr><td>UC-15</td><td>Lihat Cek Fakta</td><td>Semua</td><td>Hasil verifikasi berita</td></tr>
+<tr><td>UC-16</td><td>Buat Konsultasi</td><td>User [Auth]</td><td>Sesi tanya dengan penyuluh</td></tr>
+<tr><td>UC-17</td><td>Kirim Pesan Forum</td><td>User (Member)</td><td>Diskusi di forum</td></tr>
+<tr><td>UC-18</td><td>Chat dengan AI (@ai)</td><td>User (Member)</td><td>Tanya AI chatbot Gemini</td></tr>
+<tr><td>UC-19</td><td>Bagikan Testimoni</td><td>User [Auth]</td><td>Kirim cerita pengalaman</td></tr>
+<tr><td>UC-20</td><td>Upload Konten</td><td>Penyuluh</td><td>Tambah artikel/video</td></tr>
+<tr><td>UC-21</td><td>Jawab Konsultasi</td><td>Penyuluh</td><td>Respon pertanyaan user</td></tr>
+<tr><td>UC-22</td><td>Submit Cek Fakta</td><td>Penyuluh</td><td>Verifikasi berita</td></tr>
+<tr><td>UC-23</td><td>Approve/Reject</td><td>Admin</td><td>Moderasi konten edukasi</td></tr>
+<tr><td>UC-24</td><td>Manajemen User</td><td>Admin</td><td>CRUD & assign role</td></tr>
+<tr><td>UC-25</td><td>Kelola Campaign</td><td>Admin</td><td>CRUD donasi</td></tr>
+<tr><td>UC-26</td><td>Moderasi Testimoni</td><td>Admin/Penyuluh</td><td>Setujui/tolak testimoni</td></tr>
+<tr><td>UC-27</td><td>Verifikasi Anggota Forum</td><td>Admin/Penyuluh</td><td>Setujui anggota baru</td></tr>
+<tr><td>UC-28</td><td>Kelola Panel Admin</td><td>Admin</td><td>Filament admin panel</td></tr>
+</table>
+
+<h3>3.6 Activity Diagram</h3>
+<p class="fig-caption">Gambar 3.2 Activity Diagram Login</p>
+<pre>
+Guest           Sistem          Database
+  |               |               |
+  | Buka /login   |               |
+  +-------------->|               |
+  |               |               |
+  | Tampil form   |               |
+  |<--------------+               |
+  |               |               |
+  | Isi email+pass|               |
+  +-------------->|               |
+  |               | Validasi      |
+  |               +--[gagal]-->|  |
+  |               |<--[kembali]--+  |
+  |               |               |
+  |               | Cek kredensial |
+  |               +-------------->|
+  |               |<--[data]------+
+  |               |               |
+  | [gagal]       | [sukses]      |
+  |<-- error -----+ Buat sesi     |
+  |               +-------------->|
+  |<-- redirect --+               |
+</pre>
+
+<p class="fig-caption">Gambar 3.3 Activity Diagram Donasi</p>
+<pre>
+User            Sistem         Database      DonationProject
+  |               |               |               |
+  | Lihat list    |               |               |
+  +-------------->|               |               |
+  |<-- tampil ----+               |               |
+  |               |               |               |
+  | Pilih campaign|               |               |
+  +-------------->|               |               |
+  |<-- detail ----+               |               |
+  |    + form     |               |               |
+  |               |               |               |
+  | Kirim donasi  |               |               |
+  +-------------->| Validasi      |               |
+  |               +--[gagal]-->|  |               |
+  |               | Simpan        |               |
+  |               +-------------->|               |
+  |               | Update amount  |               |
+  |               +-------------->|               |
+  |<-- notif -----+               |               |
+</pre>
+
+<p class="fig-caption">Gambar 3.4 Activity Diagram Forum + AI Chatbot</p>
+<pre>
+User           Sistem           Database        Gemini AI
+  |              |                |                |
+  | Buka /forum  |                |                |
+  +------------->|                |                |
+  |              | Cek role       |                |
+  | [guest]      |                |                |
+  | +- UI blurred|                |                |
+  | [viewer]     |                |                |
+  | +- read-only |                |                |
+  | [member]     |                |                |
+  | +- full akses|                |                |
+  |              |                |                |
+  | Kirim pesan  |                |                |
+  +------------->|                |                |
+  |              | Simpan pesan   |                |
+  |              +--------------->|                |
+  |              |                |                |
+  |              | Cek @ai prefix |                |
+  |              +--[tidak]-> done|                |
+  |              | [ya, @ai]      |                |
+  |              | Panggil Gemini +--------------->|
+  |              |                |                |
+  |              |                | Generate resp  |
+  |              |<---------------+----------------+
+  |              |                |                |
+  |              | Simpan resp AI |                |
+  |              +--------------->|                |
+  |              |                |                |
+  |<-- tampil ---+                |                |
+</pre>
+
+<h3>3.7 Sequence Diagram</h3>
+
+<p class="fig-caption">Gambar 3.5 Sequence Diagram Register</p>
+<pre>
+Guest          Sistem           Database
+  |               |               |
+  | 1. /register  |               |
+  +-------------->|               |
+  |               |               |
+  | 2. Tampil form|               |
+  |<--------------+               |
+  |               |               |
+  | 3. Isi data:  |               |
+  | nama, email,  |               |
+  | password,     |               |
+  | avatar(opsi)  |               |
+  +-------------->|               |
+  |               |               |
+  |               | 4. Validasi   |
+  |               | 5. Cek email  |
+  |               +-------------->|
+  |               |<-- [unik] ----+
+  |               |               |
+  |               | 6. Hash bcrypt|
+  |               | 7. Simpan     |
+  |               | (role=user)   |
+  |               +-------------->|
+  |               |               |
+  |               | 8. Auto login |
+  |               |               |
+  | 9. Redirect   |               |
+  | ke /dashboard |               |
+  |<--------------+               |
+</pre>
+
+<p class="fig-caption">Gambar 3.6 Sequence Diagram Donasi</p>
+<pre>
+User           Sistem          Database      DonationProject
+  |               |               |               |
+  | 1. GET /detail|               |               |
+  +-------------->|               |               |
+  |               | 2. Query      |               |
+  |               +-------------->|               |
+  |               |<-- data ------+               |
+  |               |               |               |
+  | 3. Tampilkan  |               |               |
+  |<--------------+               |               |
+  |               |               |               |
+  | 4. POST donate|               |               |
+  | amount=50000  |               |               |
+  +-------------->|               |               |
+  |               | 5. Validasi   |               |
+  |               | 6. Simpan     |               |
+  |               +-------------->|               |
+  |               | 7. Update     |               |
+  |               | current_amount+-------------->|
+  |               |               |               |
+  | 8. Notif      |               |               |
+  |<--------------+               |               |
+</pre>
+
+<p class="fig-caption">Gambar 3.7 Sequence Diagram Konsultasi Terenkripsi</p>
+<pre>
+User           Sistem          Database       Penyuluh
+  |               |               |               |
+  | 1. POST       |               |               |
+  | /konsultasi   |               |               |
+  +-------------->|               |               |
+  |               | 2. Simpan sesi|               |
+  |               | (status=open) |               |
+  |               +-------------->|               |
+  |               |               |               |
+  |               | 3. Assign     |               |
+  |               | penyuluh      |               |
+  |               +-------------->|               |
+  |               |               |               |
+  | 4. Redirect   |               |               |
+  |<--------------+               |               |
+  |               |               |               |
+  | 5. Kirim      |               |               |
+  | pesan text    |               |               |
+  +-------------->|               |               |
+  |               | 6. Enkripsi   |               |
+  |               | AES-256-CBC   |               |
+  |               |               |               |
+  |               | 7. Simpan     |               |
+  |               +-------------->|               |
+  |               |               |               |
+  |               | 8. Notif      |               |
+  |               +------------------------------>|
+  |               |               |               |
+  |               |               | 9. Baca       |
+  |               |               |<--------------+
+  |               |               |               |
+  |               |               | 10. Balas     |
+  |               |               +-------------->|
+  |               |               |               |
+  |               | 11. Simpan    |               |
+  |               +-------------->|               |
+  |               |               |               |
+  | 12. Tampilkan |               |               |
+  | pesan balasan |               |               |
+  |<--------------+               |               |
+</pre><div class="page-break"></div>
+<h1>BAB IV: DESAIN SISTEM</h1>
+
+<h3>4.1 Entity Relationship Diagram (ERD)</h3>
+<p class="fig-caption">Gambar 4.1 Entity Relationship Diagram (ERD) Harmoni Nusantara</p>
+<pre>
++-----------------------------------------------------------------------------+
+|              ENTITY RELATIONSHIP DIAGRAM - HARMONI NUSANTARA                |
++-----------------------------------------------------------------------------+
+
+    +-----------------------+
+    |  religion_categories  |
+    +-----------------------+
+    | PK: id (BIGINT)      |----+
+    | slug (UNIQUE)        |    |
+    | name (VARCHAR 100)   |    | 1
+    | description (TEXT)   |    |
+    | icon_url (VARCHAR)   |    |
+    | timestamps           |    |
+    +-----------------------+    |
+                                | N (religion_id)
+    +------------------+    +---v-------------------+
+    |      users       |    |  education_contents   |----+
+    +------------------+    +-----------------------+    |
+    | PK: id (BIGINT) |<---+ PK: id (BIGINT)       |    | 1
+    | name (VARCHAR)  |    | FK: religion_id       |    |
+    | email (UNIQUE)  |    | FK: author_id         |    |
+    | password (hash) |    | title (VARCHAR 500)   |    |
+    | religion_pref   |    | slug (UNIQUE)         |    |
+    | role (VARCHAR)  |    | content (TEXT)        |    |
+    | avatar (VARCHAR)|    | content_type (VARCHAR)|    | N
+    | timestamps      |    | youtube_video_id      |    |
+    +--------+--------+    | status, age_group     |    |
+             |             | views_count (INT)     |    |
+             |             | timestamps            |    |
+             |             +-----------------------+    |
+             |                                        |
+    +--------+--------+    +-----------------------+    |
+    | donation_projects|   | user_learning_progress|    |
+    +------------------+   +-----------------------+    |
+    | PK: id (BIGINT)  |   | PK: id (BIGINT)      |<---+
+    | FK: created_by   |   | FK: user_id          |
+    | title (VARCHAR)  |   | FK: content_id       |
+    | description      |   | completed (BOOLEAN)  |
+    | target_amount    |   | progress_pct (SMALL) |
+    | current_amount   |   | last_accessed (TS)   |
+    | religion_scope   |   | timestamps           |
+    | status, deadline |   +-----------------------+
+    | timestamps       |
+    +--------+---------+
+             |
+             | 1     N
+    +--------+---------+
+    |     donations     |
+    +-------------------+
+    | PK: id (BIGINT)   |
+    | FK: user_id       |
+    | FK: project_id    |
+    | amount (DECIMAL)  |
+    | anonymous_flag    |
+    | payment_method    |
+    | payment_status    |
+    | transaction_ref   |
+    | timestamps        |
+    +-------------------+
+
+    +------------------+    +-----------------------+
+    |   fact_checks    |    |     volunteers        |
+    +------------------+    +-----------------------+
+    | PK: id (BIGINT)  |    | PK: id (BIGINT)       |
+    | FK: author_id    |    | FK: user_id           |
+    | title (VARCHAR)  |    | program_name (VARCHAR)|
+    | content (TEXT)   |    | religion_scope        |
+    | verdict (VARCHAR)|    | location (VARCHAR)    |
+    | source_link      |    | status (VARCHAR)      |
+    | google_api_ref   |    | motivation (TEXT)     |
+    | published_at     |    | timestamps            |
+    | timestamps       |    +-----------------------+
+    +------------------+
+
+    +------------------+    +-----------------------+
+    |  consultations   |    | consultation_messages |
+    +------------------+    +-----------------------+
+    | PK: id (BIGINT)  |--->| PK: id (BIGINT)       |
+    | FK: user_id      |    | FK: consultation_id   |
+    | FK: expert_id    |    | FK: sender_id         |
+    | title (VARCHAR)  |    | message_encrypted(TXT)|
+    | status (VARCHAR) |    | timestamps            |
+    | is_private (BOOL)|    +-----------------------+
+    | timestamps       |
+    +--------+---------+
+             |
+             | 1     N
+    +--------+---------+    +-----------------------+
+    |   forum_rooms     |    |   forum_messages      |
+    +-------------------+    +-----------------------+
+    | PK: id (BIGINT)   |--->| PK: id (BIGINT)       |
+    | FK: user_id       |    | FK: forum_room_id     |
+    | name (VARCHAR)    |    | FK: user_id (nullable)|
+    | description (TEXT)|    | content (TEXT)         |
+    | is_active (BOOL)  |    | is_ai (BOOLEAN)       |
+    | timestamps        |    | created_at            |
+    +-------+-----------+    +-----------------------+
+            |
+            | 1     N
+    +-------+-----------+
+    | forum_participants |
+    +-------------------+
+    | PK: id (BIGINT)   |
+    | FK: forum_room_id |
+    | FK: user_id       |
+    | role (VARCHAR)    |
+    | status (VARCHAR)  |
+    | timestamps        |
+    | UNIQUE(room,user) |
+    +-------------------+
+
+    +-------------------+
+    |   testimonials     |
+    +-------------------+
+    | PK: id (BIGINT)   |
+    | FK: user_id       |
+    | name (VARCHAR)    |
+    | title (VARCHAR)   |
+    | content (TEXT)    |
+    | is_approved (BOOL)|
+    | timestamps        |
+    +-------------------+
+</pre>
+<p class="keterangan">Catatan: PK = Primary Key, FK = Foreign Key, TS = TIMESTAMP. Panah menunjukkan relasi one-to-many. Gambar ulang dengan Draw.io untuk format yang lebih rapi.</p>
+
+<h3>4.2 Logical Record Structure (LRS)</h3>
+<p class="fig-caption">Gambar 4.2 Logical Record Structure (LRS) Harmoni Nusantara</p>
+
+<p><b>RELASI 1: users (induk) ke seluruh tabel anak (1:N)</b></p>
+<pre>
+users (id*, name, email, email_verified_at, password,
+       religion_preference, role, avatar, remember_token, timestamps)
+       |
+       |--(1:N)-- education_contents (id*, religion_id**, author_id**,
+       |           title, slug, content, content_type, youtube_video_id,
+       |           thumbnail_url, status, age_group, views_count, timestamps)
+       |
+       |--(1:N)-- donation_projects (id*, title, description,
+       |           target_amount, current_amount, religion_scope,
+       |           cover_image, status, deadline, created_by**, timestamps)
+       |
+       |--(1:N)-- donations (id*, user_id**, project_id**, amount,
+       |           anonymous_flag, payment_method, payment_status,
+       |           transaction_ref, timestamps)
+       |
+       |--(1:N)-- fact_checks (id*, author_id**, title, content,
+       |           verdict, source_link, google_api_ref, published_at,
+       |           timestamps)
+       |
+       |--(1:N)-- consultations (id*, user_id**, expert_id**, title,
+       |           status, is_private, timestamps)
+       |           |
+       |           |--(1:N)-- consultation_messages (id*,
+       |                       consultation_id**, sender_id**,
+       |                       message_encrypted, timestamps)
+       |
+       |--(1:N)-- volunteers (id*, user_id**, program_name,
+       |           religion_scope, location, status, motivation, timestamps)
+       |
+       |--(1:N)-- user_learning_progress (id*, user_id**, content_id**,
+       |           completed, progress_pct, last_accessed, timestamps)
+       |
+       |--(1:N)-- forum_rooms (id*, name, description, user_id**,
+       |           is_active, timestamps)
+       |           |
+       |           |--(1:N)-- forum_messages (id*, forum_room_id**,
+       |           |           user_id**, content, is_ai, created_at)
+       |           |
+       |           |--(1:N)-- forum_participants (id*, forum_room_id**,
+       |                       user_id**, role, status, timestamps)
+       |                       UNIQUE (forum_room_id, user_id)
+       |
+       |--(1:N)-- testimonials (id*, user_id**, name, title, content,
+                    is_approved, timestamps)
+</pre>
+
+<p><b>RELASI 2: religion_categories (1) ke education_contents (N)</b></p>
+<pre>
+religion_categories (id*, slug, name, description, icon_url, timestamps)
+       |
+       |--(1:N)-- education_contents (id*, religion_id**, author_id**, ...)
+</pre>
+
+<p><b>RELASI 3: donation_projects (1) ke donations (N)</b></p>
+<pre>
+donation_projects (id*, title, description, target_amount, current_amount, ...)
+       |
+       |--(1:N)-- donations (id*, user_id**, project_id**, ...)
+</pre>
+
+<p><b>RELASI 4: consultations (1) ke consultation_messages (N)</b></p>
+<pre>
+consultations (id*, user_id**, expert_id**, title, status, is_private, ...)
+       |
+       |--(1:N)-- consultation_messages (id*, consultation_id**, sender_id**, ...)
+</pre>
+
+<p><b>RELASI 5: forum_rooms (1) ke forum_messages & forum_participants (N)</b></p>
+<pre>
+forum_rooms (id*, name, description, user_id**, is_active, timestamps)
+       |
+       |--(1:N)-- forum_messages (id*, forum_room_id**, user_id**, ...)
+       |--(1:N)-- forum_participants (id*, forum_room_id**, user_id**, ...)
+</pre>
+
+<p><b>RELASI 6: education_contents (1) ke user_learning_progress (N)</b></p>
+<pre>
+education_contents (id*, religion_id**, author_id**, ...)
+       |
+       |--(1:N)-- user_learning_progress (id*, user_id**, content_id**, ...)
+</pre>
+
+<p class="keterangan">Notasi: id* = Primary Key, id** = Foreign Key, UNIQUE = Composite Unique Index. Semua PK menggunakan BIGINT AUTO_INCREMENT via $table->id() migrasi Laravel.</p>
+
+<h3>4.3 Spesifikasi File (14 Tabel Lengkap)</h3>
+
+<p class="fig-caption">Tabel 4.1 Spesifikasi File: users</p>
+<table>
+<tr><th>No</th><th>Field</th><th>Tipe</th><th>Panjang</th><th>Constraint</th><th>Keterangan</th></tr>
+<tr><td>1</td><td>id</td><td>BIGINT</td><td>-</td><td>PK, AUTO_INCREMENT</td><td>ID unik user</td></tr>
+<tr><td>2</td><td>name</td><td>VARCHAR</td><td>255</td><td>NOT NULL</td><td>Nama lengkap</td></tr>
+<tr><td>3</td><td>email</td><td>VARCHAR</td><td>255</td><td>UNIQUE, NOT NULL</td><td>Alamat email</td></tr>
+<tr><td>4</td><td>email_verified_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>Verifikasi email</td></tr>
+<tr><td>5</td><td>password</td><td>VARCHAR</td><td>255</td><td>NOT NULL</td><td>Hash bcrypt</td></tr>
+<tr><td>6</td><td>remember_token</td><td>VARCHAR</td><td>100</td><td>NULLABLE</td><td>Token sesi</td></tr>
+<tr><td>7</td><td>religion_preference</td><td>VARCHAR</td><td>50</td><td>NULLABLE</td><td>islam/kristen/katolik/hindu/buddha/konghucu</td></tr>
+<tr><td>8</td><td>role</td><td>VARCHAR</td><td>20</td><td>DEFAULT 'user'</td><td>admin, penyuluh, user</td></tr>
+<tr><td>9</td><td>avatar</td><td>VARCHAR</td><td>500</td><td>NULLABLE</td><td>Path foto profil</td></tr>
+<tr><td>10</td><td>created_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>Waktu dibuat</td></tr>
+<tr><td>11</td><td>updated_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>Waktu diupdate</td></tr>
+</table>
+
+<p class="fig-caption">Tabel 4.2 Spesifikasi File: religion_categories</p>
+<table>
+<tr><th>No</th><th>Field</th><th>Tipe</th><th>Panjang</th><th>Constraint</th><th>Keterangan</th></tr>
+<tr><td>1</td><td>id</td><td>BIGINT</td><td>-</td><td>PK, AUTO_INCREMENT</td><td>ID unik</td></tr>
+<tr><td>2</td><td>slug</td><td>VARCHAR</td><td>50</td><td>UNIQUE, NOT NULL</td><td>islam, kristen, katolik, hindu, buddha, konghucu</td></tr>
+<tr><td>3</td><td>name</td><td>VARCHAR</td><td>100</td><td>NOT NULL</td><td>Islam, Kristen Protestan, Katolik, Hindu, Buddha, Konghucu</td></tr>
+<tr><td>4</td><td>description</td><td>TEXT</td><td>-</td><td>NULLABLE</td><td>Deskripsi singkat agama</td></tr>
+<tr><td>5</td><td>icon_url</td><td>VARCHAR</td><td>500</td><td>NULLABLE</td><td>URL icon Material Symbol</td></tr>
+<tr><td>6</td><td>created_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+<tr><td>7</td><td>updated_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+</table>
+
+<p class="fig-caption">Tabel 4.3 Spesifikasi File: education_contents</p>
+<table>
+<tr><th>No</th><th>Field</th><th>Tipe</th><th>Panjang</th><th>Constraint</th><th>Keterangan</th></tr>
+<tr><td>1</td><td>id</td><td>BIGINT</td><td>-</td><td>PK, AUTO_INCREMENT</td><td>ID unik konten</td></tr>
+<tr><td>2</td><td>religion_id</td><td>BIGINT</td><td>-</td><td>FK -> religion_categories.id, CASCADE</td><td>Agama terkait</td></tr>
+<tr><td>3</td><td>author_id</td><td>BIGINT</td><td>-</td><td>FK -> users.id, CASCADE</td><td>Penulis konten</td></tr>
+<tr><td>4</td><td>title</td><td>VARCHAR</td><td>500</td><td>NOT NULL</td><td>Judul konten</td></tr>
+<tr><td>5</td><td>slug</td><td>VARCHAR</td><td>500</td><td>UNIQUE, NOT NULL</td><td>SEO-friendly URL</td></tr>
+<tr><td>6</td><td>content</td><td>TEXT</td><td>-</td><td>NOT NULL</td><td>Isi konten edukasi</td></tr>
+<tr><td>7</td><td>content_type</td><td>VARCHAR</td><td>20</td><td>NOT NULL</td><td>article, video, audio, virtual_tour</td></tr>
+<tr><td>8</td><td>youtube_video_id</td><td>VARCHAR</td><td>50</td><td>NULLABLE</td><td>ID untuk tipe video</td></tr>
+<tr><td>9</td><td>thumbnail_url</td><td>VARCHAR</td><td>500</td><td>NULLABLE</td><td>URL thumbnail gambar</td></tr>
+<tr><td>10</td><td>status</td><td>VARCHAR</td><td>20</td><td>DEFAULT 'pending'</td><td>pending, approved, rejected</td></tr>
+<tr><td>11</td><td>age_group</td><td>VARCHAR</td><td>20</td><td>NULLABLE</td><td>children, teen_adult, elderly, all</td></tr>
+<tr><td>12</td><td>views_count</td><td>INTEGER</td><td>-</td><td>DEFAULT 0</td><td>Jumlah pengunjung</td></tr>
+<tr><td>13</td><td>created_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+<tr><td>14</td><td>updated_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+</table>
+
+<p class="fig-caption">Tabel 4.4 Spesifikasi File: donation_projects</p>
+<table>
+<tr><th>No</th><th>Field</th><th>Tipe</th><th>Panjang</th><th>Constraint</th><th>Keterangan</th></tr>
+<tr><td>1</td><td>id</td><td>BIGINT</td><td>-</td><td>PK, AUTO_INCREMENT</td><td>ID campaign</td></tr>
+<tr><td>2</td><td>title</td><td>VARCHAR</td><td>500</td><td>NOT NULL</td><td>Nama campaign donasi</td></tr>
+<tr><td>3</td><td>description</td><td>TEXT</td><td>-</td><td>NOT NULL</td><td>Deskripsi campaign</td></tr>
+<tr><td>4</td><td>target_amount</td><td>DECIMAL</td><td>15,2</td><td>NOT NULL</td><td>Target donasi</td></tr>
+<tr><td>5</td><td>current_amount</td><td>DECIMAL</td><td>15,2</td><td>DEFAULT 0</td><td>Dana terkumpul</td></tr>
+<tr><td>6</td><td>religion_scope</td><td>VARCHAR</td><td>20</td><td>DEFAULT 'all'</td><td>all, islam, kristen, katolik, hindu, buddha, konghucu</td></tr>
+<tr><td>7</td><td>cover_image</td><td>VARCHAR</td><td>500</td><td>NULLABLE</td><td>Gambar sampul</td></tr>
+<tr><td>8</td><td>status</td><td>VARCHAR</td><td>20</td><td>DEFAULT 'active'</td><td>active, completed, cancelled</td></tr>
+<tr><td>9</td><td>deadline</td><td>DATE</td><td>-</td><td>NULLABLE</td><td>Batas waktu</td></tr>
+<tr><td>10</td><td>created_by</td><td>BIGINT</td><td>-</td><td>FK -> users.id, CASCADE</td><td>Pembuat campaign</td></tr>
+<tr><td>11</td><td>created_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+<tr><td>12</td><td>updated_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+</table>
+
+<p class="fig-caption">Tabel 4.5 Spesifikasi File: donations</p>
+<table>
+<tr><th>No</th><th>Field</th><th>Tipe</th><th>Panjang</th><th>Constraint</th><th>Keterangan</th></tr>
+<tr><td>1</td><td>id</td><td>BIGINT</td><td>-</td><td>PK, AUTO_INCREMENT</td><td>ID transaksi</td></tr>
+<tr><td>2</td><td>user_id</td><td>BIGINT</td><td>-</td><td>FK -> users.id, SET NULL</td><td>Donatur (null = anonymous)</td></tr>
+<tr><td>3</td><td>project_id</td><td>BIGINT</td><td>-</td><td>FK -> donation_projects.id, CASCADE</td><td>Campaign tujuan</td></tr>
+<tr><td>4</td><td>amount</td><td>DECIMAL</td><td>15,2</td><td>NOT NULL</td><td>Jumlah donasi</td></tr>
+<tr><td>5</td><td>anonymous_flag</td><td>BOOLEAN</td><td>-</td><td>DEFAULT FALSE</td><td>Sembunyikan identitas</td></tr>
+<tr><td>6</td><td>payment_method</td><td>VARCHAR</td><td>50</td><td>NULLABLE</td><td>Metode pembayaran</td></tr>
+<tr><td>7</td><td>payment_status</td><td>VARCHAR</td><td>20</td><td>DEFAULT 'pending'</td><td>pending, success, failed</td></tr>
+<tr><td>8</td><td>transaction_ref</td><td>VARCHAR</td><td>255</td><td>NULLABLE</td><td>Referensi transaksi</td></tr>
+<tr><td>9</td><td>created_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+<tr><td>10</td><td>updated_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+</table>
+
+<p class="fig-caption">Tabel 4.6 Spesifikasi File: fact_checks</p>
+<table>
+<tr><th>No</th><th>Field</th><th>Tipe</th><th>Panjang</th><th>Constraint</th><th>Keterangan</th></tr>
+<tr><td>1</td><td>id</td><td>BIGINT</td><td>-</td><td>PK, AUTO_INCREMENT</td><td>ID unik</td></tr>
+<tr><td>2</td><td>author_id</td><td>BIGINT</td><td>-</td><td>FK -> users.id, CASCADE</td><td>Verifikator (penyuluh/admin)</td></tr>
+<tr><td>3</td><td>title</td><td>VARCHAR</td><td>500</td><td>NOT NULL</td><td>Judul klaim/berita</td></tr>
+<tr><td>4</td><td>content</td><td>TEXT</td><td>-</td><td>NOT NULL</td><td>Analisis cek fakta</td></tr>
+<tr><td>5</td><td>verdict</td><td>VARCHAR</td><td>20</td><td>NOT NULL</td><td>hoax, true, misleading, unverified</td></tr>
+<tr><td>6</td><td>source_link</td><td>VARCHAR</td><td>1000</td><td>NULLABLE</td><td>Sumber berita asli</td></tr>
+<tr><td>7</td><td>google_api_ref</td><td>VARCHAR</td><td>500</td><td>NULLABLE</td><td>Referensi Google Fact Check</td></tr>
+<tr><td>8</td><td>published_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>Waktu publikasi</td></tr>
+<tr><td>9</td><td>created_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+<tr><td>10</td><td>updated_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+</table><p class="fig-caption">Tabel 4.7 Spesifikasi File: consultations</p>
+<table>
+<tr><th>No</th><th>Field</th><th>Tipe</th><th>Panjang</th><th>Constraint</th><th>Keterangan</th></tr>
+<tr><td>1</td><td>id</td><td>BIGINT</td><td>-</td><td>PK, AUTO_INCREMENT</td><td>ID sesi</td></tr>
+<tr><td>2</td><td>user_id</td><td>BIGINT</td><td>-</td><td>FK -> users.id, CASCADE</td><td>Pembuat sesi</td></tr>
+<tr><td>3</td><td>expert_id</td><td>BIGINT</td><td>-</td><td>FK -> users.id, SET NULL</td><td>Penyuluh ditugaskan</td></tr>
+<tr><td>4</td><td>title</td><td>VARCHAR</td><td>500</td><td>NOT NULL</td><td>Judul konsultasi</td></tr>
+<tr><td>5</td><td>status</td><td>VARCHAR</td><td>20</td><td>DEFAULT 'open'</td><td>open, in_progress, closed</td></tr>
+<tr><td>6</td><td>is_private</td><td>BOOLEAN</td><td>-</td><td>DEFAULT TRUE</td><td>Mode privat</td></tr>
+<tr><td>7</td><td>created_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+<tr><td>8</td><td>updated_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+</table>
+
+<p class="fig-caption">Tabel 4.8 Spesifikasi File: consultation_messages</p>
+<table>
+<tr><th>No</th><th>Field</th><th>Tipe</th><th>Panjang</th><th>Constraint</th><th>Keterangan</th></tr>
+<tr><td>1</td><td>id</td><td>BIGINT</td><td>-</td><td>PK, AUTO_INCREMENT</td><td>ID pesan</td></tr>
+<tr><td>2</td><td>consultation_id</td><td>BIGINT</td><td>-</td><td>FK -> consultations.id, CASCADE</td><td>Sesi konsultasi</td></tr>
+<tr><td>3</td><td>sender_id</td><td>BIGINT</td><td>-</td><td>FK -> users.id, CASCADE</td><td>Pengirim pesan</td></tr>
+<tr><td>4</td><td>message_encrypted</td><td>TEXT</td><td>-</td><td>NOT NULL</td><td>Pesan dienkripsi AES-256-CBC</td></tr>
+<tr><td>5</td><td>created_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+<tr><td>6</td><td>updated_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+</table>
+
+<p class="fig-caption">Tabel 4.9 Spesifikasi File: volunteers</p>
+<table>
+<tr><th>No</th><th>Field</th><th>Tipe</th><th>Panjang</th><th>Constraint</th><th>Keterangan</th></tr>
+<tr><td>1</td><td>id</td><td>BIGINT</td><td>-</td><td>PK, AUTO_INCREMENT</td><td>ID unik</td></tr>
+<tr><td>2</td><td>user_id</td><td>BIGINT</td><td>-</td><td>FK -> users.id, CASCADE</td><td>Relawan</td></tr>
+<tr><td>3</td><td>program_name</td><td>VARCHAR</td><td>255</td><td>NOT NULL</td><td>Nama program relawan</td></tr>
+<tr><td>4</td><td>religion_scope</td><td>VARCHAR</td><td>20</td><td>DEFAULT 'all'</td><td>Lingkup agama</td></tr>
+<tr><td>5</td><td>location</td><td>VARCHAR</td><td>255</td><td>NULLABLE</td><td>Lokasi kegiatan</td></tr>
+<tr><td>6</td><td>status</td><td>VARCHAR</td><td>20</td><td>DEFAULT 'pending'</td><td>pending, active, inactive</td></tr>
+<tr><td>7</td><td>motivation</td><td>TEXT</td><td>-</td><td>NULLABLE</td><td>Motivasi menjadi relawan</td></tr>
+<tr><td>8</td><td>created_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+<tr><td>9</td><td>updated_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+</table>
+
+<p class="fig-caption">Tabel 4.10 Spesifikasi File: user_learning_progress</p>
+<table>
+<tr><th>No</th><th>Field</th><th>Tipe</th><th>Panjang</th><th>Constraint</th><th>Keterangan</th></tr>
+<tr><td>1</td><td>id</td><td>BIGINT</td><td>-</td><td>PK, AUTO_INCREMENT</td><td>ID unik</td></tr>
+<tr><td>2</td><td>user_id</td><td>BIGINT</td><td>-</td><td>FK -> users.id, CASCADE</td><td>Pengguna</td></tr>
+<tr><td>3</td><td>content_id</td><td>BIGINT</td><td>-</td><td>FK -> education_contents.id, CASCADE</td><td>Konten dipelajari</td></tr>
+<tr><td>4</td><td>completed</td><td>BOOLEAN</td><td>-</td><td>DEFAULT FALSE</td><td>Status selesai</td></tr>
+<tr><td>5</td><td>progress_pct</td><td>SMALLINT</td><td>-</td><td>DEFAULT 0</td><td>Persentase 0-100</td></tr>
+<tr><td>6</td><td>last_accessed</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>Terakhir diakses</td></tr>
+<tr><td>7</td><td>created_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+<tr><td>8</td><td>updated_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+</table>
+
+<p class="fig-caption">Tabel 4.11 Spesifikasi File: forum_rooms</p>
+<table>
+<tr><th>No</th><th>Field</th><th>Tipe</th><th>Panjang</th><th>Constraint</th><th>Keterangan</th></tr>
+<tr><td>1</td><td>id</td><td>BIGINT</td><td>-</td><td>PK, AUTO_INCREMENT</td><td>ID room</td></tr>
+<tr><td>2</td><td>name</td><td>VARCHAR</td><td>255</td><td>NOT NULL</td><td>Nama ruang diskusi</td></tr>
+<tr><td>3</td><td>description</td><td>TEXT</td><td>-</td><td>NULLABLE</td><td>Deskripsi room</td></tr>
+<tr><td>4</td><td>user_id</td><td>BIGINT</td><td>-</td><td>FK -> users.id, CASCADE</td><td>Creator room</td></tr>
+<tr><td>5</td><td>is_active</td><td>BOOLEAN</td><td>-</td><td>DEFAULT TRUE</td><td>Status aktif</td></tr>
+<tr><td>6</td><td>created_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+<tr><td>7</td><td>updated_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+</table>
+
+<p class="fig-caption">Tabel 4.12 Spesifikasi File: forum_messages</p>
+<table>
+<tr><th>No</th><th>Field</th><th>Tipe</th><th>Panjang</th><th>Constraint</th><th>Keterangan</th></tr>
+<tr><td>1</td><td>id</td><td>BIGINT</td><td>-</td><td>PK, AUTO_INCREMENT</td><td>ID pesan</td></tr>
+<tr><td>2</td><td>forum_room_id</td><td>BIGINT</td><td>-</td><td>FK -> forum_rooms.id, CASCADE</td><td>Room tujuan</td></tr>
+<tr><td>3</td><td>user_id</td><td>BIGINT</td><td>-</td><td>FK -> users.id, NULL ON DELETE</td><td>Pengirim (null = AI)</td></tr>
+<tr><td>4</td><td>content</td><td>TEXT</td><td>-</td><td>NOT NULL</td><td>Isi pesan</td></tr>
+<tr><td>5</td><td>is_ai</td><td>BOOLEAN</td><td>-</td><td>DEFAULT FALSE</td><td>Pesan dari AI chatbot</td></tr>
+<tr><td>6</td><td>created_at</td><td>TIMESTAMP</td><td>-</td><td>useCurrent</td><td>Waktu kirim</td></tr>
+</table>
+
+<p class="fig-caption">Tabel 4.13 Spesifikasi File: forum_participants</p>
+<table>
+<tr><th>No</th><th>Field</th><th>Tipe</th><th>Panjang</th><th>Constraint</th><th>Keterangan</th></tr>
+<tr><td>1</td><td>id</td><td>BIGINT</td><td>-</td><td>PK, AUTO_INCREMENT</td><td>ID unik</td></tr>
+<tr><td>2</td><td>forum_room_id</td><td>BIGINT</td><td>-</td><td>FK -> forum_rooms.id, CASCADE</td><td>Room</td></tr>
+<tr><td>3</td><td>user_id</td><td>BIGINT</td><td>-</td><td>FK -> users.id, CASCADE</td><td>User</td></tr>
+<tr><td>4</td><td>role</td><td>VARCHAR</td><td>20</td><td>DEFAULT 'viewer'</td><td>creator, member, viewer</td></tr>
+<tr><td>5</td><td>status</td><td>VARCHAR</td><td>20</td><td>DEFAULT 'pending'</td><td>active, pending, banned</td></tr>
+<tr><td>6</td><td>created_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+<tr><td>7</td><td>updated_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+<tr style="background:#ffe0e0;"><td>-</td><td>UNIQUE (forum_room_id, user_id)</td><td>-</td><td>-</td><td>Composite</td><td>Mencegah duplikat partisipasi</td></tr>
+</table>
+
+<p class="fig-caption">Tabel 4.14 Spesifikasi File: testimonials</p>
+<table>
+<tr><th>No</th><th>Field</th><th>Tipe</th><th>Panjang</th><th>Constraint</th><th>Keterangan</th></tr>
+<tr><td>1</td><td>id</td><td>BIGINT</td><td>-</td><td>PK, AUTO_INCREMENT</td><td>ID unik</td></tr>
+<tr><td>2</td><td>user_id</td><td>BIGINT</td><td>-</td><td>FK -> users.id, NULL ON DELETE</td><td>Pengirim testimoni</td></tr>
+<tr><td>3</td><td>name</td><td>VARCHAR</td><td>255</td><td>NOT NULL</td><td>Nama (auto dari auth)</td></tr>
+<tr><td>4</td><td>title</td><td>VARCHAR</td><td>255</td><td>NULLABLE</td><td>Judul peran (e.g. Penerima Beasiswa)</td></tr>
+<tr><td>5</td><td>content</td><td>TEXT</td><td>-</td><td>NOT NULL</td><td>Cerita testimoni</td></tr>
+<tr><td>6</td><td>is_approved</td><td>BOOLEAN</td><td>-</td><td>DEFAULT FALSE</td><td>Status moderasi admin</td></tr>
+<tr><td>7</td><td>created_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+<tr><td>8</td><td>updated_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+</table>
+
+<h3>4.4 Pengkodean (Coding Convention)</h3>
+
+<h4>4.4.1 Primary Key</h4>
+<p>Semua tabel menggunakan BIGINT AUTO_INCREMENT via sintaks Laravel: <code>$table->id()</code>.</p>
+
+<h4>4.4.2 Foreign Key</h4>
+<pre>$table->foreignId('religion_id')->constrained('religion_categories')->onDelete('cascade');
+Format: foreignId('nama_tabel_tunggal_id')-&gt;constrained('nama_tabel')-&gt;onDelete('aksi');
+Aksi: cascadeOnDelete() atau nullOnDelete()</pre>
+
+<h4>4.4.3 Unique Index</h4>
+<p>Diterapkan pada: email (users), slug (religion_categories & education_contents), composite (forum_room_id, user_id) di forum_participants.</p>
+
+<h4>4.4.4 Tabel 4.15: Daftar Nilai Enum/Status per Tabel</h4>
+<table>
+<tr><th>Tabel</th><th>Field</th><th>Nilai yang Diizinkan</th></tr>
+<tr><td>users</td><td>role</td><td>'user', 'penyuluh', 'admin'</td></tr>
+<tr><td>education_contents</td><td>content_type</td><td>'article', 'video', 'audio', 'virtual_tour'</td></tr>
+<tr><td>education_contents</td><td>status</td><td>'pending', 'approved', 'rejected'</td></tr>
+<tr><td>education_contents</td><td>age_group</td><td>'children', 'teen_adult', 'elderly', 'all'</td></tr>
+<tr><td>donation_projects</td><td>status</td><td>'active', 'completed', 'cancelled'</td></tr>
+<tr><td>donation_projects</td><td>religion_scope</td><td>'all', 'islam', 'kristen', 'katolik', 'hindu', 'buddha', 'konghucu'</td></tr>
+<tr><td>donations</td><td>payment_status</td><td>'pending', 'success', 'failed'</td></tr>
+<tr><td>fact_checks</td><td>verdict</td><td>'hoax', 'true', 'misleading', 'unverified'</td></tr>
+<tr><td>consultations</td><td>status</td><td>'open', 'in_progress', 'closed'</td></tr>
+<tr><td>volunteers</td><td>status</td><td>'pending', 'active', 'inactive'</td></tr>
+<tr><td>forum_participants</td><td>role</td><td>'creator', 'member', 'viewer'</td></tr>
+<tr><td>forum_participants</td><td>status</td><td>'active', 'pending', 'banned'</td></tr>
+</table>
+
+<h4>4.4.5 Cascade & Set Null Rules</h4>
+<pre>CASCADE:     $table->foreignId('religion_id')->constrained()->cascadeOnDelete();
+SET NULL:    $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();</pre>
+
+<h1>BAB V: IMPLEMENTASI</h1>
+
+<h3>5.1 Class Diagram</h3>
+<p class="fig-caption">Gambar 5.1 Class Diagram Harmoni Nusantara (Arsitektur MVC)</p>
+<pre>
++-------------------------------------------------------------------+
+|                   CLASS DIAGRAM - HARMONI NUSANTARA               |
++-------------------------------------------------------------------+
+
+[LAYER 1: MODELS - 14 Entitas]
+User            ReligionCategory     EducationContent
+-id: bigint     -id: bigint           -id: bigint
+-name: string   -slug: string         -religion_id: FK
+-email: string  -name: string         -author_id: FK
+-role: string   -description: text    -title: string
+-avatar: string                      -slug: string
+-religion_pref  +categories()         +religion(): BelongsTo
++donations()    (HasMany)             +author(): BelongsTo
+
+DonationProject  Donation       Consultation     ConsultationMessage
+-target_amount   -amount        -title: string   -message_encrypted
+-current_amount  -pay_status    -is_private      +consultation(): BelongsTo
+-status          -anonymous     -status: string  +sender(): BelongsTo
+                              +messages(): HasMany
+
+FactCheck        Volunteer      ForumRoom        ForumMessage
+-verdict         -program_name  -name: string    -is_ai: bool
+-published_at    -location      -is_active       -content: text
++author():User   +user():User   +messages(): HM  +room(): BelongsTo
+                               +participants():HM +user(): BelongsTo
+
+ForumParticipant  UserLearningProgress  Testimonial
+-role: string     -completed: bool      -name: string
+-status: string   -progress_pct: small  -is_approved: bool
++room(): BelongsTo +user(): BelongsTo   +user(): BelongsTo
++user(): BelongsTo +content(): BelongsTo
+
+[LAYER 2: CONTROLLERS - 11 file]
+EducationController   WorshipController     DonationController
+VolunteerController   FactCheckController   ConsultationController
+ForumController       DashboardController   TestimonialController
+ProfileController
+
+[LAYER 3: SERVICES - 7 file]
+AladhanService  GoogleMapsService  YouTubeService
+CalendarificService  FactCheckService  GeminiService  EncryptionService
+
+[LAYER 4: VIEWS - 50+ Blade templates]
+layouts/  auth/  education/  worship/  donations/  consultations/
+forum/  dashboard/  profile/  fact-check/  testimonials/  volunteers/
+components/
+
+[MIDDLEWARE + ADMIN]
+RoleMiddleware (cek role -> izinkan/403)
+Filament AdminPanel (7 Resources)
+</pre>
+
+<h3>5.2 Deployment Diagram</h3>
+<p class="fig-caption">Gambar 5.2 Deployment Diagram Harmoni Nusantara</p>
+<pre>
++------------------------------------------------------------------+
+|                    DEPLOYMENT DIAGRAM - PRODUCTION               |
++------------------------------------------------------------------+
+
++-----------------------+    HTTPS    +---------------------------+
+|   &lt;&lt;Client Device&gt;&gt;   |------------&gt;| &lt;&lt;Cloudflare Tunnel&gt;&gt;    |
+|   Web Browser         |            | SSL Termination           |
+|   (Chrome/Firefox/    |            | DDoS Protection           |
+|    Safari/Edge)       |            | Reverse Proxy             |
++-----------------------+            +------------+--------------+
+                                                  |
++-------------------------------------------------+----------------+
+|           &lt;&lt;Web Server&gt;&gt; Nginx 1.24+                            |
+|                                                                   |
+|  +-----------------------------------------------------------+   |
+|  |          LARAVEL APPLICATION (PHP 8.4 + Laravel 13)       |   |
+|  |  Routes -> Middleware -> Controllers -> Services -> Models |   |
+|  +-----------------------------------------------------------+   |
+|                              |                                   |
+|  +----------+    +----------+----------+    +-----------------+  |
+|  |PostgreSQL|    |     Redis Cache     |    | Queue Worker    |  |
+|  |Supabase  |    | (Session/Cache/RL)  |    | Laravel Horizon |  |
+|  |14 Tables |    |                     |    | Email/API Async |  |
+|  +----------+    +--------------------+    +-----------------+  |
++------------------------------------------------------------------+
+
+           EXTERNAL APIs
++------------------------------------------------------------------+
+|  Aladhan API  | Google Maps | YouTube API | Calendarific         |
+|  Fact Check   | Gemini AI   | Web Speech (Browser TTS)          |
++------------------------------------------------------------------+
+</pre>
+
+<h3>5.3 User Interface</h3>
+<p>Total 33 halaman telah diimplementasikan dalam 7 modul: Home (1), Auth (3), Edukasi (6), Ibadah (5), Aksi Sosial (10), Forum (1), Dashboard (4), Testimoni (1), Profile (1), Admin (1).</p>
+
+<h3>5.4 Dokumen Input & Output</h3>
+
+<p><b>Input:</b> 13 form: Register, Login, Create Donasi, Donate, Relawan, Cek Fakta, Cari Cek Fakta, Konsultasi, Pesan Forum, Testimoni, Cari Edukasi, Edit Profil, Create Campaign.</p>
+
+<p><b>Output:</b> 15 tampilan: Landing Page, List Konten, Detail Konten, Galeri Video, Jadwal Sholat, Peta Ibadah, Panduan, Etiket, Campaign, Detail Campaign, Cek Fakta, Chat Room, Forum, Dashboard, Admin Panel.</p>
+
+<h1>BAB VI: PENGUJIAN</h1>
+
+<h3>6.1 Matriks Role & Permission</h3>
+<p class="fig-caption">Tabel 6.1 Matriks Role & Permission</p>
+<table>
+<tr><th>Fitur</th><th>Guest</th><th>User</th><th>Penyuluh</th><th>Admin</th></tr>
+<tr><td>Lihat konten edukasi</td><td class="center">&#x2705;</td><td class="center">&#x2705;</td><td class="center">&#x2705;</td><td class="center">&#x2705;</td></tr>
+<tr><td>Lihat jadwal ibadah</td><td class="center">&#x2705;</td><td class="center">&#x2705;</td><td class="center">&#x2705;</td><td class="center">&#x2705;</td></tr>
+<tr><td>Lihat campaign donasi</td><td class="center">&#x2705;</td><td class="center">&#x2705;</td><td class="center">&#x2705;</td><td class="center">&#x2705;</td></tr>
+<tr><td>Lihat hasil cek fakta</td><td class="center">&#x2705;</td><td class="center">&#x2705;</td><td class="center">&#x2705;</td><td class="center">&#x2705;</td></tr>
+<tr><td>Baca forum</td><td class="center">&#x26A0;&#xFE0F; blurred</td><td class="center">&#x26A0;&#xFE0F; pending</td><td class="center">&#x2705;</td><td class="center">&#x2705;</td></tr>
+<tr><td>Melakukan donasi</td><td class="center">&#x274C;</td><td class="center">&#x2705;</td><td class="center">&#x2705;</td><td class="center">&#x2705;</td></tr>
+<tr><td>Daftar relawan</td><td class="center">&#x274C;</td><td class="center">&#x2705;</td><td class="center">&#x2705;</td><td class="center">&#x2705;</td></tr>
+<tr><td>Buat konsultasi</td><td class="center">&#x274C;</td><td class="center">&#x2705;</td><td class="center">&#x2705;</td><td class="center">&#x2705;</td></tr>
+<tr><td>Kirim pesan forum</td><td class="center">&#x274C;</td><td class="center">&#x26A0;&#xFE0F; member only</td><td class="center">&#x2705;</td><td class="center">&#x2705;</td></tr>
+<tr><td>Upload konten</td><td class="center">&#x274C;</td><td class="center">&#x274C;</td><td class="center">&#x2705;</td><td class="center">&#x2705;</td></tr>
+<tr><td>Jawab konsultasi</td><td class="center">&#x274C;</td><td class="center">&#x274C;</td><td class="center">&#x2705;</td><td class="center">&#x2705;</td></tr>
+<tr><td>Approve konten</td><td class="center">&#x274C;</td><td class="center">&#x274C;</td><td class="center">&#x274C;</td><td class="center">&#x2705;</td></tr>
+<tr><td>Manajemen user</td><td class="center">&#x274C;</td><td class="center">&#x274C;</td><td class="center">&#x274C;</td><td class="center">&#x2705;</td></tr>
+<tr><td>Akses admin panel</td><td class="center">&#x274C;</td><td class="center">&#x274C;</td><td class="center">&#x274C;</td><td class="center">&#x2705;</td></tr>
+</table>
+
+<h3>6.2 Skenario Pengujian</h3>
+<p class="fig-caption">Tabel 6.2 Skenario Pengujian (Pest PHP)</p>
+<table>
+<tr><th>Kode</th><th>Skenario</th><th>Modul</th><th>Status</th></tr>
+<tr><td>T-01</td><td>Register valid</td><td>Auth</td><td>&#x2705; Siap</td></tr>
+<tr><td>T-02</td><td>Register duplicate email</td><td>Auth</td><td>&#x2705; Siap</td></tr>
+<tr><td>T-03</td><td>Login valid</td><td>Auth</td><td>&#x2705; Siap</td></tr>
+<tr><td>T-04</td><td>Login wrong password</td><td>Auth</td><td>&#x2705; Siap</td></tr>
+<tr><td>T-05</td><td>Block dashboard without login</td><td>Auth</td><td>&#x2705; Siap</td></tr>
+<tr><td>T-06</td><td>Guest access public content</td><td>Edukasi</td><td>&#x2705; Siap</td></tr>
+<tr><td>T-07</td><td>Filter content by religion</td><td>Edukasi</td><td>&#x2705; Siap</td></tr>
+<tr><td>T-08</td><td>Search content by keyword</td><td>Edukasi</td><td>&#x2705; Siap</td></tr>
+<tr><td>T-09</td><td>View Aladhan prayer schedule</td><td>Ibadah</td><td>&#x2705; Siap</td></tr>
+<tr><td>T-10</td><td>User create donation</td><td>Aksi</td><td>&#x2705; Siap</td></tr>
+<tr><td>T-11</td><td>Guest cannot donate</td><td>Aksi</td><td>&#x2705; Siap</td></tr>
+<tr><td>T-12</td><td>Encryption consultation message</td><td>Aksi</td><td>&#x2705; Siap</td></tr>
+<tr><td>T-13</td><td>Forum message by member</td><td>Forum</td><td>&#x2705; Siap</td></tr>
+<tr><td>T-14</td><td>Guest forum UI blurred</td><td>Forum</td><td>&#x2705; Siap</td></tr>
+<tr><td>T-15</td><td>@ai trigger in forum</td><td>Forum</td><td>&#x2705; Siap</td></tr>
+<tr><td>T-16</td><td>Admin approve content</td><td>Admin</td><td>&#x2705; Siap</td></tr>
+<tr><td>T-17</td><td>RoleMiddleware blocks unauthorized</td><td>Auth</td><td>&#x2705; Siap</td></tr>
+<tr><td>T-18</td><td>Testimony submit & approve</td><td>Testimoni</td><td>&#x2705; Siap</td></tr>
+</table>
+
+<h3>6.3 Spesifikasi Hardware</h3>
+<p class="fig-caption">Tabel 6.3 Spesifikasi Hardware</p>
+<table>
+<tr><th>Komponen</th><th>Minimal (Development)</th><th>Rekomendasi (Production)</th></tr>
+<tr><td>Processor</td><td>Intel Core i5 Gen 10+ / AMD Ryzen 5</td><td>2+ vCPU (Xeon / EPYC)</td></tr>
+<tr><td>RAM</td><td>8 GB DDR4</td><td>8 GB (minimal 4 GB)</td></tr>
+<tr><td>Storage</td><td>20 GB SSD</td><td>50 GB SSD Cloud</td></tr>
+<tr><td>OS</td><td>Windows 10/11, macOS 12+, Linux Ubuntu 22.04+</td><td>Ubuntu 22.04 LTS / 24.04 LTS</td></tr>
+<tr><td>Network</td><td>2 Mbps+</td><td>10 Mbps+</td></tr>
+</table>
+
+<h3>6.4 Spesifikasi Software</h3>
+<p class="fig-caption">Tabel 6.4 Spesifikasi Software</p>
+<table>
+<tr><th>Software</th><th>Versi</th><th>Fungsi</th></tr>
+<tr><td>PHP</td><td>8.3 - 8.4</td><td>Bahasa pemrograman backend</td></tr>
+<tr><td>Laravel Framework</td><td>13.7+</td><td>Framework MVC utama</td></tr>
+<tr><td>PostgreSQL</td><td>15+</td><td>Database (Supabase)</td></tr>
+<tr><td>Redis</td><td>7+</td><td>Cache & Queue</td></tr>
+<tr><td>Nginx</td><td>1.24+</td><td>Web server</td></tr>
+<tr><td>Composer</td><td>2.7+</td><td>PHP dependency manager</td></tr>
+<tr><td>Node.js</td><td>18+</td><td>JavaScript runtime (dev)</td></tr>
+<tr><td>Tailwind CSS</td><td>3.x</td><td>CSS utility-first</td></tr>
+<tr><td>Alpine.js</td><td>3.15+</td><td>Frontend reactivity</td></tr>
+<tr><td>Livewire</td><td>4.3+</td><td>Server-side reactive UI</td></tr>
+<tr><td>Filament</td><td>5.x</td><td>Admin panel</td></tr>
+<tr><td>Pest PHP</td><td>4.x</td><td>Testing framework</td></tr>
+</table>
+
+<h1>BAB VII: PENUTUP</h1>
+
+<h3>7.1 Kesimpulan</h3>
+<ol>
+<li>Harmoni Nusantara berhasil dirancang sebagai platform moderasi dan literasi beragama berbasis web dengan arsitektur MVC menggunakan Laravel 13.</li>
+<li>Basis data terdiri dari 14 tabel yang saling berelasi mencakup modul edukasi, ibadah, donasi, relawan, cek fakta, konsultasi, forum, dan testimoni.</li>
+<li>Sistem terintegrasi dengan 6 API eksternal: Aladhan (jadwal sholat), Google Maps (peta ibadah), YouTube (video edukasi), Calendarific (hari besar), Google Fact Check (cek fakta), dan Google Gemini (AI chatbot).</li>
+<li>Keamanan data diterapkan dengan enkripsi AES-256-CBC pada pesan konsultasi menggunakan Crypt::encryptString().</li>
+<li>Terdapat 4 level akses pengguna (Guest, User, Penyuluh, Admin) dengan RoleMiddleware untuk otorisasi.</li>
+</ol>
+
+<h3>7.2 Saran</h3>
+<ol>
+<li>Integrasi payment gateway (Midtrans/Xendit) untuk donasi online real-time.</li>
+<li>Pengembangan fitur notifikasi real-time menggunakan WebSocket/Pusher.</li>
+<li>Implementasi Progressive Web App (PWA) untuk akses mobile offline.</li>
+<li>Penambahan fitur multi-bahasa (Indonesia, Inggris, daerah).</li>
+<li>Deployment menggunakan Laravel Cloud untuk skalabilitas.</li>
+</ol>
+
+<h1>DAFTAR PUSTAKA</h1>
+<ol>
+<li>Satzinger, J. W., Jackson, R. B., & Burd, S. D. (2024). Systems Analysis and Design in a Changing World. 8th Ed. Cengage Learning.</li>
+<li>Pressman, R. S. (2022). Software Engineering: A Practitioner's Approach. 9th Ed. McGraw-Hill.</li>
+<li>Fowler, M. (2018). UML Distilled: A Brief Guide to the Standard Object Modeling Language. 3rd Ed. Addison-Wesley.</li>
+<li>Connolly, T., & Begg, C. (2015). Database Systems: A Practical Approach. 6th Ed. Pearson.</li>
+<li>Laravel Documentation. (2026). Laravel 13.x Documentation. https://laravel.com/docs/13.x</li>
+<li>Supabase Documentation. (2026). https://supabase.com/docs</li>
+<li>Filament Documentation. (2026). Filament 5.x. https://filamentphp.com/docs</li>
+<li>Livewire Documentation. (2026). Livewire 4.x. https://livewire.laravel.com/docs</li>
+<li>Google AI. (2026). Gemini API. https://ai.google.dev/docs</li>
+<li>Aladhan API. (2026). Prayer Times API. https://aladhan.com/prayer-times-api</li>
+</ol>
+
+<h1>LAMPIRAN</h1>
+<p><b>Lampiran 1:</b> RoleMiddleware - Middleware otorisasi berbasis role</p>
+<pre>class RoleMiddleware {
+    public function handle(Request $request, Closure $next, string ...$roles): Response
+    {
+        if (!in_array(auth()->user()?->role, $roles)) {
+            abort(403, 'Unauthorized');
+        }
+        return $next($request);
+    }
+}</pre>
+
+<p><b>Lampiran 2:</b> Struktur Migration</p>
+<table>
+<tr><th>File Migration</th><th>Tabel</th><th>Dependency</th></tr>
+<tr><td>0001_01_01_000000_create_users_table</td><td>users, password_reset_tokens, sessions</td><td>-</td></tr>
+<tr><td>2026_05_11_193646_add_columns_to_users_table</td><td>+religion_preference, role, avatar (alter)</td><td>users</td></tr>
+<tr><td>2026_05_11_193844_create_religion_categories</td><td>religion_categories</td><td>-</td></tr>
+<tr><td>2026_05_11_193846_create_education_contents</td><td>education_contents</td><td>religion_categories, users</td></tr>
+<tr><td>2026_05_11_194305_create_consultations</td><td>consultations</td><td>users</td></tr>
+<tr><td>2026_05_11_194306_create_donation_projects</td><td>donation_projects</td><td>users</td></tr>
+<tr><td>2026_05_11_194306_create_donations</td><td>donations</td><td>users, donation_projects</td></tr>
+<tr><td>2026_05_11_194306_create_fact_checks</td><td>fact_checks</td><td>users</td></tr>
+<tr><td>2026_05_11_194307_create_consultation_messages</td><td>consultation_messages</td><td>consultations, users</td></tr>
+<tr><td>2026_05_11_194307_create_volunteers</td><td>volunteers</td><td>users</td></tr>
+<tr><td>2026_05_11_194310_create_user_learning_progress</td><td>user_learning_progress</td><td>users, education_contents</td></tr>
+<tr><td>2026_05_14_000001_create_forum_rooms</td><td>forum_rooms</td><td>users</td></tr>
+<tr><td>2026_05_14_000002_create_forum_messages</td><td>forum_messages</td><td>forum_rooms, users</td></tr>
+<tr><td>2026_05_14_000003_create_forum_participants</td><td>forum_participants</td><td>forum_rooms, users</td></tr>
+<tr><td>2026_05_14_052712_create_testimonials</td><td>testimonials</td><td>users</td></tr>
+<tr><td>2026_05_14_054823_add_title_to_testimonials_table</td><td>+title (alter)</td><td>testimonials</td></tr>
+</table>
+
+<p><b>Lampiran 3:</b> Seeders - Data Awal</p>
+<pre>DatabaseSeeder.php  -> calls: ReligionCategorySeeder, EducationContentSeeder, ForumSeeder
+ReligionCategory    -> 6 agama: Islam, Kristen, Katolik, Hindu, Buddha, Konghucu
+EducationContent    -> 33 konten: 20 artikel + 13 video untuk 6 agama
+ForumSeeder         -> 1 room "Ruang Bersama" + 1 creator + 2 messages (admin + AI)
+</pre>
+
+<p><b>Lampiran 4:</b> Relasi Database Lengkap (Mapping Migration ke Tabel)</p>
+<pre>+---------------+---------------------------+-------------------------------------------+
+| Migration File | Tabel                    | Foreign Key Constraints                   |
++---------------+---------------------------+-------------------------------------------+
+| 000000        | users                    | -                                         |
+| 193646        | +religion_preference,    | - (alter table users)                     |
+|               |   role, avatar           |                                           |
+| 193844        | religion_categories      | -                                         |
+| 193846        | education_contents       | religion_id->religion_categories(id)      |
+|               |                          | author_id->users(id)                      |
+| 194305        | consultations            | user_id->users(id)                        |
+|               |                          | expert_id->users(id) nullable             |
+| 194306_a      | donation_projects        | created_by->users(id)                     |
+| 194306_b      | donations                | user_id->users(id) nullable               |
+|               |                          | project_id->donation_projects(id)         |
+| 194306_c      | fact_checks              | author_id->users(id)                      |
+| 194307_a      | consultation_messages    | consultation_id->consultations(id)        |
+|               |                          | sender_id->users(id)                      |
+| 194307_b      | volunteers               | user_id->users(id)                        |
+| 194310        | user_learning_progress   | user_id->users(id)                        |
+|               |                          | content_id->education_contents(id)        |
+| 000001        | forum_rooms              | user_id->users(id)                        |
+| 000002        | forum_messages           | forum_room_id->forum_rooms(id)            |
+|               |                          | user_id->users(id) nullable               |
+| 000003        | forum_participants       | forum_room_id->forum_rooms(id)            |
+|               |                          | user_id->users(id)                        |
+|               |                          | UNIQUE(forum_room_id, user_id)            |
+| 052712        | testimonials             | user_id->users(id) nullable               |
+| 054823        | +title                   | - (alter table testimonials)              |
++---------------+---------------------------+-------------------------------------------+
+</pre>
+
+</body>
+</html>
