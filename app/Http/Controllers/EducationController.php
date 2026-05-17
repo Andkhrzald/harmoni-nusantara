@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\EducationContent;
 use App\Models\ReligionCategory;
 use App\Services\YouTubeService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
@@ -113,5 +114,23 @@ class EducationController extends Controller
         $contents = $query->latest()->paginate(12);
 
         return view('education.religion', compact('religion', 'contents'));
+    }
+
+    public function toggleFavorite(string $slug): RedirectResponse
+    {
+        $content = EducationContent::where('slug', $slug)->firstOrFail();
+        $user = auth()->user();
+
+        $existingFavorite = $user->favorites()->where('content_id', $content->id)->first();
+
+        if ($existingFavorite) {
+            $existingFavorite->delete();
+        } else {
+            $user->favorites()->create([
+                'content_id' => $content->id,
+            ]);
+        }
+
+        return redirect()->back();
     }
 }

@@ -49,17 +49,28 @@
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                     @forelse($featuredContents as $content)
-                        <a href="{{ route('edukasi.video.show', $content->slug) }}"
-                           class="group border border-gray-100 rounded-xl overflow-hidden hover:shadow-md transition-shadow">
-                            @if($content->thumbnail_url)
-                                <img src="{{ $content->thumbnail_url }}" alt="{{ $content->title }}"
-                                     class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
-                                     loading="lazy">
-                            @else
-                                <div class="w-full h-40 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
-                                    <span class="material-symbols-outlined text-5xl text-gray-300">auto_stories</span>
-                                </div>
-                            @endif
+                        <div class="group relative border border-gray-100 rounded-xl overflow-hidden hover:shadow-md transition-shadow">
+                            <a href="{{ route('edukasi.video.show', $content->slug) }}">
+                                @if($content->thumbnail_url)
+                                    <img src="{{ $content->thumbnail_url }}" alt="{{ $content->title }}"
+                                         class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
+                                         loading="lazy">
+                                @else
+                                    <div class="w-full h-40 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-5xl text-gray-300">auto_stories</span>
+                                    </div>
+                                @endif
+                            </a>
+                            @auth
+                                <form action="{{ route('edukasi.favorite', $content->slug) }}" method="POST" class="absolute top-2 right-2">
+                                    @csrf
+                                    <button type="submit" class="p-1.5 rounded-full bg-white/80 hover:bg-white shadow-sm transition-colors" title="{{ auth()->user()->hasFavorited($content->id) ? 'Hapus dari favorit' : 'Tambah ke favorit' }}">
+                                        <span class="material-symbols-outlined text-lg {{ auth()->user()->hasFavorited($content->id) ? 'text-red-500' : 'text-gray-400' }}">
+                                            {{ auth()->user()->hasFavorited($content->id) ? 'favorite' : 'favorite_border' }}
+                                        </span>
+                                    </button>
+                                </form>
+                            @endauth
                             <div class="p-4">
                                 <div class="flex items-center gap-2 mb-1">
                                     <span class="text-xs {{ $content->content_type === 'video' ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600' }} px-2 py-0.5 rounded-full font-medium">
@@ -69,10 +80,12 @@
                                         <span class="text-xs text-gray-400">{{ $content->religion->name }}</span>
                                     @endif
                                 </div>
-                                <h4 class="font-semibold text-gray-800 group-hover:text-primary transition-colors leading-snug">{{ $content->title }}</h4>
+                                <a href="{{ route('edukasi.video.show', $content->slug) }}">
+                                    <h4 class="font-semibold text-gray-800 group-hover:text-primary transition-colors leading-snug">{{ $content->title }}</h4>
+                                </a>
                                 <p class="text-xs text-gray-400 mt-1.5">{{ $content->views_count }}x dibaca</p>
                             </div>
-                        </a>
+                        </div>
                     @empty
                         <div class="col-span-3 text-center py-12 text-gray-400">
                             <span class="material-symbols-outlined text-5xl">library_books</span>

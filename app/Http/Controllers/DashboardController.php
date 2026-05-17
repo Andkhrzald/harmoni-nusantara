@@ -45,4 +45,14 @@ class DashboardController extends Controller
 
         return view('dashboard.consultations', compact('consultations'));
     }
+
+    public function favorites(): View
+    {
+        $favorites = auth()->user()->favorites()
+            ->with('content')
+            ->latest()
+            ->get();
+
+        return view('dashboard.favorites', compact('favorites'));
+    }
 }

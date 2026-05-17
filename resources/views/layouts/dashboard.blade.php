@@ -199,6 +199,22 @@
                     </div>
                 </div>
 
+                {{-- Favorites Section --}}
+                @php
+                    $favoritesCount = Auth::user()->favorites()->count();
+                @endphp
+                @if($favoritesCount > 0)
+                <div class="px-3 py-4 border-t border-gray-100">
+                    <a href="{{ route('dashboard.favorites') }}" 
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group
+                              {{ request()->routeIs('dashboard.favorites') ? 'bg-red-50 text-red-600 shadow-sm' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                        <span class="material-symbols-outlined text-lg transition-all {{ request()->routeIs('dashboard.favorites') ? 'text-red-500' : 'text-gray-400 group-hover:text-gray-600' }}">favorite</span>
+                        <span class="flex-1">Favorit</span>
+                        <span class="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full">{{ $favoritesCount }}</span>
+                    </a>
+                </div>
+                @endif
+
             </nav>
 
             {{-- Bottom: User & Logout --}}

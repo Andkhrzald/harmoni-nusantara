@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/donations', [DashboardController::class, 'donations'])->name('donations');
         Route::get('/belajar', [DashboardController::class, 'learning'])->name('learning');
         Route::get('/konsultasi', [DashboardController::class, 'consultations'])->name('consultations');
+        Route::get('/favorit', [DashboardController::class, 'favorites'])->name('favorites');
     });
 });
 
@@ -56,6 +57,8 @@ Route::prefix('edukasi')->name('edukasi.')->group(function () {
 
     // Harus di bawah /video agar {slug} tidak menangkap "video"
     Route::get('/{slug}', [EducationController::class, 'byReligion'])->name('agama'); // edukasi.agama
+
+    Route::post('/{slug}/favorite', [EducationController::class, 'toggleFavorite'])->name('favorite')->middleware('auth');
 });
 
 // ─── Ibadah ──────────────────────────────────────────────────────────────────
