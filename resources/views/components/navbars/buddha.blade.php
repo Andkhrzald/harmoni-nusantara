@@ -71,7 +71,7 @@
                 <form method="POST" action="{{ route('logout') }}" class="px-3 py-2.5">@csrf<button type="submit" class="flex items-center gap-3 text-sm font-medium text-white/60 hover:text-white transition-all"><span class="material-symbols-outlined text-lg">logout</span> Keluar</button></form>
             @else
                 <a href="{{ route('login') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">login</span> Masuk</a>
-                <a href="{{ route('register') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">person_add</span> Daftar</a>
+                <a href="{{ route('register') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg"></span> Daftar</a>
             @endauth
             <a href="{{ route('home') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/60 hover:text-white hover:bg-white/10 transition-all"><span class="material-symbols-outlined text-lg">home</span> Beranda</a>
         </div>
