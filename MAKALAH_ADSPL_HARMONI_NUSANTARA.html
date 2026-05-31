@@ -16,7 +16,7 @@
 <ol>
 <li>Sistem berbasis web (desktop & mobile responsive).</li>
 <li>6 agama resmi Indonesia (Islam, Kristen, Katolik, Hindu, Buddha, Konghucu).</li>
-<li>Framework: Laravel 13, PHP 8.4, PostgreSQL (Supabase).</li>
+<li>Framework: Laravel 13, PHP 8.3, PostgreSQL (Supabase).</li>
 <li>Tidak membahas implementasi payment gateway secara detail.</li>
 <li>Tidak membahas deployment dan infrastruktur production secara mendalam.</li>
 </ol>
@@ -46,10 +46,10 @@
 <tr><td>Backend Framework</td><td>Laravel</td><td>13.7+</td></tr>
 <tr><td>Bahasa Pemrograman</td><td>PHP</td><td>8.4</td></tr>
 <tr><td>Database</td><td>PostgreSQL (Supabase)</td><td>15+</td></tr>
-<tr><td>Frontend Rendering</td><td>Blade + Alpine.js</td><td>3.15+</td></tr>
-<tr><td>Reaktif UI</td><td>Livewire</td><td>4.3+</td></tr>
-<tr><td>CSS Framework</td><td>Tailwind CSS</td><td>3.x</td></tr>
-<tr><td>Admin Panel</td><td>Filament</td><td>5.x</td></tr>
+<tr><td>Frontend Rendering</td><td>Blade + Alpine.js</td><td>3.15.12</td></tr>
+<tr><td>Reaktif UI</td><td>Livewire</td><td>4.3.0</td></tr>
+<tr><td>CSS Framework</td><td>Tailwind CSS</td><td>3.4.19</td></tr>
+<tr><td>Admin Panel</td><td>Filament</td><td>5.6.3</td></tr>
 <tr><td>Testing</td><td>Pest PHP</td><td>4.x</td></tr>
 <tr><td>Code Formatter</td><td>Laravel Pint</td><td>1.x</td></tr>
 </table>
@@ -146,6 +146,9 @@
 <tr><td>UC-26</td><td>Moderasi Testimoni</td><td>Admin/Penyuluh</td><td>Setujui/tolak testimoni</td></tr>
 <tr><td>UC-27</td><td>Verifikasi Anggota Forum</td><td>Admin/Penyuluh</td><td>Setujui anggota baru</td></tr>
 <tr><td>UC-28</td><td>Kelola Panel Admin</td><td>Admin</td><td>Filament admin panel</td></tr>
+<tr><td>UC-29</td><td>Toggle Favorit Edukasi</td><td>User [Auth]</td><td>Menandai konten edukasi sebagai favorit</td></tr>
+<tr><td>UC-30</td><td>Lihat Virtual Tour & Galeri Video</td><td>Semua</td><td>Tur virtual tempat ibadah & galeri video YouTube</td></tr>
+<tr><td>UC-31</td><td>Lihat Sorotan Religi</td><td>Semua</td><td>Menjelajahi tempat ibadah, tokoh, dan situs sejarah</td></tr>
 </table>
 
 <h3>3.6 Activity Diagram</h3>
@@ -462,8 +465,33 @@ User           Sistem          Database       Penyuluh
     | is_approved (BOOL)|
     | timestamps        |
     +-------------------+
+
+    +-------------------+
+    |  user_favorites    |
+    +-------------------+
+    | PK: id (BIGINT)   |
+    | FK: user_id       |
+    | FK: content_id    |
+    | timestamps        |
+    | UNIQUE(user,content)
+    +-------------------+
+
+    +-----------------------+
+    | religious_highlights   |
+    +-----------------------+
+    | PK: id (BIGINT)       |
+    | FK: religion_id       |
+    | type (VARCHAR 30)     |
+    | name (VARCHAR 255)    |
+    | description (TEXT)    |
+    | image_url (VARCHAR)   |
+    | location (VARCHAR)    |
+    | reference_url (VARCHAR)|
+    | sort_order (INT)      |
+    | timestamps            |
+    +-----------------------+
 </pre>
-<p class="keterangan">Catatan: PK = Primary Key, FK = Foreign Key, TS = TIMESTAMP. Panah menunjukkan relasi one-to-many. Gambar ulang dengan Draw.io untuk format yang lebih rapi.</p>
+<p class="keterangan">Catatan: PK = Primary Key, FK = Foreign Key, TS = TIMESTAMP. Panah menunjukkan relasi one-to-many. Total 16 tabel. Gambar ulang dengan Draw.io untuk format yang lebih rapi.</p>
 
 <h3>4.2 Logical Record Structure (LRS)</h3>
 <p class="fig-caption">Gambar 4.2 Logical Record Structure (LRS) Harmoni Nusantara</p>
@@ -512,15 +540,21 @@ users (id*, name, email, email_verified_at, password,
        |                       user_id**, role, status, timestamps)
        |                       UNIQUE (forum_room_id, user_id)
        |
-       |--(1:N)-- testimonials (id*, user_id**, name, title, content,
-                    is_approved, timestamps)
+        |--(1:N)-- testimonials (id*, user_id**, name, title, content,
+        |              is_approved, timestamps)
+        |
+        |--(1:N)-- user_favorites (id*, user_id**, content_id**,
+                    timestamps, UNIQUE(user_id, content_id))
 </pre>
 
-<p><b>RELASI 2: religion_categories (1) ke education_contents (N)</b></p>
+<p><b>RELASI 2: religion_categories (1) ke education_contents & religious_highlights (N)</b></p>
 <pre>
 religion_categories (id*, slug, name, description, icon_url, timestamps)
-       |
-       |--(1:N)-- education_contents (id*, religion_id**, author_id**, ...)
+        |
+        |--(1:N)-- education_contents (id*, religion_id**, author_id**, ...)
+        |--(1:N)-- religious_highlights (id*, religion_id**, type, name,
+                    description, image_url, location, reference_url,
+                    sort_order, timestamps)
 </pre>
 
 <p><b>RELASI 3: donation_projects (1) ke donations (N)</b></p>
@@ -545,11 +579,12 @@ forum_rooms (id*, name, description, user_id**, is_active, timestamps)
        |--(1:N)-- forum_participants (id*, forum_room_id**, user_id**, ...)
 </pre>
 
-<p><b>RELASI 6: education_contents (1) ke user_learning_progress (N)</b></p>
+<p><b>RELASI 6: education_contents (1) ke user_learning_progress & user_favorites (N)</b></p>
 <pre>
 education_contents (id*, religion_id**, author_id**, ...)
-       |
-       |--(1:N)-- user_learning_progress (id*, user_id**, content_id**, ...)
+        |
+        |--(1:N)-- user_learning_progress (id*, user_id**, content_id**, ...)
+        |--(1:N)-- user_favorites (id*, user_id**, content_id**, ...)
 </pre>
 
 <p class="keterangan">Notasi: id* = Primary Key, id** = Foreign Key, UNIQUE = Composite Unique Index. Semua PK menggunakan BIGINT AUTO_INCREMENT via $table->id() migrasi Laravel.</p>
@@ -748,6 +783,33 @@ education_contents (id*, religion_id**, author_id**, ...)
 <tr><td>8</td><td>updated_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
 </table>
 
+<p class="fig-caption">Tabel 4.15 Spesifikasi File: user_favorites</p>
+<table>
+<tr><th>No</th><th>Field</th><th>Tipe</th><th>Panjang</th><th>Constraint</th><th>Keterangan</th></tr>
+<tr><td>1</td><td>id</td><td>BIGINT</td><td>-</td><td>PK, AUTO_INCREMENT</td><td>ID unik</td></tr>
+<tr><td>2</td><td>user_id</td><td>BIGINT</td><td>-</td><td>FK -> users.id, CASCADE</td><td>Pengguna</td></tr>
+<tr><td>3</td><td>content_id</td><td>BIGINT</td><td>-</td><td>FK -> education_contents.id, CASCADE</td><td>Konten edukasi</td></tr>
+<tr><td>4</td><td>created_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+<tr><td>5</td><td>updated_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+<tr style="background:#ffe0e0;"><td>-</td><td>UNIQUE (user_id, content_id)</td><td>-</td><td>-</td><td>Composite</td><td>Mencegah duplikat favorit</td></tr>
+</table>
+
+<p class="fig-caption">Tabel 4.16 Spesifikasi File: religious_highlights</p>
+<table>
+<tr><th>No</th><th>Field</th><th>Tipe</th><th>Panjang</th><th>Constraint</th><th>Keterangan</th></tr>
+<tr><td>1</td><td>id</td><td>BIGINT</td><td>-</td><td>PK, AUTO_INCREMENT</td><td>ID unik</td></tr>
+<tr><td>2</td><td>religion_id</td><td>BIGINT</td><td>-</td><td>FK -> religion_categories.id, CASCADE</td><td>Agama terkait</td></tr>
+<tr><td>3</td><td>type</td><td>VARCHAR</td><td>30</td><td>NOT NULL</td><td>worship_place, figure, historical_site</td></tr>
+<tr><td>4</td><td>name</td><td>VARCHAR</td><td>255</td><td>NOT NULL</td><td>Nama tempat/tokoh/situs</td></tr>
+<tr><td>5</td><td>description</td><td>TEXT</td><td>-</td><td>NOT NULL</td><td>Deskripsi lengkap</td></tr>
+<tr><td>6</td><td>image_url</td><td>VARCHAR</td><td>500</td><td>NULLABLE</td><td>URL gambar</td></tr>
+<tr><td>7</td><td>location</td><td>VARCHAR</td><td>500</td><td>NULLABLE</td><td>Alamat/lokasi</td></tr>
+<tr><td>8</td><td>reference_url</td><td>VARCHAR</td><td>1000</td><td>NULLABLE</td><td>URL referensi</td></tr>
+<tr><td>9</td><td>sort_order</td><td>INTEGER</td><td>-</td><td>DEFAULT 0</td><td>Urutan tampilan</td></tr>
+<tr><td>10</td><td>created_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+<tr><td>11</td><td>updated_at</td><td>TIMESTAMP</td><td>-</td><td>NULLABLE</td><td>-</td></tr>
+</table>
+
 <h3>4.4 Pengkodean (Coding Convention)</h3>
 
 <h4>4.4.1 Primary Key</h4>
@@ -761,7 +823,7 @@ Aksi: cascadeOnDelete() atau nullOnDelete()</pre>
 <h4>4.4.3 Unique Index</h4>
 <p>Diterapkan pada: email (users), slug (religion_categories & education_contents), composite (forum_room_id, user_id) di forum_participants.</p>
 
-<h4>4.4.4 Tabel 4.15: Daftar Nilai Enum/Status per Tabel</h4>
+<h4>4.4.4 Tabel 4.17: Daftar Nilai Enum/Status per Tabel</h4>
 <table>
 <tr><th>Tabel</th><th>Field</th><th>Nilai yang Diizinkan</th></tr>
 <tr><td>users</td><td>role</td><td>'user', 'penyuluh', 'admin'</td></tr>
@@ -776,6 +838,7 @@ Aksi: cascadeOnDelete() atau nullOnDelete()</pre>
 <tr><td>volunteers</td><td>status</td><td>'pending', 'active', 'inactive'</td></tr>
 <tr><td>forum_participants</td><td>role</td><td>'creator', 'member', 'viewer'</td></tr>
 <tr><td>forum_participants</td><td>status</td><td>'active', 'pending', 'banned'</td></tr>
+<tr><td>religious_highlights</td><td>type</td><td>'worship_place', 'figure', 'historical_site'</td></tr>
 </table>
 
 <h4>4.4.5 Cascade & Set Null Rules</h4>
@@ -791,7 +854,7 @@ SET NULL:    $table->foreignId('user_id')->nullable()->constrained()->nullOnDele
 |                   CLASS DIAGRAM - HARMONI NUSANTARA               |
 +-------------------------------------------------------------------+
 
-[LAYER 1: MODELS - 14 Entitas]
+[LAYER 1: MODELS - 16 Entitas]
 User            ReligionCategory     EducationContent
 -id: bigint     -id: bigint           -id: bigint
 -name: string   -slug: string         -religion_id: FK
@@ -818,6 +881,15 @@ ForumParticipant  UserLearningProgress  Testimonial
 -status: string   -progress_pct: small  -is_approved: bool
 +room(): BelongsTo +user(): BelongsTo   +user(): BelongsTo
 +user(): BelongsTo +content(): BelongsTo
+
+UserFavorite      ReligiousHighlight
+-user_id: FK      -religion_id: FK
+-content_id: FK   -type: string (worship_place/figure/historical_site)
+UNIQUE(user,content)  -name: string
++user(): BelongsTo    -sort_order: integer
++content(): BelongsTo +religion(): BelongsTo
+                   +scopeByType()
+                   +scopeOrdered()
 
 [LAYER 2: CONTROLLERS - 11 file]
 EducationController   WorshipController     DonationController
@@ -876,13 +948,21 @@ Filament AdminPanel (7 Resources)
 </pre>
 
 <h3>5.3 User Interface</h3>
-<p>Total 33 halaman telah diimplementasikan dalam 7 modul: Home (1), Auth (3), Edukasi (6), Ibadah (5), Aksi Sosial (10), Forum (1), Dashboard (4), Testimoni (1), Profile (1), Admin (1).</p>
+<p>Total 38+ halaman telah diimplementasikan dalam 7 modul: Home (1), Auth (6), Edukasi (8: index, religion, show, gallery, youtube-search, virtual-tour + filter & search), Ibadah (5: index, schedule, map, guide, etiquette), Aksi Sosial (10: donasi CRUD, relawan, cek fakta CRUD, konsultasi CRUD), Forum (1), Dashboard (6: index, donations, learning, consultations, favorites, testimonials), Testimoni (1), Profile (1 + 3 partials), Admin (7 Filament resources).</p>
+
+<p><b>Komponen UI Khusus:</b></p>
+<ul>
+<li><b>TTS Button</b> — Komponen Livewire + Alpine.js menggunakan Web Speech API untuk aksesibilitas baca teks (Text-to-Speech) dengan bahasa id-ID. Toggle play/stop.</li>
+<li><b>Navbar Spesifik Agama</b> — 6 komponen navigasi terpisah untuk masing-masing agama (islam, kristen, katolik, hindu, buddha, konghucu) dengan warna dan ikon khas.</li>
+</ul>
 
 <h3>5.4 Dokumen Input & Output</h3>
 
-<p><b>Input:</b> 13 form: Register, Login, Create Donasi, Donate, Relawan, Cek Fakta, Cari Cek Fakta, Konsultasi, Pesan Forum, Testimoni, Cari Edukasi, Edit Profil, Create Campaign.</p>
+<p><b>Input:</b> 15 form: Register, Login, Create Donasi, Donate, Relawan, Cek Fakta, Cari Cek Fakta (Google Fact Check API), Konsultasi, Pesan Forum, Testimoni, Cari Edukasi, Edit Profil, Create Campaign, Filter Agama, Upload Avatar.</p>
 
-<p><b>Output:</b> 15 tampilan: Landing Page, List Konten, Detail Konten, Galeri Video, Jadwal Sholat, Peta Ibadah, Panduan, Etiket, Campaign, Detail Campaign, Cek Fakta, Chat Room, Forum, Dashboard, Admin Panel.</p>
+<p><b>Output:</b> 18 tampilan: Landing Page, List Konten, Detail Konten, Galeri Video, YouTube Search, Virtual Tour, Jadwal Sholat, Peta Ibadah, Panduan, Etiket, Campaign, Detail Campaign, Cek Fakta, Chat Room Konsultasi, Forum + AI Chatbot, Dashboard, Admin Panel (Filament - 7 Resource), Sorotan Religi (Religious Highlights).</p>
+
+<p><b>Admin Panel (Filament 5.6.3):</b> 7 Resource terdaftar: ReligionCategoryResource, EducationContentResource, DonationProjectResource, FactCheckResource, VolunteerResource, ForumMessageResource, ForumParticipantResource.</p>
 
 <h1>BAB VI: PENGUJIAN</h1>
 
@@ -945,17 +1025,17 @@ Filament AdminPanel (7 Resources)
 <p class="fig-caption">Tabel 6.4 Spesifikasi Software</p>
 <table>
 <tr><th>Software</th><th>Versi</th><th>Fungsi</th></tr>
-<tr><td>PHP</td><td>8.3 - 8.4</td><td>Bahasa pemrograman backend</td></tr>
-<tr><td>Laravel Framework</td><td>13.7+</td><td>Framework MVC utama</td></tr>
+<tr><td>PHP</td><td>8.3</td><td>Bahasa pemrograman backend</td></tr>
+<tr><td>Laravel Framework</td><td>13.8.0</td><td>Framework MVC utama</td></tr>
 <tr><td>PostgreSQL</td><td>15+</td><td>Database (Supabase)</td></tr>
 <tr><td>Redis</td><td>7+</td><td>Cache & Queue</td></tr>
 <tr><td>Nginx</td><td>1.24+</td><td>Web server</td></tr>
 <tr><td>Composer</td><td>2.7+</td><td>PHP dependency manager</td></tr>
 <tr><td>Node.js</td><td>18+</td><td>JavaScript runtime (dev)</td></tr>
-<tr><td>Tailwind CSS</td><td>3.x</td><td>CSS utility-first</td></tr>
-<tr><td>Alpine.js</td><td>3.15+</td><td>Frontend reactivity</td></tr>
-<tr><td>Livewire</td><td>4.3+</td><td>Server-side reactive UI</td></tr>
-<tr><td>Filament</td><td>5.x</td><td>Admin panel</td></tr>
+<tr><td>Tailwind CSS</td><td>3.4.19</td><td>CSS utility-first</td></tr>
+<tr><td>Alpine.js</td><td>3.15.12</td><td>Frontend reactivity</td></tr>
+<tr><td>Livewire</td><td>4.3.0</td><td>Server-side reactive UI</td></tr>
+<tr><td>Filament</td><td>5.6.3</td><td>Admin panel</td></tr>
 <tr><td>Pest PHP</td><td>4.x</td><td>Testing framework</td></tr>
 </table>
 
@@ -964,8 +1044,8 @@ Filament AdminPanel (7 Resources)
 <h3>7.1 Kesimpulan</h3>
 <ol>
 <li>Harmoni Nusantara berhasil dirancang sebagai platform moderasi dan literasi beragama berbasis web dengan arsitektur MVC menggunakan Laravel 13.</li>
-<li>Basis data terdiri dari 14 tabel yang saling berelasi mencakup modul edukasi, ibadah, donasi, relawan, cek fakta, konsultasi, forum, dan testimoni.</li>
-<li>Sistem terintegrasi dengan 6 API eksternal: Aladhan (jadwal sholat), Google Maps (peta ibadah), YouTube (video edukasi), Calendarific (hari besar), Google Fact Check (cek fakta), dan Google Gemini (AI chatbot).</li>
+<li>Basis data terdiri dari 16 tabel yang saling berelasi mencakup modul edukasi, ibadah, donasi, relawan, cek fakta, konsultasi, forum, testimoni, favorit pengguna, dan sorotan religi.</li>
+<li>Sistem terintegrasi dengan 7 API eksternal: Aladhan (jadwal sholat), Google Maps (peta ibadah), YouTube (video edukasi), Calendarific (hari besar), Google Fact Check (cek fakta), Google Gemini (AI chatbot), dan Web Speech API (Text-to-Speech aksesibilitas).</li>
 <li>Keamanan data diterapkan dengan enkripsi AES-256-CBC pada pesan konsultasi menggunakan Crypt::encryptString().</li>
 <li>Terdapat 4 level akses pengguna (Guest, User, Penyuluh, Admin) dengan RoleMiddleware untuk otorisasi.</li>
 </ol>
@@ -1009,6 +1089,8 @@ Filament AdminPanel (7 Resources)
 <table>
 <tr><th>File Migration</th><th>Tabel</th><th>Dependency</th></tr>
 <tr><td>0001_01_01_000000_create_users_table</td><td>users, password_reset_tokens, sessions</td><td>-</td></tr>
+<tr><td>0001_01_01_000001_create_cache_table</td><td>cache, cache_locks</td><td>-</td></tr>
+<tr><td>0001_01_01_000002_create_jobs_table</td><td>jobs, job_batches, failed_jobs</td><td>-</td></tr>
 <tr><td>2026_05_11_193646_add_columns_to_users_table</td><td>+religion_preference, role, avatar (alter)</td><td>users</td></tr>
 <tr><td>2026_05_11_193844_create_religion_categories</td><td>religion_categories</td><td>-</td></tr>
 <tr><td>2026_05_11_193846_create_education_contents</td><td>education_contents</td><td>religion_categories, users</td></tr>
@@ -1024,13 +1106,18 @@ Filament AdminPanel (7 Resources)
 <tr><td>2026_05_14_000003_create_forum_participants</td><td>forum_participants</td><td>forum_rooms, users</td></tr>
 <tr><td>2026_05_14_052712_create_testimonials</td><td>testimonials</td><td>users</td></tr>
 <tr><td>2026_05_14_054823_add_title_to_testimonials_table</td><td>+title (alter)</td><td>testimonials</td></tr>
+<tr><td>2026_05_17_111929_create_user_favorites</td><td>user_favorites</td><td>users, education_contents</td></tr>
+<tr><td>2026_05_17_120313_create_religious_highlights</td><td>religious_highlights</td><td>religion_categories</td></tr>
 </table>
 
 <p><b>Lampiran 3:</b> Seeders - Data Awal</p>
-<pre>DatabaseSeeder.php  -> calls: ReligionCategorySeeder, EducationContentSeeder, ForumSeeder
-ReligionCategory    -> 6 agama: Islam, Kristen, Katolik, Hindu, Buddha, Konghucu
-EducationContent    -> 33 konten: 20 artikel + 13 video untuk 6 agama
-ForumSeeder         -> 1 room "Ruang Bersama" + 1 creator + 2 messages (admin + AI)
+<pre>DatabaseSeeder.php      -> calls: ReligionCategorySeeder, EducationContentSeeder,
+                           ForumSeeder, ReligiousHighlightSeeder
+ReligionCategory        -> 6 agama: Islam, Kristen, Katolik, Hindu, Buddha, Konghucu
+EducationContent        -> 33 konten: 20 artikel + 13 video untuk 6 agama
+ForumSeeder             -> 1 room "Ruang Bersama" + 1 creator + 2 messages (admin + AI)
+ReligiousHighlightSeeder -> 31 sorotan religi: tempat ibadah, tokoh, & situs sejarah
+                           (5 tempat ibadah + 6 tokoh + 5 situs untuk 6 agama)
 </pre>
 
 <p><b>Lampiran 4:</b> Relasi Database Lengkap (Mapping Migration ke Tabel)</p>
@@ -1062,6 +1149,10 @@ ForumSeeder         -> 1 room "Ruang Bersama" + 1 creator + 2 messages (admin + 
 |               |                          | UNIQUE(forum_room_id, user_id)            |
 | 052712        | testimonials             | user_id->users(id) nullable               |
 | 054823        | +title                   | - (alter table testimonials)              |
+| 111929        | user_favorites           | user_id->users(id)                        |
+|               |                          | content_id->education_contents(id)        |
+|               |                          | UNIQUE(user_id, content_id)               |
+| 120313        | religious_highlights     | religion_id->religion_categories(id)      |
 +---------------+---------------------------+-------------------------------------------+
 </pre>
 

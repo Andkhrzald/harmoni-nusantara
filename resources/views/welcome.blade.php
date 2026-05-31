@@ -622,19 +622,9 @@
                             <span class="material-symbols-outlined text-secondary">schedule</span> 
                             Jadwal Ibadah
                         </h3>
-                        <span class="text-sm text-on-surface-variant bg-primary-100 px-3 py-1 rounded-full">Jakarta</span>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        @php
-                        $prayers = [
-                            ['name' => 'Subuh', 'time' => '04:32', 'isNext' => false],
-                            ['name' => 'Zuhur', 'time' => '11:58', 'isNext' => false],
-                            ['name' => 'Asar', 'time' => '15:18', 'isNext' => false],
-                            ['name' => 'Magrib', 'time' => '18:12', 'isNext' => true],
-                            ['name' => 'Isya', 'time' => '19:25', 'isNext' => false],
-                            ['name' => 'Dhuha', 'time' => '06:45', 'isNext' => false],
-                        ];
-                        @endphp
+                <span class="text-sm text-on-surface-variant bg-primary-100 px-3 py-1 rounded-full">{{ $city }}</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
                         @foreach($prayers as $prayer)
                         <div class="p-3 rounded-xl {{ $prayer['isNext'] ? 'bg-secondary-50 border-2 border-secondary/30' : 'bg-surface-light' }}">
                             <span class="text-xs {{ $prayer['isNext'] ? 'text-secondary font-bold' : 'text-on-surface-variant' }}">{{ $prayer['name'] }}</span>
@@ -662,41 +652,38 @@
                             <div class="absolute -right-8 -top-8 opacity-10">
                                 <span class="material-symbols-outlined text-[160px] text-secondary">celebration</span>
                             </div>
-                            <span class="inline-block bg-secondary text-white px-3 py-1 rounded-full text-xs font-bold mb-3">Terdekat</span>
-                            <h4 class="text-2xl font-bold text-secondary-800 mb-2">Hari Raya Idul Fitri</h4>
-                            <p class="text-secondary-700 mb-4">1 Syawal 1446 H - 31 Maret 2025</p>
-                            <div class="flex items-center gap-3">
-                                <div class="flex -space-x-2">
-                                    <img src="https://i.pravatar.cc/40?img=1" class="w-8 h-8 rounded-full border-2 border-white" />
-                                    <img src="https://i.pravatar.cc/40?img=2" class="w-8 h-8 rounded-full border-2 border-white" />
-                                    <img src="https://i.pravatar.cc/40?img=3" class="w-8 h-8 rounded-full border-2 border-white" />
-                                </div>
-                                <span class="text-sm text-secondary-700">+12rb akan berinteraksi</span>
-                            </div>
+                    <span class="inline-block bg-secondary text-white px-3 py-1 rounded-full text-xs font-bold mb-3">Terdekat</span>
+                    <h4 class="text-2xl font-bold text-secondary-800 mb-2">{{ $featuredEvent['title'] }}</h4>
+                    <p class="text-secondary-700 mb-4">{{ $featuredEvent['date']->translatedFormat('d F Y') }}</p>
+                    <div class="flex items-center gap-3">
+                        <div class="flex -space-x-2">
+                            <img src="https://i.pravatar.cc/40?img=1" class="w-8 h-8 rounded-full border-2 border-white" />
+                            <img src="https://i.pravatar.cc/40?img=2" class="w-8 h-8 rounded-full border-2 border-white" />
+                            <img src="https://i.pravatar.cc/40?img=3" class="w-8 h-8 rounded-full border-2 border-white" />
+                        </div>
+                        <span class="text-sm text-secondary-700">+12rb akan berinteraksi</span>
+                    </div>
                         </div>
                         
                         <!-- Upcoming Events -->
-                        <div class="flex-1 space-y-3">
-                            @php
-                            $events = [
-                                ['day' => '09', 'month' => 'Mei', 'title' => 'Kenaikan Isa Almasih', 'religion' => 'kristen'],
-                                ['day' => '23', 'month' => 'Mei', 'title' => 'Hari Raya Waisak', 'religion' => 'buddha'],
-                                ['day' => '01', 'month' => 'Jun', 'title' => 'Hari Lahir Pancasila', 'religion' => 'nasional'],
-                            ];
-                            @endphp
-                            @foreach($events as $event)
-                            <a href="{{ route('edukasi.index') }}" class="flex items-center gap-4 p-3 rounded-xl hover:bg-surface-light transition-colors group">
-                                <div class="w-12 h-12 bg-primary-100 flex items-center justify-center rounded-lg">
-                                    <span class="text-primary font-bold">{{ $event['day'] }}</span>
-                                </div>
-                                <div>
-                                    <h5 class="font-semibold text-on-surface group-hover:text-primary transition-colors">{{ $event['title'] }}</h5>
-                                    <p class="text-xs text-on-surface-variant">{{ $event['month'] }} 2025</p>
-                                </div>
-                                <span class="material-symbols-outlined text-on-surface-variant ml-auto opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
-                            </a>
-                            @endforeach
+                <div class="flex-1 space-y-3">
+                    @forelse($upcomingEvents as $event)
+                    <a href="{{ route('edukasi.index') }}" class="flex items-center gap-4 p-3 rounded-xl hover:bg-surface-light transition-colors group">
+                        <div class="w-12 h-12 bg-primary-100 flex items-center justify-center rounded-lg">
+                            <span class="text-primary font-bold">{{ $event['date']->format('d') }}</span>
                         </div>
+                        <div>
+                            <h5 class="font-semibold text-on-surface group-hover:text-primary transition-colors">{{ $event['title'] }}</h5>
+                            <p class="text-xs text-on-surface-variant">{{ $event['date']->translatedFormat('M Y') }}</p>
+                        </div>
+                        <span class="material-symbols-outlined text-on-surface-variant ml-auto opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+                    </a>
+                    @empty
+                    <div class="text-center py-6 text-on-surface-variant text-sm">
+                        Belum ada data hari besar bulan ini.
+                    </div>
+                    @endforelse
+                </div>
                     </div>
                 </div>
             </div>

@@ -12,14 +12,104 @@ use App\Http\Controllers\VolunteerController;
 use App\Http\Controllers\WorshipController;
 use App\Models\ReligiousHighlight;
 use App\Models\Testimonial;
+use App\Services\AladhanService;
+use App\Services\CalendarificService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 
 // ─── Landing ────────────────────────────────────────────────────────────────
-Route::get('/', function () {
+Route::get('/', function (AladhanService $aladhan, CalendarificService $calendarific) {
     $testimonials = Testimonial::approved()->latest()->take(6)->get();
     $highlights = ReligiousHighlight::with('religion')->ordered()->get();
 
-    return view('welcome', compact('testimonials', 'highlights'));
+    // ─── Jadwal Ibadah — realtime dari Aladhan API ───────────────────────
+    $city = 'Jakarta';
+    $aladhanTimes = $aladhan->getPrayerTimesByCity($city);
+
+    $prayerMap = [
+        'Fajr' => 'Subuh', 'Dhuhr' => 'Zuhur', 'Asr' => 'Asar',
+        'Maghrib' => 'Magrib', 'Isha' => 'Isya',
+    ];
+
+    $prayers = [];
+    $nowTs = now()->hour * 3600 + now()->minute * 60 + now()->second;
+    $nextSet = false;
+
+    foreach ($prayerMap as $key => $name) {
+        $time = $aladhanTimes[$key] ?? null;
+        if (! $time) {
+            continue;
+        }
+
+        [$h, $m] = explode(':', $time);
+        $ts = (int) $h * 3600 + (int) $m * 60;
+        $isNext = ! $nextSet && $ts > $nowTs;
+        if ($isNext) {
+            $nextSet = true;
+        }
+
+        $prayers[] = compact('name', 'time', 'isNext');
+    }
+
+    // Dhuha ~15 menit setelah Sunrise
+    $sunrise = $aladhanTimes['Sunrise'] ?? null;
+    $dhuhaTime = $sunrise
+        ? Carbon::createFromFormat('H:i', $sunrise)->addMinutes(15)->format('H:i')
+        : '06:30';
+    [$dh, $dm] = explode(':', $dhuhaTime);
+    $dhuhaTs = (int) $dh * 3600 + (int) $dm * 60;
+    $prayers[] = [
+        'name' => 'Dhuha', 'time' => $dhuhaTime,
+        'isNext' => ! $nextSet && $dhuhaTs > $nowTs,
+    ];
+
+    // Wrap ke pertama jika semua sudah lewat
+    if (! $nextSet && count($prayers)) {
+        $prayers[0]['isNext'] = true;
+    }
+
+    // ─── Kalender Toleransi — realtime dari Calendarific API ─────────────
+    $holidays = collect($calendarific->getHolidays(now()->month, now()->year));
+
+    $religionMap = [
+        'Idul Fitri' => 'islam', 'Idul Adha' => 'islam', 'Maulid' => 'islam',
+        'Isra' => 'islam', 'Muharram' => 'islam', 'Rajab' => 'islam',
+        'Ramadan' => 'islam', 'Natal' => 'kristen', 'Paskah' => 'kristen',
+        'Kenaikan' => 'kristen', 'Waisak' => 'buddha', 'Nyepi' => 'hindu',
+        'Galungan' => 'hindu', 'Imlek' => 'konghucu',
+    ];
+
+    $mapReligion = function (string $name) use ($religionMap): string {
+        foreach ($religionMap as $keyword => $religion) {
+            if (str_contains($name, $keyword)) {
+                return $religion;
+            }
+        }
+
+        return 'nasional';
+    };
+
+    $events = $holidays
+        ->map(fn (array $h) => [
+            'date' => Carbon::parse($h['date']['iso'] ?? ''),
+            'title' => $h['name'] ?? 'Hari Besar',
+            'religion' => $mapReligion($h['name'] ?? ''),
+        ])
+        ->filter(fn ($e) => $e['date'] && $e['date']->isFuture())
+        ->sortBy('date')
+        ->values();
+
+    $featuredEvent = $events->first();
+    $upcomingEvents = $events->skip(1)->take(3);
+
+    if (! $featuredEvent) {
+        $featuredEvent = ['title' => 'Hari Besar', 'date' => now(), 'religion' => 'nasional'];
+    }
+
+    return view('welcome', compact(
+        'testimonials', 'highlights', 'prayers', 'city',
+        'featuredEvent', 'upcomingEvents',
+    ));
 })->name('home');
 
 // ─── Dashboard (auth) ────────────────────────────────────────────────────────
